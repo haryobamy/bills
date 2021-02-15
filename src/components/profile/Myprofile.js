@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import leader from  '../../assests/images/team/leader.jpg';
 
+import Profileheader from './Pofileheader';
+import './Myprofile.css';
 
 
 
@@ -8,6 +10,9 @@ class Myprofile extends Component {
     state = {  }
     render() { 
         return ( 
+            <>
+
+            <Profileheader />
             <div>
                 <div id="content" className="py-4">
     <div className="container">
@@ -20,7 +25,7 @@ class Myprofile extends Component {
           
           <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={leader} alt=""/>
-              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute"></i>
+              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera  position-absolute"></i>
                 <input type="file" className="custom-file-input" id="customFile"/>
               </div>
             </div>
@@ -745,6 +750,8 @@ class Myprofile extends Component {
     </div>
   </div>
             </div>
+
+            </>
          );
     }
 }

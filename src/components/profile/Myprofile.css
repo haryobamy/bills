@@ -1,0 +1,34 @@
+.bg-primary,
+.badge-primary {
+  background-color: #2dbe60 !important;
+}
+
+.secondary-nav.nav .nav-link {
+  text-align: center;
+  font-size: 16px;
+  padding: 1rem 20px;
+  white-space: nowrap;
+  color: rgba(250, 250, 250, 0.9);
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary,
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+  color: #2dbe60;
+  border-color: #2dbe60;
+}
+
+.primary-menu ul.navbar-nav > li > a:not(.btn),
+.login-signup ul.navbar-nav > li > a:not(.btn) {
+  height: 80px;
+  padding-left: 0.85em;
+  padding-right: 0.85em;
+  color: #4c4d4d;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 500;
+}
