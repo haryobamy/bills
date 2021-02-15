@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 
@@ -8,6 +11,8 @@ class Support extends Component {
     state = {  }
     render() { 
         return ( 
+          <>
+          <Header />
 
             <div id="content">
     <div className="container">
@@ -109,6 +114,8 @@ class Support extends Component {
       </div>
     </div>
   </div>
+  <Footer />
+  </>
          );
     }
 }

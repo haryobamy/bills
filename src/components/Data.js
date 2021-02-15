@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 
@@ -10,6 +13,7 @@ class Data extends Component {
             
 
          <>
+         <Header />
     <div>
     <div className="bg-secondary pt-4 pb-5">
       <div className="container">
@@ -141,6 +145,7 @@ class Data extends Component {
     </section>
     
   </div>
+  <Footer />
   </>
   
         );

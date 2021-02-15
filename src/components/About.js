@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
+
 
 
 
@@ -7,6 +11,10 @@ class About extends Component {
     state = {  }
     render() { 
         return (  
+
+          <>
+
+          <Header />
 
             <div>
 
@@ -104,6 +112,9 @@ class About extends Component {
     
   </div>
   </div>
+  <Footer />
+
+  </>
         );
     }
 }

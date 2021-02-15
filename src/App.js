@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from 'react-router-dom';
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/js/bootstrap.bundle'
-import bootstrap from "bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import './App.css';
 
 
 
 import Home from './components/Home';
-import Footer from './components/Footer';
 import Recharge from './components/Recharge';
-import Header from './components/Header';
 import Data from './components/Data';
 import Electricity from './components/Electricity';
 import Cable from './components/Cable';
@@ -21,6 +18,7 @@ import About from './components/About';
 import Faq from './components/Faq';
 import Support from './components/Support';
 import Contact from './components/Contact';
+import Myprofile from './components/profile/Myprofile';
 
 
 
@@ -34,7 +32,7 @@ class App extends Component {
   
            <React.Fragment>
 
-              <Header />
+              
     <Router>
 
    
@@ -53,6 +51,7 @@ class App extends Component {
             <Route path="/faq" component={Faq} />
             <Route path="/support" component={Support} />
             <Route path="/contact" component={Contact} />
+            <Route path="/profile" component={Myprofile} />
             {/* 
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
@@ -65,7 +64,7 @@ class App extends Component {
       </div>
      
     </Router>
-            <Footer />
+            
     </React.Fragment>
     
   );

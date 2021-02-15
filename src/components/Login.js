@@ -1,18 +1,67 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 
 
 class Login extends Component {
-    state = {  }
+    constructor(){
+      super()
+      this.state = {
+
+        email:'',
+        phonenumber:'',
+        password:''
+      }
+      this.changeEmail = this.changeEmail.bind(this)
+      this.changePhonenumber = this.changePhonenumber.bind(this)
+      this.changePassword = this.changePassword.bind(this)
+      this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    changeEmail(event) {
+      this.setState({
+        email:event.target.value
+      })
+    }
+
+    changePhonenumber(event) {
+      this.setState({
+        phonenumber:event.target.value
+      })
+    }
+
+    changePassword(event) {
+      this.setState({
+        password:event.target.value
+      })
+    }
+
+    onSubmit(event) {
+      event.preventDefault()
+
+      const registered = {
+        email:this.state.email,
+        phonenumber:this.state.phonenumber,
+        password:this.state.password
+      }
+      axios.post('http://localhost:4000/app/signup', registered)
+      .then(response => console.log (response.data))
+
+      window.location ='/profile'
+    }
+
     render() { 
         return ( 
+          <>
+          <Header />
 
                     <div>
 
-            <section className="page-header page-header-text-light bg-secondary"
-            
-            >
+            <section className="page-header page-header-text-light bg-secondary">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-md-8">
@@ -53,17 +102,17 @@ class Login extends Component {
                   </form>
                 </div>
                 <div className="tab-pane fade" id="signupPage" role="tabpanel" aria-labelledby="signup-page-tab">
-                  <form id="signupForm" method="post">
+                  <form id="signupForm" method="post" onSubmit={this.onSubmit} >
                     <div className="form-group">
-                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" required placeholder="Email ID"/>
+                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" required placeholder="Email ID" value={this.state.email} onChange={this.changeEmail}  />
                     </div>
                     <div className="form-group">
-                      <input type="text" className="form-control" id="signupMobile" required placeholder="Mobile Number"/>
+                      <input type="text" className="form-control" id="signupMobile" required placeholder="Mobile Number" value={this.state.phonenumber} onChange={this.changePhonenumber}  />
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password"/>
+                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password"  value={this.state.password} onChange={this.changePassword} />
                     </div>
-                    <button className="btn btn-primary btn-block" type="submit">Signup</button>
+                    <button className="btn btn-primary btn-block" type="submit" value='submit' >Signup</button>
                   </form>
                 </div>
                 <div className="d-flex align-items-center my-4">
@@ -83,6 +132,8 @@ class Login extends Component {
             </div>
           </div>
           </div>
+          <Footer />
+          </>
          );
     }
 }

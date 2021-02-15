@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 
@@ -7,6 +10,8 @@ class Faq extends Component {
     state = {  }
     render() { 
         return ( 
+          <>
+          <Header />
             
             <div>
             
@@ -227,6 +232,8 @@ class Faq extends Component {
       </div>
     </div>
     </div>
+    <Footer />
+    </>
      );
     }
 }

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
+
 
 
 
@@ -10,6 +14,8 @@ class Cable extends Component {
     }
     render() { 
         return ( 
+          <>
+          <Header />
         
         <div id="content">
     
@@ -141,6 +147,8 @@ class Cable extends Component {
         </section>
         
       </div>
+      <Footer />
+      </>
       
        );
     }

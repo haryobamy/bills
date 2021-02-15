@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 
@@ -11,7 +14,8 @@ class Home extends Component {
         return ( 
 
 
-
+          <>
+          <Header />
 
             
           <div>
@@ -49,21 +53,21 @@ class Home extends Component {
               <div className="row mt-4 mb-2">
                 <div className="col-md-4">
                   <div className="featured-box style-1">
-                    <div className="featured-box-icon text-primary"> <i className="far fa-thumbs-up"></i></div>
+                    <div className="featured-box-icon text-primary"> <i className="fa fa-thumbs-up"></i></div>
                     <h3>Why choose Us</h3>
                     <p>Lisque persius interesset his et, in quot quidam persequeris vim, ad mea essent possim iriure.</p>
                   </div>
                 </div>
                 <div className="col-md-4">
                   <div className="featured-box style-1">
-                    <div className="featured-box-icon text-primary"> <i className="far fa-paper-plane"></i> </div>
+                    <div className="featured-box-icon text-primary"> <i className="fa fa-paper-plane"></i> </div>
                     <h3>Our Mission</h3>
                     <p>Lisque persius interesset his et, in quot quidam persequeris vim, ad mea essent possim iriure.</p>
                   </div>
                 </div>
                 <div className="col-md-4">
                   <div className="featured-box style-1">
-                    <div className="featured-box-icon text-primary"> <i className="far fa-eye"></i> </div>
+                    <div className="featured-box-icon text-primary"> <i className="fa fa-eye"></i> </div>
                     <h3>Our Vision</h3>
                     <p>Lisque persius interesset his et, in quot quidam persequeris vim, ad mea essent possim iriure.</p>
                   </div>
@@ -121,6 +125,8 @@ class Home extends Component {
           
         </div>
         </div>
+        <Footer />
+        </>
 
          );
     }

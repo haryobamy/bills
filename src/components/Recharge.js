@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Footer from '../components/Footer';
+
+import Header from '../components/Header';
 
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -14,6 +17,8 @@ class Recharge extends Component {
     state = {  }
     render() { 
         return ( 
+          <>
+          <Header />
             
 
         
@@ -23,9 +28,9 @@ class Recharge extends Component {
        {/* Secondary Navigation */}
       
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fa fa-bars"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-tv"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-wifi"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
           <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
           <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
@@ -166,7 +171,8 @@ class Recharge extends Component {
       </div>
     </section>
      </div>
-    
+     <Footer />
+     </>
   
   
          );

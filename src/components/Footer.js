@@ -13,28 +13,28 @@ class Footer extends Component {
         <div className="row">
           <div className="col-sm-6 col-md-3">
             <div className="featured-box text-center">
-              <div className="featured-box-icon text-light"> <i className="fas fa-lock"></i> </div>
+              <div className="featured-box-icon text-light"> <i className="fa fa-lock"></i> </div>
               <h4 className="text-light">100% Secure Payments</h4>
               <p className="text-light">Moving your card details to a much more secured place.</p>
             </div>
           </div>
           <div className="col-sm-6 col-md-3">
             <div className="featured-box text-center">
-              <div className="featured-box-icon text-light"> <i className="fas fa-thumbs-up"></i> </div>
+              <div className="featured-box-icon text-light"> <i className="fa fa-thumbs-up"></i> </div>
               <h4 className="text-light">Trust pay</h4>
               <p className="text-light">100% Payment Protection. Easy Return Policy.</p>
             </div>
           </div>
           <div className="col-sm-6 col-md-3">
             <div className="featured-box text-center">
-              <div className="featured-box-icon text-light"> <i className="fas fa-bullhorn"></i> </div>
+              <div className="featured-box-icon text-light"> <i className="fa fa-bullhorn"></i> </div>
               <h4 className="text-light">Refer & Earn</h4>
               <p className="text-light">Invite a friend to sign up and earn up to &#8358;100.</p>
             </div>
           </div>
           <div className="col-sm-6 col-md-3">
             <div className="featured-box text-center">
-              <div className="featured-box-icon text-light"> <i className="far fa-life-ring"></i> </div>
+              <div className="featured-box-icon text-light"> <i className="fa fa-life-ring"></i> </div>
               <h4 className="text-light">24X7 Support</h4>
               <p className="text-light">We're here to help. Have a query and need help ? <a href="#" className="text-light">Click here</a></p>
             </div>
@@ -66,11 +66,11 @@ class Footer extends Component {
           <p>Keep in touch</p>
           <ul className="social-icons">
             <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fa fa-facebook-f"></i></a></li>
-            <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
-            <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-            <li className="social-icons-linkedin"><a data-toggle="tooltip" href="http://www.linkedin.com/" target="_blank" title="Linkedin"><i className="fab fa-linkedin-in"></i></a></li>
-            <li className="social-icons-youtube"><a data-toggle="tooltip" href="http://www.youtube.com/" target="_blank" title="Youtube"><i className="fab fa-youtube"></i></a></li>
-            <li className="social-icons-instagram"><a data-toggle="tooltip" href="http://www.instagram.com/" target="_blank" title="Instagram"><i className="fab fa-instagram"></i></a></li>
+            <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fa fa-twitter"></i></a></li>
+            <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fa fa-google"></i></a></li>
+            <li className="social-icons-linkedin"><a data-toggle="tooltip" href="http://www.linkedin.com/" target="_blank" title="Linkedin"><i className="fa fa-linkedin-in"></i></a></li>
+            <li className="social-icons-youtube"><a data-toggle="tooltip" href="http://www.youtube.com/" target="_blank" title="Youtube"><i className="fa fa-youtube"></i></a></li>
+            <li className="social-icons-instagram"><a data-toggle="tooltip" href="http://www.instagram.com/" target="_blank" title="Instagram"><i className="fa fa-instagram"></i></a></li>
           </ul>
         </div>
       </div>
