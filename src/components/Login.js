@@ -107,7 +107,7 @@ class Login extends Component {
                       <input type="text" className="form-control" data-bv-field="number" id="signupEmail" required placeholder="Email ID" value={this.state.email} onChange={this.changeEmail}  />
                     </div>
                     <div className="form-group">
-                      <input type="text" className="form-control" id="signupMobile" required placeholder="Mobile Number" value={this.state.phonenumber} onChange={this.changePhonenumber}  />
+                      <input type="text" className="form-control" id="signupMobile" maxlength="10" required placeholder="Mobile Number" value={this.state.phonenumber} onChange={this.changePhonenumber}  />
                     </div>
                     <div className="form-group">
                       <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password"  value={this.state.password} onChange={this.changePassword} />

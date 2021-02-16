@@ -40,3 +40,8 @@
 .bg-secondary {
   background-color: #0c2f55 !important;
 }
+
+.bg-primary,
+.badge-primary {
+  background-color: #2dbe60 !important;
+}

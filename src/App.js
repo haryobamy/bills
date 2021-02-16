@@ -19,6 +19,10 @@ import Faq from './components/Faq';
 import Support from './components/Support';
 import Contact from './components/Contact';
 import Myprofile from './components/profile/Myprofile';
+import Dashboard from './components/profile/Dashboard';
+import Transaction from './components/profile/Transaction';
+import Sendmoney from './components/profile/Sendmoney';
+import Addcard from './components/profile/Addcard';
 
 
 
@@ -52,6 +56,11 @@ class App extends Component {
             <Route path="/support" component={Support} />
             <Route path="/contact" component={Contact} />
             <Route path="/profile" component={Myprofile} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/transaction" component={Transaction} />
+            <Route path="/sendmoney" component={Sendmoney} />
+            <Route path="/addcard" component={Addcard} />
+
             {/* 
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
