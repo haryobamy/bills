@@ -3,8 +3,9 @@ import eva from  '../../assests/images/team/leader.jpg';
 
 
 import './Myprofile.css';
-import SecNav from './SecNav';
+import SecNav from './Sent';
 import Profileheader from './Pofileheader';
+import Profilefooter from './Profilefooter';
 
 
 
@@ -15,7 +16,20 @@ class Myprofile extends Component {
             <>
 
             <Profileheader />
-            <SecNav />
+            <div className="bg-primary">
+                
+                <div className="container d-flex justify-content-center">
+                  <ul className="nav secondary-nav">
+        
+          
+                    <li className="nav-item"> <a className="nav-link active" href="/profile">Account</a></li>
+                    <li className="nav-item"> <a className="nav-link"   href="/addcard">Cards & Bank Accounts</a></li>
+                    <li className="nav-item"> <a className="nav-link" href="/notification">Notifications</a></li>
+                    
+                  </ul>
+                 
+                </div>
+              </div>
             <div>
                 <div id="content" className="py-4">
     <div className="container">
@@ -753,7 +767,7 @@ class Myprofile extends Component {
     </div>
   </div>
             </div>
-
+            <Profilefooter />
             </>
          );
     }

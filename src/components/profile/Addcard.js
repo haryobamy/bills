@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import SecNav from './SecNav';
+import SecNav from './Sent';
 import Profileheader from './Pofileheader';
+import Profilefooter from './Profilefooter';
 
 
 class Addcard extends Component {
@@ -10,7 +11,20 @@ class Addcard extends Component {
 
             <>
             <Profileheader />
-            <SecNav />
+            <div className="bg-primary">
+                
+                <div className="container d-flex justify-content-center">
+                  <ul className="nav secondary-nav">
+        
+          
+                    <li className="nav-item"> <a className="nav-link " href="/profile">Account</a></li>
+                    <li className="nav-item"> <a className="nav-link active"   href="/addcard">Cards & Bank Accounts</a></li>
+                    <li className="nav-item"> <a className="nav-link" href="/notification">Notifications</a></li>
+                    
+                  </ul>
+                 
+                </div>
+              </div>
 
             <div id="content" className="py-4">
             <div className="container">
@@ -591,6 +605,7 @@ class Addcard extends Component {
               </div>
             </div>
           </div>
+          <Profilefooter />
           </>
          );
     }

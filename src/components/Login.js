@@ -8,40 +8,60 @@ import Header from '../components/Header';
 
 
 class Login extends Component {
-    constructor(){
-      super()
+    constructor(props){
+      super(props)
       this.state = {
 
         email:'',
         phonenumber:'',
-        password:''
+        password:'',
+        checked: false
       }
-      this.changeEmail = this.changeEmail.bind(this)
-      this.changePhonenumber = this.changePhonenumber.bind(this)
-      this.changePassword = this.changePassword.bind(this)
-      this.onSubmit = this.onSubmit.bind(this)
+      this.handleChange = this.handleChange.bind(this)
+      // this.changePhonenumber = this.changePhonenumber.bind(this)
+      // this.changePassword = this.changePassword.bind(this)
+      this.handleCheck = this.handleCheck.bind(this)
+      this.signup = this.signup.bind(this)
+      this.signin = this.signin.bind(this)
+      console.log(props);
+      console.log(this.state);
     }
 
-    changeEmail(event) {
-      this.setState({
-        email:event.target.value
-      })
+    // changeEmail(event) {
+    //   this.setState({
+    //     email:event.target.value
+    //   })
+    // }
+
+    // changePhonenumber(event) {
+    //   this.setState({
+    //     phonenumber:event.target.value
+    //   })
+    // }
+
+    // changePassword(event) {
+    //   this.setState({
+    //     password:event.target.value
+    //   })
+    // }
+
+    handleChange = e => {
+      this.setState ({ [e.target.name]: e.target.value});
+    
     }
 
-    changePhonenumber(event) {
-      this.setState({
-        phonenumber:event.target.value
-      })
+    handleCheck = e  => {
+
+      this.setState(() => ({
+        checked: !this.state.checked
+      }));
+     console.log(this.state.checked,'checked');
     }
 
-    changePassword(event) {
-      this.setState({
-        password:event.target.value
-      })
-    }
 
-    onSubmit(event) {
-      event.preventDefault()
+
+    signup = e => {
+      e.preventDefault();
 
       const registered = {
         email:this.state.email,
@@ -49,9 +69,29 @@ class Login extends Component {
         password:this.state.password
       }
       axios.post('http://localhost:4000/app/signup', registered)
-      .then(response => console.log (response.data))
-
+      .then((response) => {
+        //handle success
+        console.log (response.data);
       window.location ='/profile'
+    })
+    .catch((error) => {
+      //handle error
+      console.log(error)
+    })
+    }
+
+    signin = e => {
+      e.preventDefault();
+      const user =  {
+        email:this.state.email,
+        password:this.state.password
+      }
+      axios.post('http://localhost:4000/app/login', user)
+      .then((response) => {
+        //handle success
+        console.log(response.data)
+        window.location = '/dashboard'
+      })
     }
 
     render() { 
@@ -82,35 +122,36 @@ class Login extends Component {
               </ul>
               <div className="tab-content pt-4">
                 <div className="tab-pane fade show active" id="loginPage" role="tabpanel" aria-labelledby="login-page-tab">
-                  <form id="loginForm" method="post">
+                  <form id="loginForm" method="post" onSubmit = {this.signin}>
                     <div className="form-group">
-                      <input type="email" className="form-control" id="loginMobile" required placeholder="Mobile or Email ID"/>
+                      <input type="email" className="form-control" id="loginMobile" name='email' required placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="loginPassword" required placeholder="Password"/>
+                      <input type="password" className="form-control" id="loginPassword" name='password' required placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                     </div>
                     <div className="row mb-4">
                       <div className="col-sm">
                         <div className="form-check custom-control custom-checkbox">
-                          <input id="remember-me" name="remember" className="custom-control-input" type="checkbox"/>
+                          <input id="remember-me" name="checked" className="custom-control-input" type="checkbox" onChange={this.handleCheck}
+         value={this.state.checked}/>
                           <label className="custom-control-label" for="remember-me">Remember Me</label>
                         </div>
                       </div>
                       <div className="col-sm text-right"> <a className="justify-content-end" href="#">Forgot Password ?</a> </div>
                     </div>
-                    <button className="btn btn-primary btn-block" type="submit">Login</button>
+                    <button className="btn btn-primary btn-block" type="submit" value='submit' >Login</button>
                   </form>
                 </div>
                 <div className="tab-pane fade" id="signupPage" role="tabpanel" aria-labelledby="signup-page-tab">
-                  <form id="signupForm" method="post" onSubmit={this.onSubmit} >
+                  <form id="signupForm" method="post" onSubmit={this.signup} >
                     <div className="form-group">
-                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" required placeholder="Email ID" value={this.state.email} onChange={this.changeEmail}  />
+                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" name='email' required placeholder="Email ID" value={this.state.email} onChange={this.handleChange}  />
                     </div>
                     <div className="form-group">
-                      <input type="text" className="form-control" id="signupMobile" maxlength="10" required placeholder="Mobile Number" value={this.state.phonenumber} onChange={this.changePhonenumber}  />
+                      <input type="text" className="form-control" id="signupMobile" maxlength="10" required placeholder="Mobile Number" name='phonenumber' value={this.state.phonenumber} onChange={this.handleChange}  />
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password"  value={this.state.password} onChange={this.changePassword} />
+                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password" name='password' value={this.state.password} onChange={this.handleChange} />
                     </div>
                     <button className="btn btn-primary btn-block" type="submit" value='submit' >Signup</button>
                   </form>

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.bundle';
 import './App.css';
+
+import axios from 'axios';
 
 
 
@@ -23,12 +24,42 @@ import Dashboard from './components/profile/Dashboard';
 import Transaction from './components/profile/Transaction';
 import Sendmoney from './components/profile/Sendmoney';
 import Addcard from './components/profile/Addcard';
+import Notification from './components/profile/Notification';
+import Sent from './components/profile/Sent';
 
 
 
 class App extends Component {
-  state = {  }
+  constructor(props){
+    super(props);
+    this.state = {
+      product:[]
+    }
+  }
+    // state = { 
+    //   content:[] 
+    //  }
+
+
+     componentDidMount() {
+
+      this.fetchService();
+     }
+
+     fetchService = () => {
+        axios.get('https://sandbox.vtpass.com/api/service-categories')
+        .then((response) => {
+          const  product  = response.data.content;
+           this.setState({product})
+          console.log(product)
+          
+        })
+        .catch((error) =>{
+          console.log(error);
+        })
+     }
   render()
+  
    { 
     return ( 
 
@@ -60,6 +91,8 @@ class App extends Component {
             <Route path="/transaction" component={Transaction} />
             <Route path="/sendmoney" component={Sendmoney} />
             <Route path="/addcard" component={Addcard} />
+            <Route path="/notification" component={Notification} />
+            <Route path="/sent" component={Sent} />
 
             {/* 
             <Route path="/sign-in" component={Login} />

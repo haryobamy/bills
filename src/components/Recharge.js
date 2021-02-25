@@ -35,7 +35,7 @@ class Recharge extends Component {
           <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
           <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-subway"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
         
         {/* Secondary Navigation end  */}
@@ -170,6 +170,163 @@ class Recharge extends Component {
         </div>
       </div>
     </section>
+
+
+    {/* plans modal */}
+
+    <div id="view-plans" className="modal fade" role="dialog" aria-hidden="true">
+  <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title">Browse Plans</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+      </div>
+      <div className="modal-body">
+        <form className="form-row mb-4 mb-sm-2" method="post">
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="form-group">
+              <select className="custom-select" required="">
+                <option value="">Select Your Operator</option>
+                <option>1st Operator</option>
+                <option>2nd Operator</option>
+                <option>3rd Operator</option>
+                <option>4th Operator</option>
+                <option>5th Operator</option>
+                <option>6th Operator</option>
+                <option>7th Operator</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="form-group">
+              <select className="custom-select" required="">
+                <option value="">Select Your Circle</option>
+                <option>1st Circle</option>
+                <option>2nd Circle</option>
+                <option>3rd Circle</option>
+                <option>4th Circle</option>
+                <option>5th Circle</option>
+                <option>6th Circle</option>
+                <option>7th Circle</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <div className="form-group">
+              <select className="custom-select" required="">
+                <option value="">All Plans</option>
+                <option>Topup</option>
+                <option>Full Talktime</option>
+                <option>Validity Recharge</option>
+                <option>SMS</option>
+                <option>Data</option>
+                <option>Unlimited Talktime</option>
+                <option>STD</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <button className="btn btn-primary btn-block" type="submit">View Plans</button>
+          </div>
+        </form>
+        <div className="plans">
+          <div className="table-responsive-md">
+            <table className="table table-hover border">
+              <tbody>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$10 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">8 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">7 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Talktime $8 & 2 Local & National SMS & Free SMS valid for 2 day(s)</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$15 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">13 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">15 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Regular Talktime</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$50 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">47 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">47 Local Vodafone min free </td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$100 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">92 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Local min 92 & 10 Local & National SMS & Free SMS valid for 
+                    7 day(s).</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$150 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">143 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">60 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Talktime $143 & 50 Local & National SMS & Free SMS valid for 
+                    15 day(s).</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$220 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">220 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$250 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">250 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime + 50 SMS per day for 7 days.</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$300 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">301 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">64 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$410 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">0 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Unlimited Local,STD & Roaming calls</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$501 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">510 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">180 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 28 days.</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$799 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">820 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">250 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 84 days.</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+                <tr>
+                  <td className="text-5 text-primary text-center align-middle">$999 <span className="text-1 text-muted d-block">Amount</span></td>
+                  <td className="text-3 text-center align-middle">1099 <span className="text-1 text-muted d-block">Talktime</span></td>
+                  <td className="text-3 text-center align-middle">356 Days <span className="text-1 text-muted d-block">Validity</span></td>
+                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 90 days.</td>
+                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
      </div>
      <Footer />
      </>

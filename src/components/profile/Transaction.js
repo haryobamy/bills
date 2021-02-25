@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Profileheader from './Pofileheader';
+import Profilefooter from './Profilefooter';
 
 
 class Transaction extends Component {
@@ -267,6 +268,7 @@ class Transaction extends Component {
       </div>
     </div>
   </div>
+  <Profilefooter />
   </>
          );
     }

@@ -4,8 +4,7 @@ import React, { Component } from 'react';
 
 
 
-import 'bootstrap/js/dist/dropdown';
-import Dropdown from 'bootstrap/js/dist/dropdown';
+
 
 
 

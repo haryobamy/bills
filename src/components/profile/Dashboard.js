@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Header from './Pofileheader';
 import eva from  '../../assests/images/eva.jpg';
+import Profilefooter from './Profilefooter';
 
 
 
@@ -81,13 +82,13 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className="col-sm-6 col-md-3 mb-4 mb-sm-0">
-                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-credit-card"></i></span> <span className="text-5 d-block text-light mt-4 mb-3"><i className="far fa-circle "></i></span>
-                  <p className="mb-0"><a className="btn-link stretched-link" href="">Add Card</a></p>
+                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-credit-card"></i></span> <span className="text-5 d-block text-light mt-4 mb-3"><i className="fa fa-circle "></i></span>
+                  <p className="mb-0"><a className="btn-link stretched-link" href="/addcard">Add Card</a></p>
                 </div>
               </div>
               <div className="col-sm-6 col-md-3">
-                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-university"></i></span> <span className="text-5 d-block text-light mt-4 mb-3"><i className="far fa-circle "></i></span>
-                  <p className="mb-0"><a className="btn-link stretched-link" href="">Add Bank Account</a></p>
+                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-university"></i></span> <span className="text-5 d-block text-light mt-4 mb-3"><i className="fa fa-circle "></i></span>
+                  <p className="mb-0"><a className="btn-link stretched-link" href=""  >Add Bank Account</a></p>
                 </div>
               </div>
             </div>
@@ -238,6 +239,7 @@ class Dashboard extends Component {
     </div>
   </div>
             </div>
+            <Profilefooter />
             </>
          );
     }
