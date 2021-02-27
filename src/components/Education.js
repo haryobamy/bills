@@ -1,15 +1,135 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
-
+import axios from 'axios'
 import Header from '../components/Header';
 
 
 
 
 
-class Education extends Component {
-    state = {  }
-    render() { 
+const Education = (props) => {
+  const [waec, setWaec] = useState([]);
+  const [ formData, setFormData] = useState({
+    amount:'', 
+    phoneNumber:"", 
+     network:'',
+     quantity:'',
+     variation_code:''
+     
+
+  })
+
+  const waceReg = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=waec-registration`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+           setWaec(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+
+  const wacePin = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=waec`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+           setWaec(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+
+
+useEffect(() => {
+  waceReg();
+ 
+}, [])
+  
+useEffect(() => {
+  wacePin();
+ 
+}, [])
+  
+
+ 
+ 
+
+
+  // useEffect(() => {
+  //    let Cable = 'waec-registration';
+  //   // if (network === 'waec-registration')
+  //   // {
+  //   //   let Cable = 'waec-registration';
+  //   // } else{
+  //   //   let Cable = 'waec';
+  //   // }
+
+  //   const url = `service-variations?serviceID=${Cable}`;
+  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
+  //    .then((response) => {
+  //      //handle success
+  //      const data = response.data.content.varations
+  //      setWaec(data);
+  //      console.log(data)
+  //  })
+  //  .catch((error) => {
+  //    //handle error
+  //    console.log(error)
+  //  })
+  //    return () => {
+  //     setWaec([])
+  //    }
+  //  }, [props])
+
+
+
+      const handleChange = (e) => {
+        const {name,value} = e.target
+        setFormData({
+          ...formData, 
+          [name]:value
+        })
+        // console.log(name, value);
+        
+        console.log(e.target.value);
+    
+      }
+
+      const handleSubmit = (e) => {
+    
+        const params = {
+          request_id:'',
+          serviceID:formData.network,
+          phone:formData.phoneNumber,
+          variation_code:formData.variation_code,
+          amount:formData.amount
+        }
+        axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+        .then((response) => {
+          //handle success
+          const data = response.data
+          console.log(data)
+        
+      })
+      .catch((error) => {
+        //handle error
+        console.log(error)
+      })
+      console.log(formData);
+      }
+
+
+
         return (  
 
           <>
@@ -20,15 +140,15 @@ class Education extends Component {
     <div className="bg-secondary">
       <div className="container">
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fas fa-mobile-alt"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fas fa-tv"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fas fa-wifi"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fas fa-phone"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fas fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fas fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fas fa-subway"></i></span> Bank Transfer</a> </li>
-        </ul> 
+          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+        </ul>  
       </div>
     </div>
     
@@ -46,46 +166,47 @@ class Education extends Component {
                         
                         <h6 className='text-center mb-3'>WAEC Result Checking PIN / Scratch Card</h6>
             <form id="broadbanadBill" method="post">
+
+            <div className="mb-3">
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="waec" name="network" value='waec' className="custom-control-input" required type="radio"  onClick={() => wacePin()} onChange={handleChange} />
+                  <label className="custom-control-label" for='waec' >WAEC Result Checker PIN</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="waec-registration" name="network" value='waec-registration' className="custom-control-input" required type="radio" onClick={() => waceReg()} onChange={handleChange} />
+                  <label className="custom-control-label" for="waec-registration" >WAEC Registration PIN</label>
+                </div>
+              </div>
+
               <div className="form-group">
-                  <select className="custom-select" id="operator" required="">
-                    <option value="">Please Select Exam Type</option>
-                    <option>1st Operator</option>
-                    <option>2nd Operator</option>
-                    <option>3rd Operator</option>
-                    <option>4th Operator</option>
-                    <option>5th Operator</option>
-                    <option>6th Operator</option>
-                    <option>7th Operator</option>
+              <select id="variation_code" name='variation_code' data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" className="selectpicker form-control bg-transparent" required onChange={handleChange}  value={formData.variation_code} >
+                    <option >Please Select Exam Type</option>
+                    {
+                               waec.map(waecs =>  <option key={waecs.variation_code} value={waecs.variation_code} >{waecs.name} </option>)
+                             }
                   </select>
                 </div>
               <div className="form-group">
               <label className="input-item-label" for="phone-number">Phone Number</label>
-                <input type="text" className="form-control" data-bv-field="number" id="telephoneNumber" required placeholder="Enter Telephone Number"/>
+                <input type="text" className="form-control" data-bv-field="number" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Telephone Number" onChange={handleChange}/>
               </div>
               <label className="input-item-label" >Amount</label>
               <div className="form-group input-group">
-              
                 <div className="input-group-prepend"> <span className="input-group-text">&#8358;</span> </div>
-                <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"/>
+                <input className="form-control" id="amount" placeholder="Enter Amount" name='amount' required type="text" value={formData.variation_code} onChange={handleChange}/>
               </div>
               <div className="form-group">
               <label className="input-item-label">Email</label>
-                <input type="text" className="form-control" data-bv-field="number" id="email" required placeholder="Enter  Your Email"/>
+                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email"/>
               </div>
               <label className="input-item-label" >Quantity</label>
               <div className="form-group input-group">
-              
                 <div className="input-group-prepend">  </div>
-                <input className="form-control" id="amount" placeholder="Enter Quantity" required type="text"/>
+                <input className="form-control" id="quantity" placeholder="Enter Quantity" name='quantity' value={formData.quantity} onChange={handleChange} required type="text"/>
               </div>
-
-
-
               
-
-              
-              
-              <button className="btn btn-primary btn-block btn-lg" type="submit">Continue to Pay Bill</button>
+              <button className="btn btn-success btn-block btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button>
+              <button className="btn btn-danger btn-block btn-lg" type="reset">Cancel</button>
             </form>
           </div>
 
@@ -184,6 +305,6 @@ class Education extends Component {
   </>
         );
     }
-}
+
  
 export default Education;

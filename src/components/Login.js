@@ -86,7 +86,7 @@ class Login extends Component {
         email:this.state.email,
         password:this.state.password
       }
-      axios.post('http://localhost:4000/app/login', user)
+      axios.get(`http://localhost:4000/app/login`, user)
       .then((response) => {
         //handle success
         console.log(response.data)

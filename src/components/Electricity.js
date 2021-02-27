@@ -1,15 +1,80 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
-
+import axios from 'axios'
 import Header from '../components/Header';
 
 
 
 
 
-class Electricity  extends Component {
-    state = {  }
-    render() { 
+const Electricity = (props) => {
+  const [ formData, setFormData] = useState({
+    amount:'', 
+    phoneNumber:"",
+    meterNumber:'', 
+     network:'',
+     meterType:''
+
+  })
+
+
+  
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    // console.log(name, value);
+    
+    console.log(e.target.value);
+
+  }
+
+  // VERIFY METER NUMBER
+  const handleVerify = (e) => {
+    const params = {
+      billersCode:formData.meterNumber,
+      serviceID:formData.network,
+      type:formData.meterType
+    }
+    axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params)
+    .then((response) => {
+      //handle success
+      const data = response.data
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    console.log(error)
+  })
+  }
+
+
+  const handleSubmit = (e) => {
+    
+    const params = {
+      request_id:'',
+      billersCode:formData.meterNumber,
+      serviceID:formData.network,
+      phone:formData.phoneNumber,
+      variation_code:formData.meterType,
+      amount:formData.amount
+    }
+    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+    .then((response) => {
+      //handle success
+      const data = response.data
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    console.log(error)
+  })
+  console.log(formData);
+  }
         return ( 
           <>
           <Header />
@@ -20,41 +85,76 @@ class Electricity  extends Component {
       <div className="container">
       
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fas fa-mobile-alt"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fas fa-tv"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fas fa-wifi"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fas fa-phone"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fas fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fas fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fas fa-subway"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
         
    
       <div className="bg-light shadow-md rounded px-4 pt-4 pb-3">
       <h2 class="text-4 mb-3">Pay Your Electricity Bill</h2>
             <form id="gasBill" method="post">
+            <div className="mb-3">
+              <div className="custom-control custom-radio custom-control-inline">
+                <input id="ikeja-electric" name="network" value='ikeja-electric' className="custom-control-input" required type="radio" onChange={handleChange}   />
+                  <label className="custom-control-label" for='ikeja-electric' >IKEDC</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="eko-electric" name="network" value='eko-electric' className="custom-control-input" required type="radio"  onChange={handleChange} />
+                  <label className="custom-control-label" for="eko-electric" >EKEDC</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="kano-electric" name="network" className="custom-control-input" value='kano-electric' required type="radio"   onChange={handleChange} />
+                  <label className="custom-control-label" for='kano-electric' >KEDCO</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="portharcourt-electric" name="network" value='portharcourt-electric' className="custom-control-input" required type="radio" onChange={handleChange}    />
+                  <label className="custom-control-label" for='portharcourt-electric' >PHED</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="jos-electric" name="network" value='jos-electric' className="custom-control-input" required type="radio"  onChange={handleChange} />
+                  <label className="custom-control-label" for='jos-electric' >JED</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="ibadan-electric" name="network" value='ibadan-electric' className="custom-control-input" required type="radio" onChange={handleChange}  />
+                  <label className="custom-control-label" for="ibadan-electric" >IBEDC</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="kaduna-electric" name="network" className="custom-control-input" value='kaduna-electric' required type="radio" onChange={handleChange}  />
+                  <label className="custom-control-label" for='kaduna-electric' >KAEDCO</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="abuja-electric" name="network" value='abuja-electric' className="custom-control-input" required type="radio" onChange={handleChange}   />
+                  <label className="custom-control-label" for='abuja-electric' >AEDC</label>
+                </div>
+              </div>
               <div class="form-row">
               <div class="col-md-6 col-lg-3 form-group">
-                  <select class="custom-select" id="operator" required="">
-                    <option value="">Select Your Operator</option>
-                    <option>1st Operator</option>
-                    <option>2nd Operator</option>
-                    <option>3rd Operator</option>
-                    <option>4th Operator</option>
-                    <option>5th Operator</option>
-                    <option>6th Operator</option>
-                    <option>7th Operator</option>
+                  <select class="custom-select" id="meteType" required name='meterType' onChange={handleChange} value={formData.meterType} >
+                    <option value="">Select Meter Type</option>
+                    <option  >Postpaid</option>
+                    <option>Prepaid</option>
                   </select>
-                </div>
-              <div class="col-md-6 col-lg-3 form-group">
-                <input type="text" class="form-control" data-bv-field="number" id="consumerNumber" required placeholder="Enter Consumer Number"/>
               </div>
               <div class="col-md-6 col-lg-3 form-group">
-                <input class="form-control" id="amount" placeholder="Enter Amount" required type="text"/>
+                <input type="text" class="form-control" data-bv-field="number" id="meterNumber" name='meterNumber' value={formData.meterNumber} required placeholder="Enter Meter Number" onInput={handleVerify} onChange={handleChange} />
               </div>
               <div class="col-md-6 col-lg-3 form-group">
-              <button class="btn btn-primary btn-block btn-lg" type="submit">Continue</button>
+                <input class="form-control" id="amount" autoComplete='off' placeholder="Enter Amount" name='amount' value={formData.amount} onChange={handleChange} required type="text"/>
+              </div>
+              <div class="col-md-6 col-lg-3 form-group">
+                <input class="form-control" id="phoneNumber" placeholder="Enter Phone Number " name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} required type="text"/>
+              </div>
+              <div class="col-md-6 col-lg-2 form-group">
+              <button class="btn btn-success btn-block btn-lg" type="button" onClick={handleSubmit} >Continue</button>
+              </div >
+              <div class="col-md-6 col-lg-2 form-group" >
+              <button class="btn btn-danger btn-block btn-lg" type="reset">Cancel</button>
               </div>
               </div>
             </form>            
@@ -128,7 +228,7 @@ class Electricity  extends Component {
             </div>
           </div>
         </div>
-        <div className="text-center pt-4"> <a href="#" className="btn btn-outline-primary">Get Started Earn</a> </div>  
+        <div className="text-center pt-4"> <a href="/Login" className="btn btn-outline-primary">Get Started Earn</a> </div>  
     </div>
     </section>
     
@@ -152,6 +252,5 @@ class Electricity  extends Component {
   </>
          );
     }
-}
- 
+
 export default Electricity ;

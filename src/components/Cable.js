@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import Footer from '../components/Footer';
 
 import Header from '../components/Header';
@@ -7,12 +7,158 @@ import Header from '../components/Header';
 
 
 
-class Cable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
+const Cable = (props) => {
+  const [cables, setCables] = useState([]);
+  const [ formData, setFormData] = useState({
+    amount:'', 
+    phoneNumber:"", 
+     network:'',
+     cable:'',
+     smartCardNumber:'',
+     variation_code:''
+     
+
+  })
+    
+
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    // console.log(name, value);
+    
+    console.log(e.target.value);
+
+  }
+
+  const dstv = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=dstv`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setCables(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
     }
-    render() { 
+  }
+  const gotv = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=gotv`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setCables(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+  const startimes = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=startimes`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setCables(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+    
+
+  useEffect(() => {
+    dstv();
+  }, [])
+  useEffect(() => {
+    gotv();
+  }, [])
+  useEffect(() => {
+    startimes();
+  }, [])
+
+
+  // useEffect(() => {
+
+
+  //   let Cable = formData.network;
+  //   Cable =+ ( formData.network === formData.network) ? 'gotv' : 'startimes'
+    
+  //   const url = `service-variations?serviceID=${Cable}`;
+    
+  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
+  //    .then((response) => {
+  //      //handle success
+  //      const data = response.data.content.varations
+  //      setCables(data);
+  //      console.log(data)
+     
+  //  })
+  //  .catch((error) => {
+  //    //handle error
+  //    console.log(error)
+  //  })
+
+  //    return () => {
+  //     setCables([])
+  //    }
+  //  }, [props])
+
+
+     // VERIFY SMART CARD NUMBER
+  const handleVerify = (e) => {
+    const params = {
+      billersCode:formData.smartCardNumber,
+      serviceID:formData.network
+    }
+    axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params)
+    .then((response) => {
+      //handle success
+      const data = response.data
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    console.log(error)
+  })
+  }
+
+
+   const handleSubmit = (e) => {
+    
+    const params = {
+      request_id:'',
+      billersCode:formData.smartCardNumber,
+      serviceID:formData.network,
+      phone:formData.phoneNumber,
+      variation_code:formData.variation_code,
+      amount:formData.amount
+    }
+    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+    .then((response) => {
+      //handle success
+      const data = response.data
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    console.log(error)
+  })
+  console.log(formData);
+  }
+     
         return ( 
           <>
           <Header />
@@ -23,44 +169,62 @@ class Cable extends Component {
           <div className="container">
           
           <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fa fa-mobile-alt"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-tv"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-wifi"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-university"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
           <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
 
           <div className="bg-light shadow-md rounded px-4 pt-4 pb-3">
-              <h2 className="text-4 mb-3">CableTv Recharge or Bill Payment</h2>
-                <form id="cableTvRechargeBill" method="post">
+              <h2 className="text-4 mb-3">CableTv Recharge</h2>
+                <form id="cableTvRecharge" method="post">
+                <div className="mb-3">
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="dstv" name="network" value='dstv' className="custom-control-input" required type="radio"  onClick={() => dstv()} onChange={handleChange} />
+                  <label className="custom-control-label" for='dstv' >DSTV</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="gotv" name="network" value='gotv' className="custom-control-input" required type="radio" onClick={() => gotv()} onChange={handleChange} />
+                  <label className="custom-control-label" for="gotv" >GOTV</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="startimes" name="network" className="custom-control-input" value='startimes' required type="radio" onClick={() => startimes()}  onChange={handleChange} />
+                  <label className="custom-control-label" for='startimes' >STARTIMES</label>
+                </div>
+              </div>
                 <div className="form-row">
                   <div className="col-md-6 col-lg-3 form-group">
-                      <select className="custom-select" id="operator" required="">
+                      <select className="custom-select" id="variation_code" name='variation_code' required onChange={handleChange}  value={formData.variation_code} >
                         <option value="">Select Your Operator</option>
-                        <option>1st Operator</option>
-                        <option>2nd Operator</option>
-                        <option>3rd Operator</option>
-                        <option>4th Operator</option>
-                        <option>5th Operator</option>
-                        <option>6th Operator</option>
-                        <option>7th Operator</option>
+                        {
+                               cables.map(cable =>  <option key={cable.variation_code} value={cable.variation_code} >{cable.name} </option>)
+                             }
                       </select>
                     </div>
                   <div className="col-md-6 col-lg-3 form-group">
-                    <input type="text" className="form-control" data-bv-field="number" id="accountNumber" required placeholder="Enter Account Number"/>
+                    <input type="text" className="form-control" data-bv-field="number" id="smartCardNumber" name='smartCardNumber' value={formData.smartCardNumber} required placeholder="Enter Smart card Number" onChange={handleChange} onInput={handleVerify}/>
                   </div>
                   <div className="col-md-6 col-lg-3 form-group">
-                  <a href="#" data-target="#view-plans" data-toggle="modal" className="view-plans-link">View Plans</a>
-                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"/>
+                    <input type="text" className="form-control" data-bv-field="number" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Phone Number" onChange={handleChange}/>
                   </div>
                   <div className="col-md-6 col-lg-3 form-group">
-                  <button className="btn btn-primary btn-block" type="submit">Continue</button>
+                  
+                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"  value={formData.variation_code} />
+                  </div>
+
+                  <div className="col-md-6 col-lg-2 form-group">
+                  <button className="btn btn-success btn-block" type="button" onClick={handleSubmit}>Continue</button>
+                  </div>
+                  <div className="col-md-6 col-lg-2 form-group">
+                  <button className="btn btn-danger btn-block" type="reset">Cancel</button>
                   </div>
                   </div>
                 </form>
+                
           </div>
         </div>
         </div>
@@ -146,168 +310,12 @@ class Cable extends Component {
             </div>
           </div>
         </section>
-
-         
-    <div id="view-plans" className="modal fade" role="dialog" aria-hidden="true">
-  <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title">Browse Plans</h5>
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-      </div>
-      <div className="modal-body">
-        <form className="form-row mb-4 mb-sm-2" method="post">
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">Select Your Operator</option>
-                <option>1st Operator</option>
-                <option>2nd Operator</option>
-                <option>3rd Operator</option>
-                <option>4th Operator</option>
-                <option>5th Operator</option>
-                <option>6th Operator</option>
-                <option>7th Operator</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">Select Your Circle</option>
-                <option>1st Circle</option>
-                <option>2nd Circle</option>
-                <option>3rd Circle</option>
-                <option>4th Circle</option>
-                <option>5th Circle</option>
-                <option>6th Circle</option>
-                <option>7th Circle</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">All Plans</option>
-                <option>Topup</option>
-                <option>Full Talktime</option>
-                <option>Validity Recharge</option>
-                <option>SMS</option>
-                <option>Data</option>
-                <option>Unlimited Talktime</option>
-                <option>STD</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <button className="btn btn-primary btn-block" type="submit">View Plans</button>
-          </div>
-        </form>
-        <div className="plans">
-          <div className="table-responsive-md">
-            <table className="table table-hover border">
-              <tbody>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$10 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">8 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">7 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Talktime $8 & 2 Local & National SMS & Free SMS valid for 2 day(s)</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$15 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">13 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">15 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Regular Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$50 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">47 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">47 Local Vodafone min free </td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$100 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">92 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Local min 92 & 10 Local & National SMS & Free SMS valid for 
-                    7 day(s).</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$150 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">143 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">60 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Talktime $143 & 50 Local & National SMS & Free SMS valid for 
-                    15 day(s).</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$220 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">220 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$250 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">250 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 50 SMS per day for 7 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$300 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">301 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">64 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$410 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">0 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Unlimited Local,STD & Roaming calls</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$501 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">510 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">180 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 28 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$799 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">820 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">250 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 84 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$999 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">1099 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">356 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 90 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-        
       </div>
       <Footer />
       </>
       
        );
     }
-}
+
  
 export default Cable;

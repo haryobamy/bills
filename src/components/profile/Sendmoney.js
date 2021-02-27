@@ -57,6 +57,8 @@ import axios from 'axios'
       
      console.log(formData);
     }
+
+    // verfy account number
     const handleVerify = (e) => {
       const params = {
         billersCode:formData.accountNumber,
@@ -92,6 +94,23 @@ import axios from 'axios'
 
                 
             <div id="content" className="py-4">
+
+            <div className="bg-secondary">
+      <div className="container">
+      <ul className="nav primary-nav alternate">
+          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link " href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
+</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link  active" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+        </ul>  
+      </div>
+    </div>
+
+
             <div className="container">
               <h2 className="font-weight-400 text-center mt-3">Send Money</h2>
               <p className="text-4 text-center mb-4">Send your money on anytime, anywhere in the world.</p>
@@ -122,8 +141,8 @@ import axios from 'axios'
                       <div className="form-group">
                         <label for="accountNumber">Account Number</label>
                         <div className="input-group">
-                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number" autocomplete="off" maxlength="10" data-parsley-required="true" data-parsley-minlength="10" data-parsley-minlength-message="Please enter a valid account number" data-parsley-required-message="Please enter an account number" data-safe="true"  onChange={handleChange} value={formData.accountNumber} />
-                        <button className="btn btn-warning" type="button"  onClick={handleVerify} >Verify</button>
+                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number" autocomplete="off" maxlength="11" data-parsley-required="true" data-parsley-minlength="11" data-parsley-minlength-message="Please enter a valid account number" data-parsley-required-message="Please enter an account number" data-safe="true"  onChange={handleChange} value={formData.accountNumber} onInput={handleVerify} />
+                        {/* <button className="btn btn-warning" type="button"  onClick={handleVerify} >Verify</button> */}
                         </div>
                       </div>
 

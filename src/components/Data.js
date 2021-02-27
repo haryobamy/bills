@@ -6,79 +6,137 @@ import Header from '../components/Header';
 
 
 
-const Data = () => {
+const Data = (props) => {
 
-  const [mtns, setMtns] = useState([])
-  const [checked, setChecked] = useState(false)
-  const [modal, setModal] = useState({
-
-
-  })
+  const [service, setService] = useState([])
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
-     network:"",
+     network:'',
      variation_code:'',
      variation_amount:''
-     
 
   })
 
 
 
 
-
-
-  
-
-
-  //  if (this.mtn-data === checked) {
-  //   useEffect(() => {
-
-    
-    
-  //     axios.get('https://sandbox.vtpass.com/api/service-variations?serviceID=mtn-data')
-  //      .then((response) => {
-  //        //handle success
-  //        const data = response.data.content.varations
-  //        setMtns(data);
-  //        console.log(data)
-       
-  //    })
-  //    .catch((error) => {
-  //      //handle error
-  //      console.log(error)
-  //    })
-  
-  //      return () => {
-  //       setMtns([])
-  //      }
-  //    }, [])
-     
-  //  } else {
-     
-  //  }
+  const mtnData = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=mtn-data`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setService(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+  const airtelData = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=airtel-data`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setService(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+  const gloData = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=glo-data`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setService(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+  const etisalatData = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=etisalat-data`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setService(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
+  const smileData = async () => {
+    try {
+       await axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=smile-direct`)
+       .then((response) => {
+              //handle success
+             const data = response.data.content.varations
+             setService(data);
+             console.log(data)
+         })
+    } catch (error) {
+      //handle error
+     console.log(error)
+    }
+  }
 
   useEffect(() => {
+    mtnData();
+  }, [])
 
+  useEffect(() => {
+    airtelData();
+  }, [])
+
+  useEffect(() => {
+    gloData();
+  }, [])
+
+  useEffect(() => {
+    etisalatData();
+  }, [])
+
+  useEffect(() => {
+    smileData();
+  }, [])
+  
+
+  // useEffect(() => {
+
+
+  //   let mtn = 'mtn-data'
     
-    axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=airtel-data`)
-     .then((response) => {
-       //handle success
-       const data = response.data.content.varations
-       setMtns(data);
-       console.log(data)
+  //   const url = `service-variations?serviceID=${mtn}`;
+    
+  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
+  //    .then((response) => {
+  //      //handle success
+  //      const data = response.data.content.varations
+  //      setService(data);
+  //      console.log(data)
      
-   })
-   .catch((error) => {
-     //handle error
-     console.log(error)
-   })
+  //  })
+  //  .catch((error) => {
+  //    //handle error
+  //    console.log(error)
+  //  })
 
-     return () => {
-      setMtns([])
-     }
-   }, [])
+  //    return () => {
+  //     setService([])
+  //    }
+  //  }, [props])
 
    const handleChange = (e) => {
     const {name,value} = e.target
@@ -102,10 +160,15 @@ const Data = () => {
     console.log(e.target.value);
 
   }
-  const handlePlanSelect = (e) => {
+  // const handlePlanSelect = (e) => {
+
+  //   const {name,value} = e.target
+  //   setService({
+  //     [name]:value
+  //   })
     
-    console.log('plan selected')
-  }
+  //   console.log('plan selected')
+  // }
 
 
   
@@ -113,7 +176,6 @@ const Data = () => {
 
 
   const handleSubmit = (e) => {
-
     
       const params = {
         request_id:'',
@@ -142,10 +204,10 @@ const Data = () => {
 
    
 
-   const handleCheck = (e) => {
-    setChecked(!checked)
-    // console.log('checked');
-   }
+  //  const handleCheck = (e) => {
+  //   setChecked(!checked)
+  //    console.log('plan selected');
+  //  }
  
 
   
@@ -164,14 +226,14 @@ const Data = () => {
       <div className="container">
       
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link active" href="/mobile"><span><i className="fas fa-mobile-alt"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fas fa-tv"></i></span> Internet Data </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fas fa-wifi"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fas fa-university"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fas fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link active" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fas fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
 
 
@@ -180,23 +242,23 @@ const Data = () => {
             <form id="form-data" method="post">
             <div className="mb-3">
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="mtn-data" name="network" value='mtn-data' className="custom-control-input" required type="radio"   onClick={handleCheck} onChange={handleNetworkSelect} />
+                <input id="mtn-data" name="network" value='mtn-data' className="custom-control-input" required type="radio" onClick={ () => mtnData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='mtn-data' >MTN</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="airtel-data" name="network" value='airtel-data' className="custom-control-input" required type="radio" onClick={handleCheck} onChange={handleNetworkSelect} />
+                <input id="airtel-data" name="network" value='airtel-data' className="custom-control-input" required type="radio" onClick={ () => airtelData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for="airtel-data" >AIRTEL</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="9mobile-data" name="network" className="custom-control-input" value='9mobile-data' required type="radio" onClick={handleCheck} onChange={handleNetworkSelect} />
+                  <input id="9mobile-data" name="network" className="custom-control-input" value='9mobile-data' required type="radio" onClick={ () => etisalatData()} onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='9mobile-data' >9MObile</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="glo-data" name="network" value='glo-data' className="custom-control-input" required type="radio"  onClick={handleCheck} onChange={handleNetworkSelect} />
+                  <input id="glo-data" name="network" value='glo-data' className="custom-control-input" required type="radio"  onClick={() =>  gloData()} onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='glo-data' >GLO</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="smile-direct" name="network" value='smile-direct' className="custom-control-input" required type="radio" onClick={handleCheck} onChange={handleNetworkSelect} />
+                  <input id="smile-direct" name="network" value='smile-direct' className="custom-control-input" required type="radio" onClick={() =>  smileData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='smile-direct' >SMILE</label>
                 </div>
               </div>
@@ -206,7 +268,7 @@ const Data = () => {
               <select id="variation_code" name='variation_code' data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" className="selectpicker form-control bg-transparent" required onChange={handleNetworkSelect}  value={formData.variation_code} >
                             <option>Select Your  Plan</option>
                             {
-                               mtns.map(network =>  <option key={network.variation_code} value={network.variation_code}  >{network.name} </option>)
+                               service.map(network =>  <option key={network.variation_code} value={network.variation_code}  >{network.name} </option>)
                             }
                              
                             </select>
@@ -363,13 +425,13 @@ const Data = () => {
         <div className="plans">
           <div className="table-responsive-md">
           {
-                               mtns.map(network =>  <table  className="table table-hover border"  key={network.variation_code} value={network.variation_code} >
+                               service.map(network =>  <table  className="table table-hover border"  key={network.variation_code} value={network.variation_code} >
                                  
                                  <tbody>
                                    <tr>
                                    <td className="text-5 text-primary text-center align-middle"> ₦{network.variation_amount} <span className="text-1 text-muted d-block">Amount</span></td>
                                    <td className="text-3 text-center align-middle">{network.name} <span className="text-1 text-muted d-block">Plan-Validity</span></td>
-                                   <td className="align-middle"> <a data-target='#variation_code' className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="button" onClick={handlePlanSelect}>Recharge Now </a> </td>
+                                   {/* <td className="align-middle"> <a data-target='#variation_code' className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="button" onClick={handlePlanSelect}>Recharge Now </a> </td> */}
                                    </tr>
                                  </tbody>
                                  
@@ -382,7 +444,7 @@ const Data = () => {
               <tbody>
                 <tr>
                 {/* {
-                               mtns.map(network =>  <td key={network.variation_code} value={network.variation_code} >{network.variation_amount} <span></span> amount</td>)
+                               service.map(network =>  <td key={network.variation_code} value={network.variation_code} >{network.variation_amount} <span></span> amount</td>)
                              } */}
                   <td className="text-5 text-primary text-center align-middle"> <span className="text-1 text-muted d-block">Amount</span></td>
                   <td className="text-3 text-center align-middle">8 <span className="text-1 text-muted d-block">Talktime</span></td>

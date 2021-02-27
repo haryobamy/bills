@@ -50,10 +50,7 @@ router.post('/signup', async (req, res) => {
 
 
 // login
-router.post('/login', async (req, res) => {
-
-
-
+router.get('/login', async (req, res) => {
 
     
     //checking if user email already exist in the database
