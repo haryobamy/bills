@@ -33,9 +33,7 @@ class Header extends Component {
               <ul className="navbar-nav">
                 <li className="dropdown active"> <a className="dropdown-toggle" href="/">Home</a>
                 </li>
-                <li className="dropdown"> <a className="dropdown-toggle" href="/mobile"> Recharge or Bill Payment</a>
-                  
-                </li>
+                
                    
                 <li className="login-signup ml-lg-2"><a className="pl-lg-4 pr-0" href="/login" title="Login / Sign up">Login / Sign up <span className="d-none d-lg-inline-block"><i className="fa fa-user"></i></span></a></li>
               </ul>

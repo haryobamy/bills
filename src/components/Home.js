@@ -1,22 +1,84 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
-
 import Header from '../components/Header';
+import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.css'
 
 
 
+import banner1 from '../assests/images/slider/banner1.jpg';
+import { Carousel } from 'bootstrap';
+import Login from './Login';
 
 
 
-class Home extends Component {
-    state = {  }
-    render() { 
+const Home = (props) => {
+  const [ formData, setFormData] = useState({
+    amount:'', 
+    phoneNumber:"", 
+     network:'',
+  })
+
+ 
+   
+
+
+
+  const handleSubmit = (e) => {
+    
+    const params = {
+      request_id:'',
+      serviceID:formData.network,
+      phone:formData.phoneNumber,
+      amount:formData.amount
+    }
+    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+    .then((response) => {
+      //handle success
+      const data = response.data
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    console.log(error)
+  })
+  console.log(formData);
+  }
+    
+
+
+  const handleNetworkSelect = (e) => {
+    
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    console.log(name, value);
+    
+    console.log(e.target.value);
+
+  }
+
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    console.log(name, value);
+  } 
+
+  const {user}= props;
         return ( 
+         
+        
 
 
           <>
-          <Header />
-
+        
+          
             
           <div>
           <section className="page-header page-header-text-light py-0">
@@ -25,8 +87,67 @@ class Home extends Component {
           <div className="hero-mask opacity-7 bg-dark"></div>
           <div className="hero-bg" style={{backgroundImage:"url('./images/bg/image-6.jpg')"}}></div>
         <div className="hero-content py-2 py-lg-4 my-2 my-md-4">
-            <div className="container mt-5">
-              <div className="row align-items-center">
+        {/* <div className="container mt-5"> */}
+
+            <div className="container">
+       {/* Secondary Navigation */}
+      
+      <ul className="nav primary-nav alternate">
+          <li className="nav-item"> <a className="nav-link active" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
+</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+        </ul> 
+        
+        {/* Secondary Navigation end  */}
+        
+       {/* Mobile Recharge */}
+      
+      <div className="bg-secondary shadow-md rounded px-4 pt-4 pb-3">
+            <h2 className="text-4 mb-3">Mobile Recharge</h2>
+            <form id="recharge-bill" method="post">
+           
+              <div className="mb-3">
+              <div className="custom-control custom-radio custom-control-inline">
+                <input id="mtn" name="network" value='mtn' className="custom-control-input" required type="radio"   onClick={handleNetworkSelect} />
+                  <label className="custom-control-label" for='mtn' >MTN</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                <input id="airtel" name="network" value='airtel' className="custom-control-input" required type="radio"  onChange={handleNetworkSelect} />
+                  <label className="custom-control-label" for="airtel" >AIRTEL</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="etisalat" name="network" className="custom-control-input" value='etisalat' required type="radio"  onChange={handleNetworkSelect} />
+                  <label className="custom-control-label" for='etisalat' >9MObile</label>
+                </div>
+                <div className="custom-control custom-radio custom-control-inline">
+                  <input id="glo" name="network" value='glo' className="custom-control-input" required type="radio"   onChange={handleNetworkSelect} />
+                  <label className="custom-control-label" for='glo' >GLO</label>
+                </div>
+              </div>
+              <div className="form-row">
+              <div className="col-md-6 col-lg-4 form-group">
+                <input type="text" className="form-control" data-bv-field="number" id="phoneNumber"  name='phoneNumber' required placeholder="Enter Mobile Number" onChange={handleChange} />
+              </div>
+              <div className="col-md-6 col-lg-4 form-group">
+                <input className="form-control" id="amount" name='amount'required placeholder="Enter Amount"  type="text" onChange={handleChange} />
+              </div>
+              <div className="col-md-6 col-lg-2 form-group">
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button>
+              </div>
+              <div className="col-md-6 col-lg-2 form-group">
+              <button className="btn btn-danger btn-lg btn-block" type="reset">Cancle</button>
+              </div>
+              </div>
+            </form>
+      {/* </div> Mobile Recharge end  */}
+    </div>
+    </div>
+              {/* <div className="row align-items-center">
           <div className="col-12">
                   <ul className="breadcrumb justify-content-start mb-0">
                     <li><a href="index.html">Home</a></li>
@@ -37,8 +158,8 @@ class Home extends Component {
                   <h1>Page Header Custom Background</h1>
             <p className="lead mb-0">with Transparent Header</p>
                 </div>
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
          </div>
           </section>
@@ -79,44 +200,44 @@ class Home extends Component {
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader.jpg"/>
                     <h3>Neil Patel</h3>
                     <p className="text-muted">CEO & Founder</p>
-                    <ul className="social-icons social-icons-sm d-inline-flex">
+                    {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
                       <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-2.jpg"/>
                     <h3>James Maxwell</h3>
                     <p className="text-muted">Co-Founder</p>
-                    <ul className="social-icons social-icons-sm d-inline-flex">
+                    {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
                       <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-3.jpg"/>
                     <h3>Ruby Clinton</h3>
                     <p className="text-muted">Co-Founder</p>
-                    <ul className="social-icons social-icons-sm d-inline-flex">
+                    {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
                       <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-4.jpg"/>
                     <h3>Miky Sheth</h3>
                     <p className="text-muted">Support</p>
-                    <ul className="social-icons social-icons-sm d-inline-flex">
+                    {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
                       <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
               </div>
@@ -130,6 +251,6 @@ class Home extends Component {
 
          );
     }
-}
+
  
 export default Home;

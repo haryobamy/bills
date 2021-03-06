@@ -14,7 +14,7 @@ class About extends Component {
 
           <>
 
-          <Header />
+
 
             <div>
 

@@ -12,7 +12,7 @@ class Support extends Component {
     render() { 
         return ( 
           <>
-          <Header />
+          
 
             <div id="content">
     <div className="container">

@@ -11,7 +11,7 @@ class Faq extends Component {
     render() { 
         return ( 
           <>
-          <Header />
+          
             
             <div>
             

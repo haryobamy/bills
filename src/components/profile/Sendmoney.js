@@ -90,7 +90,7 @@ import axios from 'axios'
 
 
             <>
-            <Profileheader/>
+            
 
                 
             <div id="content" className="py-4">

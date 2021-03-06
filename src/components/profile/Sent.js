@@ -11,7 +11,7 @@ class Sent extends Component {
         return ( 
           <>
 
-          <Profileheader />
+          
             <div>
 
             <div className="bg-primary">

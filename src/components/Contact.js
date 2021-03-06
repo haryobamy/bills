@@ -12,7 +12,7 @@ class Contact extends Component {
     render() { 
         return ( 
           <>
-          <Header />
+          
 
             <div>
 

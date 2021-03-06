@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 
 
 
-class Profileheader extends Component {
-    state = {  }
-    render() { 
+const Profileheader = (props) => {
+  const {handleLogout} = props;
         return ( 
             
             <div>
@@ -25,7 +24,7 @@ class Profileheader extends Component {
                   <ul className="navbar-nav mr-auto">
                     <li><a href="/dashboard">Dashboard</a></li>
                     <li><a href="/transaction">Transactions</a></li>
-                    <li><a href="/sendmoney">Transfer</a></li>
+                    <li><a href="/data">Recharge & Bills Payments</a></li>
                     <li><a href="/help">Help</a></li>
                   </ul>
                 </div>
@@ -37,7 +36,7 @@ class Profileheader extends Component {
               <nav className="login-signup navbar navbar-expand">
                 <ul className="navbar-nav">
                 <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-success shadow-none d-none d-sm-block" href="/profile">Settings</a></li>
-                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" href="">Sign out</a></li>
+                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" href="/" onClick={handleLogout}  >Sign out</a></li>
                 </ul>
               </nav>
               
@@ -51,6 +50,6 @@ class Profileheader extends Component {
       
         );
     }
-}
+
  
 export default Profileheader;

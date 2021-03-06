@@ -85,7 +85,23 @@ class Footer extends Component {
           <li className="nav-item"> <a className="nav-link" href="#">Terms of Use</a> </li>
           <li className="nav-item"> <a className="nav-link" href="#">Privacy Policy</a> </li>
         </ul>
-        <p className="copyright-text">Copyright © 2018 <a href="#">Quickai</a>. All Rights Reserved.</p>
+        <div className="copyright" id="copyright">
+            © {new Date().getFullYear()}, Designed by{" "}
+            <a
+              href="#"
+              target="_blank"
+            >
+              plus27
+            </a>
+            . Coded by{" "}
+            <a
+              href="#"
+              target="_blank"
+            >
+              haryo
+            </a>
+            .
+          </div>
       </div>
     </div>
   </div>

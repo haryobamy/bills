@@ -3,14 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import Popper from 'popper.js';
 import 'bootstrap';
 import './index.css';
-
-
 import React from 'react';
-import ReactDOM from 'react-dom';
-
-
+import ReactDOM from 'react-dom'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+
+
+axios.defaults.headers.common['Authorization'] = 'Bearer' + localStorage.getItem('token');
+
+
 
 ReactDOM.render(
   <React.StrictMode>

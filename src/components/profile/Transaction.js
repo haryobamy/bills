@@ -8,7 +8,7 @@ class Transaction extends Component {
     render() { 
         return ( 
             <>
-            <Profileheader />
+            
 
             <div id="content" className="py-4">
     <div className="container">

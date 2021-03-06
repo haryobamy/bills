@@ -88,33 +88,6 @@ const Cable = (props) => {
   }, [])
 
 
-  // useEffect(() => {
-
-
-  //   let Cable = formData.network;
-  //   Cable =+ ( formData.network === formData.network) ? 'gotv' : 'startimes'
-    
-  //   const url = `service-variations?serviceID=${Cable}`;
-    
-  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
-  //    .then((response) => {
-  //      //handle success
-  //      const data = response.data.content.varations
-  //      setCables(data);
-  //      console.log(data)
-     
-  //  })
-  //  .catch((error) => {
-  //    //handle error
-  //    console.log(error)
-  //  })
-
-  //    return () => {
-  //     setCables([])
-  //    }
-  //  }, [props])
-
-
      // VERIFY SMART CARD NUMBER
   const handleVerify = (e) => {
     const params = {
@@ -161,7 +134,7 @@ const Cable = (props) => {
      
         return ( 
           <>
-          <Header />
+          
         
         <div id="content">
     
@@ -169,7 +142,7 @@ const Cable = (props) => {
           <div className="container">
           
           <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link" href="/mobile"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
           <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
           <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
           <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
@@ -269,13 +242,13 @@ const Cable = (props) => {
           <section className="section bg-light shadow-md px-5">
           <div className="container">
             <h2 className="text-9 font-weight-600 text-center">Refer & Earn</h2>
-            <p className="lead text-center mb-5">Refer your friends and earn up to $20.</p>
+            <p className="lead text-center mb-5">Refer your friends and earn up to ₦20.</p>
             <div className="row">
               <div className="col-md-4">
                 <div className="featured-box style-4">
                   <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
                   <h3>You Refer Friends</h3>
-                  <p className="text-3">Share your referral link with friends. They get $10.</p>
+                  <p className="text-3">Share your referral link with friends. They get ₦10.</p>
                 </div>
               </div>
               <div className="col-md-4">
@@ -289,7 +262,7 @@ const Cable = (props) => {
                 <div className="featured-box style-4">
                   <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
                   <h3>Earn You</h3>
-                  <p className="text-3">You get $20. You can use these credits to take recharge.</p>
+                  <p className="text-3">You get ₦20. You can use these credits to take recharge.</p>
                 </div>
               </div>
             </div>
@@ -302,7 +275,7 @@ const Cable = (props) => {
             <div className="row">
               <div className="col-lg-6 text-center"> <img className="img-fluid" alt="" src="images/app-mobile-2.png"/> </div>
               <div className="col-lg-6 text-center text-lg-left">
-                <h2 className="text-9 font-weight-600 my-4">Download Our Quickai</h2> <br/> <h2>className="d-none d-lg-inline-block">
+                <h2 className="text-9 font-weight-600 my-4">Download Our Quickai</h2> <br/> <h2 className="d-none d-lg-inline-block">
                   Mobile App Now</h2>
                 <p className="lead">Download our app for the fastest, most convenient way to Recharge & Bill Payment, Booking and more....</p>
                 <div className="pt-3"> <a className="mr-4" href=""><img alt="" src="images/app-store.png"/></a><a href=""><img alt="" src="images/google-play-store.png"/></a> </div>

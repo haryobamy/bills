@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import eva from  '../../assests/images/team/leader.jpg';
 
 
@@ -8,21 +8,29 @@ import Profileheader from './Pofileheader';
 import Profilefooter from './Profilefooter';
 
 
+const Myprofile = () =>{
+  const [ formData, setFormData] = useState({
+    firstName:'', 
+    lastName:"", 
+     network:'',
+     variation_code:'',
+     variation_amount:''
 
-class Myprofile extends Component {
-    state = {  }
-    render() { 
+  })
+
+
+
         return ( 
             <>
 
-            <Profileheader />
+            
             <div className="bg-primary">
                 
                 <div className="container d-flex justify-content-center">
                   <ul className="nav secondary-nav">
         
           
-                    <li className="nav-item"> <a className="nav-link active" href="/profile">Account</a></li>
+                    <li className="nav-item"> <a className="nav-link active" href="/profile">Profile</a></li>
                     <li className="nav-item"> <a className="nav-link"   href="/addcard">Cards & Bank Accounts</a></li>
                     <li className="nav-item"> <a className="nav-link" href="/notification">Notifications</a></li>
                     
@@ -38,27 +46,27 @@ class Myprofile extends Component {
         
         <aside className="col-lg-3"> 
           
-          {/* Profile Details */}
-          
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
+         {/* Profile Details */}
+         
+         <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={eva} alt=""/>
-              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera  position-absolute"></i>
+              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute"></i>
                 <input type="file" className="custom-file-input" id="customFile"/>
               </div>
             </div>
             <p className="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
             <p className="mb-2"><a href="profile.html" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
           </div>
-          {/* <!-- Profile Details End --> */}
+           {/* Profile Details End  */}
           
            {/* Available Balance */}
          
           <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div className="text-17 text-light my-3"><i className="fa fa-wallet"></i></div>
-            <h3 className="text-9 font-weight-400">$2956.00</h3>
+            <h3 className="text-9 font-weight-400">₦2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3" />
-            <div className="d-flex"><a href="withdraw-money.html" className="btn-link mr-auto">Withdraw</a> <a href="deposit-money.html" className="btn-link ml-auto">Deposit</a></div>
+            <div className="d-flex"><a href="withdraw-money.html" className="btn-link mr-auto">Withdraw</a> <a href="" className="btn-link ml-auto">Deposit</a></div>
           </div>
            {/* Available Balance End  */}
           
@@ -69,7 +77,7 @@ class Myprofile extends Component {
             <h3 className="text-3 font-weight-400 my-4">Need Help?</h3>
             <p className="text-muted opacity-8 mb-4">Have questions or concerns regrading your account?<br/>
               Our experts are here to help!.</p>
-            <a href="#" className="btn btn-primary btn-block">Chate with Us</a> </div>
+            <a href="#" className="btn btn-primary btn-block">Contact Us</a> </div>
           {/* <!-- Need Help? End -->  */}
           
         </aside>
@@ -114,20 +122,20 @@ class Myprofile extends Component {
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="firstName">First Name</label>
-                          <input type="text" value="Smith" className="form-control" data-bv-field="firstName" id="firstName" required placeholder="First Name"/>
+                          <input type="text"  className="form-control" data-bv-field="firstName" id="firstName" required placeholder="First Name"/>
                         </div>
                       </div>
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="fullName">Last Name</label>
-                          <input type="text" value="Rhodes" className="form-control" data-bv-field="fullName" id="fullName" required placeholder="Full Name"/>
+                          <input type="text"  className="form-control" data-bv-field="fullName" id="fullName" required placeholder="Full Name"/>
                         </div>
                       </div>
                       <div className="col-12">
                         <div className="form-group">
                           <label for="birthDate">Date of Birth</label>
                           <div className="position-relative">
-                            <input id="birthDate" value="12-09-1982" type="text" className="form-control" required placeholder="Date of Birth"/>
+                            <input id="birthDate"  type="text" className="form-control" required placeholder="Date of Birth"/>
                             <span className="icon-inside"><i className="fa fa-calendar-alt"></i></span> </div>
                         </div>
                       </div>
@@ -771,6 +779,6 @@ class Myprofile extends Component {
             </>
          );
     }
-}
+
  
 export default Myprofile;

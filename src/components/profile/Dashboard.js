@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
 import Header from './Pofileheader';
 import eva from  '../../assests/images/eva.jpg';
 import Profilefooter from './Profilefooter';
@@ -9,12 +9,52 @@ import Profilefooter from './Profilefooter';
 
 class Dashboard extends Component {
     state = {  }
-    render() { 
+
+
+
+    componentDidMount(){
+
+      
+
+      axios.get('http://localhost:4000/app/user')
+      .then((res) => {
+
+        this.setState({
+          user: res.userData 
+        })
+        console.log(res)
+      })
+      .catch((error) => {
+        //handle error
+        console.log(error)
+      })
+    }
+
+    render() {
+      if(this.props.user){
+        return(
+          <h2>Hi {this.props.user.firstName} {this.props.user.lastName} </h2>
+        )
+      }
         return ( 
             <>
-            <Header />
+            
 
             <div>
+            <div className="bg-primary">
+                
+                <div className="container d-flex justify-content-center">
+                  <ul className="nav secondary-nav">
+        
+          
+                    <li className="nav-item"> <a className="nav-link " href="/profile">Profile</a></li>
+                    <li className="nav-item"> <a className="nav-link"   href="/addcard">Cards & Bank Accounts</a></li>
+                    <li className="nav-item"> <a className="nav-link" href="/notification">Notifications</a></li>
+                    
+                  </ul>
+                 
+                </div>
+              </div>
                 
 
                 <div id="content" className="py-4">
@@ -55,7 +95,7 @@ class Dashboard extends Component {
             <h3 className="text-3 font-weight-400 my-4">Need Help?</h3>
             <p className="text-muted opacity-8 mb-4">Have questions or concerns regrading your account?<br/>
               Our experts are here to help!.</p>
-            <a href="#" className="btn btn-primary btn-block">Chate with Us</a> 
+            <a href="#" className="btn btn-primary btn-block">Contact Us</a> 
           </div>
            {/* Need Help? End */}
           
