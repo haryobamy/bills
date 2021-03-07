@@ -38,10 +38,25 @@
 }
 
 .bg-secondary {
-  background-color: #0c2f55 !important;
+  background-color: #1384e4 !important;
 }
 
 .bg-primary,
 .badge-primary {
   background-color: #2dbe60 !important;
+}
+ .serviceNav  {
+   color: #fff !important;
+  
+ }
+ .nav-item
+ :hover{
+   color:#546834 !important;
+   
+   
+ }
+
+  .actives  {
+  background-color: #144d7d87;
+  color: #fff !important;
 }

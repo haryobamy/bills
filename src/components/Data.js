@@ -11,6 +11,8 @@ const Data = (props) => {
   const user = JSON.parse(localStorage.getItem('user'))
   const [planAmount, setPlanAmount] = useState('')
   const [service, setService] = useState([])
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
@@ -19,6 +21,13 @@ const Data = (props) => {
      
 
   })
+
+ 
+
+  
+    // setUsername('plus27solutions@gmail.com');
+    // setPassword('blessing1');
+  
 
 
 
@@ -168,8 +177,14 @@ const Data = (props) => {
       history.push('/login')
       return
     }
+
+    const username = 'plus27solutions@gmail.com'
+    const password = 'blessing1'
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
     
+    const url = 'https://sandbox.vtpass.com/api/pay/'
       const params = {
+
         request_id:'',
         billersCode:formData.phoneNumber,
         serviceID:formData.network,
@@ -177,7 +192,11 @@ const Data = (props) => {
         variation_code:formData.variation_code,
         amount:formData.variation_amount
       }
-      axios.post(`https://sandbox.vtpass.com/api/pay/`, params)
+      axios.post( url, params,{
+        headers: {
+          'Authentication': `Basic ${token}`
+        },
+      })
       .then((response) => {
         //handle success
         const data = response.data
@@ -218,14 +237,14 @@ const Data = (props) => {
       <div className="container">
       
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link active" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav actives" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/education"><span><i className="fa fa-graduation-cap"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
 
 
@@ -295,7 +314,7 @@ const Data = (props) => {
     <div className="section py-4">
       <div className="container">
         <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-          <li className="nav-item"> <a className="nav-link active" id="mobile-recharge-tab" data-toggle="tab" href="#mobile-recharge" role="tab" aria-controls="mobile-recharge" aria-selected="true">Broadband Bill Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link actives" id="mobile-recharge-tab" data-toggle="tab" href="#mobile-recharge" role="tab" aria-controls="mobile-recharge" aria-selected="true">Broadband Bill Payment</a> </li>
           <li className="nav-item"> <a className="nav-link" id="billpayment-tab" data-toggle="tab" href="#billpayment" role="tab" aria-controls="billpayment" aria-selected="false">Best Offers</a> </li>
           <li className="nav-item"> <a className="nav-link" id="why-quickai-tab" data-toggle="tab" href="#why-quickai" role="tab" aria-controls="why-quickai" aria-selected="false">Pay Online</a> </li>
         </ul>

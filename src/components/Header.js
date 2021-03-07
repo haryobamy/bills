@@ -32,7 +32,7 @@ class Header extends Component {
           <nav className="primary-menu navbar navbar-expand-lg">
             <div id="header-nav" className="collapse navbar-collapse">
               <ul className="navbar-nav">
-                <li className="dropdown active"> <a className="dropdown-toggle" href="/">Home</a>
+                <li className="dropdown "> <a className="dropdown-toggle " href="/">Home</a>
                 </li>
                 
                    

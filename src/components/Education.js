@@ -149,14 +149,14 @@ useEffect(() => {
     <div className="bg-secondary">
       <div className="container">
       <ul className="nav primary-nav alternate">
-          <li className="nav-item"> <a className="nav-link" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
-          <li className="nav-item"> <a className="nav-link active" href="/education"><span><i className="fa fa-phone"></i></span> Educational Payment </a> </li>
-          <li className="nav-item"> <a className="nav-link active" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav " href="/data"><span><i className="fa fa-wifi"></i></span> Internet Data</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/electricity"><span><i className="fa fa-lightbulb"></i></span>Electricity  Bill</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNa actives text-white" href="/education"><span><i className="fa fa-graduation-cap"></i></span> Educational Payment </a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/cable"><span><i className="fa fa-plug"></i></span> TV Subscription
 </a> </li>
-          <li className="nav-item"> <a className="nav-link" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
-          <li className="nav-item"> <a className="nav-link" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="#"><span><i className="fa fa-lightbulb"></i></span> Insurance Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link serviceNav" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul>  
       </div>
     </div>
