@@ -212,7 +212,7 @@ const Home = (props) => {
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader.jpg"/>
                     <h3>Neil Patel</h3>
-                    <p className="text-muted">CEO & Founder</p>
+                    {/* <p className="text-muted">CEO & Founder</p> */}
                     {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
@@ -223,7 +223,7 @@ const Home = (props) => {
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-2.jpg"/>
                     <h3>James Maxwell</h3>
-                    <p className="text-muted">Co-Founder</p>
+                    {/* <p className="text-muted">Co-Founder</p> */}
                     {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
@@ -234,7 +234,7 @@ const Home = (props) => {
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-3.jpg"/>
                     <h3>Ruby Clinton</h3>
-                    <p className="text-muted">Co-Founder</p>
+                    {/* <p className="text-muted">Co-Founder</p> */}
                     {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
@@ -245,7 +245,7 @@ const Home = (props) => {
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader-4.jpg"/>
                     <h3>Miky Sheth</h3>
-                    <p className="text-muted">Support</p>
+                    {/* <p className="text-muted">Support</p> */}
                     {/* <ul className="social-icons social-icons-sm d-inline-flex">
                       <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
                       <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>

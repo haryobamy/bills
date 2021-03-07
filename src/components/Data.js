@@ -373,7 +373,7 @@ const Data = (props) => {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
       </div>
       <div className="modal-body">
-        <form className="form-row mb-4 mb-sm-2" method="post">
+        {/* <form className="form-row mb-4 mb-sm-2" method="post">
           <div className="col-12 col-sm-6 col-lg-3">
             <div className="form-group">
               <select className="custom-select" required="">
@@ -413,7 +413,7 @@ const Data = (props) => {
           <div className="col-12 col-sm-6 col-lg-3">
             <button className="btn btn-primary btn-block" type="submit">View Plans</button>
           </div>
-        </form>
+        </form> */}
         <div className="plans">
           <div className="table-responsive-md">
           {
@@ -431,13 +431,13 @@ const Data = (props) => {
                             }
 
 
-
+{/* 
             <table className="table table-hover border" >
               <tbody>
                 <tr>
-                {/* {
+                {
                                service.map(network =>  <td key={network.variation_code} value={network.variation_code} >{network.variation_amount} <span></span> amount</td>)
-                             } */}
+                             }
                   <td className="text-5 text-primary text-center align-middle"> <span className="text-1 text-muted d-block">Amount</span></td>
                   <td className="text-3 text-center align-middle">8 <span className="text-1 text-muted d-block">Talktime</span></td>
                   <td className="text-3 text-center align-middle">7 Days <span className="text-1 text-muted d-block">Validity</span></td>
@@ -524,7 +524,7 @@ const Data = (props) => {
                   <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
                 </tr>
               </tbody>
-            </table>
+            </table> */}
           </div>
         </div>
       </div>
@@ -543,91 +543,4 @@ const Data = (props) => {
 export default Data;
 
 
- // constructor(props){
-  //   super(props);
-  //   this.state = {
-  //     dataPlan: [],
-  //     phoneNumber: '',
-  //     serviceName:[],
-  //     varations:[],
-  //     amount:'5000'
-  //   }
-  //    this.handleSelect = this.handleSelect.bind(this)
-  //    console.log(this.state);
-
-
-  //    const fetchNetwork = async (serviceName) => {
-  //     const api_call = await fetch(`https://sandbox.vtpass.com/api/service-variations?serviceID=${serviceName}`);
-  //     const data = await api_call.json();
-  //     console.log(data);
-  //     return {data}
-  //     };
-
-  //     fetchNetwork().then((res)=>{
-  //       if(!res.data.message) {
-  //       this.setState({ serviceName: res.data });
-  //       }
-  //       console.log(res)
-  //   })
-     
-  // }
-  //   // state = { 
-  //   //   content:[] 
-  //   //  }
-
-
-  //    componentDidMount() {
-
-  //     // this.fetchService();
-  //     this.fetchNetwork();
-      
-  //    }
-
-  //   //  fetchService = () => {
-  //   //     axios.get('https://sandbox.vtpass.com/api/service-categories')
-  //   //     .then((response) => {
-  //   //       const  product  = response.data.content;
-  //   //        this.setState({product})
-  //   //       console.log(product)
-          
-  //   //     })
-  //   //     .catch((error) =>{
-  //   //       console.log(error);
-  //   //     })
-  //   //  }
-
-
-    
-
-  //    fetchNetwork = () => {
-  //      axios.get(`https://sandbox.vtpass.com/api/service-variations?serviceID=${this.state.serviceName}`)
-  //      .then((response) => {
-  //        const dataPlan = response.data.content
-  //        const varations = response.data.content.varations
-  //        const amount = response.data.content.varations[1].variation_amount
-  //        console.log(amount)
-  //        this.setState(dataPlan)
-  //        this.setState({varations})
-  //        this.setState(amount)
-       
-  //      })
-  //      .catch((error) =>{
-  //       console.log(error);
-
-  //      })
-  //    }
-
-  //   //  handleSelect=(e)=>{
-
-  //   //    this.setState ({ [e.target.value]: e.target.value});
-  //   //    console.log(e);
-  //   // }
-
-  //   handleSelect = e => {
-      
-
-  //     const serviceName = e.target.value;
-  //     //console.log(serviceName)
-  //    this.setState ({ serviceName});
-
-  //   }
+ 

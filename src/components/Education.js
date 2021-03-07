@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 const Education = (props) => {
   const history = useHistory()
   const user = JSON.parse(localStorage.getItem('user'))
+  const [planAmount, setPlanAmount] = useState('')
   const [waec, setWaec] = useState([]);
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -105,6 +106,7 @@ useEffect(() => {
         // console.log(name, value);
         
         console.log(e.target.value);
+        setPlanAmount(waec.find(v => v.variation_code === value)?.variation_amount )
     
       }
 
@@ -200,7 +202,7 @@ useEffect(() => {
               <label className="input-item-label" >Amount</label>
               <div className="form-group input-group">
                 <div className="input-group-prepend"> <span className="input-group-text">&#8358;</span> </div>
-                <input className="form-control" id="amount" placeholder="Enter Amount" name='amount' required type="text" value={formData.variation_code} onChange={handleChange}/>
+                <input className="form-control" id="amount" placeholder="Enter Amount" name='amount' required type="text" value={planAmount}  onChange={handleChange}/>
               </div>
               <div className="form-group">
               <label className="input-item-label">Email</label>

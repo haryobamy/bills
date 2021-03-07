@@ -11,6 +11,7 @@ import Header from '../components/Header';
 const Cable = (props) => {
   const history = useHistory()
   const user = JSON.parse(localStorage.getItem('user'))
+  const [planAmount, setPlanAmount] = useState('')
   const [cables, setCables] = useState([]);
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -22,6 +23,17 @@ const Cable = (props) => {
      
 
   })
+
+
+  useEffect(() => {
+
+    setFormData({
+      ...formData, 
+      amount:planAmount
+    })
+  
+     
+   }, [planAmount])
     
 
   const handleChange = (e) => {
@@ -33,6 +45,7 @@ const Cable = (props) => {
     // console.log(name, value);
     
     console.log(e.target.value);
+    setPlanAmount(cables.find(v => v.variation_code === value)?.variation_amount )
 
   }
 
@@ -193,7 +206,7 @@ const Cable = (props) => {
                   </div>
                   <div className="col-md-6 col-lg-3 form-group">
                   
-                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"  value={formData.variation_code} />
+                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"  value={planAmount} />
                   </div>
 
                   <div className="col-md-6 col-lg-2 form-group">
