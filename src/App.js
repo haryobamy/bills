@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link ,Redirect} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link ,Redirect, useHistory} from 'react-router-dom';
 import fire from './fire';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
-import axios from 'axios';
+import 'firebase/auth';
+
+
+
 
 
 
@@ -37,28 +40,28 @@ import { auth } from './fire';
 
 
 const App = () => {
-
+ 
+const history = useHistory()
   const [user, setUser] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [hasPassword, setHasPassword] = useState('');
-  const [hasAcount, setHasAcount] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null)
+  // const [hasPassword, setHasPassword] = useState('');
+  // const [hasAcount, setHasAcount] = useState(false);
+  // const [currentUser, setCurrentUser] = useState(null)
 
 
 
   // const  unsubscribeFromAuth = null;
 
-  const clearInputs = () =>{
-    setEmail('');
-    setPassword('');
-  }
-  const clearErrors = () =>{
-    setEmailError('');
-    setPasswordError('');
-  }
+  // const clearInputs = () =>{
+  //   setEmail('');
+  //   setPassword('');
+  // }
+  // const clearErrors = () =>{
+  //   setEmailError('');
+  //   setPasswordError('');
+  // }
 
   // useEffect(() => {
   //    unsubscribeFromAuth = auth.onAuthStateChanged(user => {
@@ -72,11 +75,14 @@ const App = () => {
 
  
 
-  const handleLogin = () => {
-    clearErrors();
+  const handleLogin = ({email, password}) => {
+    // clearErrors();
     fire
     .auth()
-    .signInWithEmailAndPassword(email, password)
+    .signInWithEmailAndPassword(email,password)
+    .then(() => {
+      history.push('/dashboard')
+    } )
     .catch(err => {
       switch(err.code){
         case "auth/invalid-email":
@@ -91,11 +97,14 @@ const App = () => {
     })
   }
 
-  const handleSignup = () =>{
-    clearErrors();
+  const handleSignup = ({email, password}) =>{
+    // clearErrors();
     fire
     .auth()
-    .createUserWithEmailAndPassword(email, password)
+    .createUserWithEmailAndPassword(email,password)
+    .then(() => {
+      history.push('/dashboard')
+    } )
     .catch(err => {
       switch(err.code){
         case "auth/email-already-in-use":
@@ -109,13 +118,19 @@ const App = () => {
     })
   }
   const handleLogout = () => {
-    fire.auth().signOut();
+    fire.auth().signOut().then(() => localStorage.clear() )
+
   }
 
   const authListener = () => {
     fire.auth().onAuthStateChanged(user => {
       if(user){
-        clearInputs();
+
+        localStorage.setItem("user", JSON.stringify(user))
+        
+          // history.push('/dashboard')
+      
+        // clearInputs();
       
         setUser(user);
       } else{
@@ -128,6 +143,7 @@ const App = () => {
       authListener();
   },[]);
 
+ 
 
 
 
@@ -139,7 +155,7 @@ const App = () => {
 
       
   
-           <React.Fragment>
+           <>
              {user ? (
                <Profileheader handleLogout={handleLogout}/>
              ):(
@@ -147,7 +163,7 @@ const App = () => {
              )}
              {/* <AllNav  /> */} 
               
-    <Router>
+    
 
     <div className="auth-wrapper">
         <div className="auth-inner">
@@ -188,7 +204,8 @@ const App = () => {
                <Route path="/faq" component={Faq} />
                <Route path="/support" component={Support} />
                <Route path="/contact" component={Contact} />
-              <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} />
+              <Route path="/login" component=  {() => <Login  handleLogin={handleLogin} handleSignup={handleSignup} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle}  />} />
+              {/* <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} /> */}
               </>
              )}
 
@@ -207,9 +224,9 @@ const App = () => {
         </div>
       </div>
      
-    </Router>
+  
             
-    </React.Fragment>
+    </>
     
   );
     }

@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import 'firebase/auth';
+import 'firebase/firebase-storage'
 
 
 
@@ -13,14 +14,26 @@ import 'firebase/auth';
     measurementId: "G-37T9NBZJV9"
   };
   // Initialize Firebase
-  const fire = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
+  
+
+   const storage = firebase.storage();
+
+   export const auth = firebase.auth();
+
+   const provider = new firebase.auth.GoogleAuthProvider();
+   provider.setCustomParameters({ prompt: 'select_account' });
+   export const signInWithGoogle = () => auth.signInWithPopup(provider);
+   
+   
+
+  
+  
 
   
 
-export const auth = firebase.auth();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+
   
-  export default fire;
+export { storage, firebase as default}
+  

@@ -1,23 +1,28 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import $ from 'jquery';
-// import Popper from 'popper.js';
-import 'bootstrap';
+
+// // import Popper from 'popper.js';
+// import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
+import {BrowserRouter as  Router } from 'react-router-dom';
 
 
-axios.defaults.headers.common['Authorization'] = 'Bearer' + localStorage.getItem('token');
+
 
 
 
 ReactDOM.render(
-  <React.StrictMode>
+  
+    <Router >
     <App />
-  </React.StrictMode>,
+    </Router>,
+    
+  
   document.getElementById('root')
 );
 

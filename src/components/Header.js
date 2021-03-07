@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 
 
@@ -20,7 +21,7 @@ class Header extends Component {
         <div className="header-column justify-content-start"> 
           
            {/* Logo */}
-          <div className="logo"> <a href="index.html" title='bills'><img src="images/logo.png" alt="bills" width="127" height="29" /></a> </div>
+          <div className="logo"> <Link to='/'><a title='bills'><img src="images/logo.png" alt="bills"  /></a></Link>  </div>
            {/* Logo end */}
           
         </div>

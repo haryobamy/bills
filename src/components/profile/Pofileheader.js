@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 
 
@@ -22,10 +23,10 @@ const Profileheader = (props) => {
               <nav className="primary-menu navbar navbar-expand-lg">
                 <div id="header-nav" className="collapse navbar-collapse">
                   <ul className="navbar-nav mr-auto">
-                    <li><a href="/dashboard">Dashboard</a></li>
-                    <li><a href="/transaction">Transactions</a></li>
-                    <li><a href="/data">Recharge & Bills Payments</a></li>
-                    <li><a href="/help">Help</a></li>
+                    <li> <Link to='/dashboard'> <a>Dashboard</a> </Link></li>
+                    <li> <Link to='/transaction'><a>Transactions</a></Link></li>
+                    <li> <Link to='/data'><a >Recharge & Bills Payments</a></Link></li>
+                    <li> <Link to='/help'><a>Help</a></Link></li>
                   </ul>
                 </div>
               </nav>

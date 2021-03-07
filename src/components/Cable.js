@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import Footer from '../components/Footer';
+import { useHistory } from 'react-router-dom';
 
 import Header from '../components/Header';
 
@@ -8,6 +9,8 @@ import Header from '../components/Header';
 
 
 const Cable = (props) => {
+  const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
   const [cables, setCables] = useState([]);
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -109,6 +112,10 @@ const Cable = (props) => {
 
 
    const handleSubmit = (e) => {
+    if(!user){
+      history.push('/login')
+      return
+    }
     
     const params = {
       request_id:'',

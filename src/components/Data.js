@@ -1,20 +1,22 @@
 import React, {useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
-import Header from '../components/Header';
 
 
 
 const Data = (props) => {
-
+  const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
+  const [planAmount, setPlanAmount] = useState('')
   const [service, setService] = useState([])
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
      variation_code:'',
-     variation_amount:''
+     
 
   })
 
@@ -113,30 +115,15 @@ const Data = (props) => {
   }, [])
   
 
-  // useEffect(() => {
+  useEffect(() => {
 
-
-  //   let mtn = 'mtn-data'
-    
-  //   const url = `service-variations?serviceID=${mtn}`;
-    
-  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
-  //    .then((response) => {
-  //      //handle success
-  //      const data = response.data.content.varations
-  //      setService(data);
-  //      console.log(data)
+    setFormData({
+      ...formData, 
+      amount:planAmount
+    })
+  
      
-  //  })
-  //  .catch((error) => {
-  //    //handle error
-  //    console.log(error)
-  //  })
-
-  //    return () => {
-  //     setService([])
-  //    }
-  //  }, [props])
+   }, [planAmount])
 
    const handleChange = (e) => {
     const {name,value} = e.target
@@ -158,6 +145,7 @@ const Data = (props) => {
     console.log(name, value);
     
     console.log(e.target.value);
+    setPlanAmount(service.find(v => v.variation_code === value)?.variation_amount )
 
   }
   // const handlePlanSelect = (e) => {
@@ -176,6 +164,10 @@ const Data = (props) => {
 
 
   const handleSubmit = (e) => {
+    if(!user){
+      history.push('/login')
+      return
+    }
     
       const params = {
         request_id:'',
@@ -183,9 +175,9 @@ const Data = (props) => {
         serviceID:formData.network,
         phone:formData.phoneNumber,
         variation_code:formData.variation_code,
-        variation_amount:formData.variation_amount
+        amount:formData.variation_amount
       }
-      axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+      axios.post(`https://sandbox.vtpass.com/api/pay/`, params)
       .then((response) => {
         //handle success
         const data = response.data
@@ -278,7 +270,7 @@ const Data = (props) => {
               </div>
               <div className="col-md-6 col-lg-3 form-group">
                 <a href="#" data-target="#view-plans" data-toggle="modal" className="view-plans-link">View Plans</a>
-                <input className="form-control" id="amount" placeholder="Enter Amount"  required type="text" onChange={handleChange} value={formData.variation_code} />
+                <input className="form-control" id="amount" placeholder="Enter Amount"  required type="text" onChange={handleChange} value={planAmount} />
               </div>
               <div className="col-md-6 col-lg-3 form-group">
               <button className="btn btn-primary btn-block btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button>

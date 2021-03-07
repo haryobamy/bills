@@ -1,7 +1,7 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
-import fire from '../fire';
+
+
 
 
 
@@ -9,14 +9,30 @@ import fire from '../fire';
 
 
 const Login =(props) => {
+  
 
-  const {email, setEmail, password, setPassword, handleLogin, handleSignup, hasAccount, setHasAccount, emailError, passwordError, signInWithGoogle} = props;
+  const {handleLogin, handleSignup,  emailError, passwordError, signInWithGoogle} = props;
+  const [formData, setFormData] = useState({
 
-
+  })
+ const onSignin = e => {
+    handleLogin(formData)
+ }
+ 
+ const onSignup = e => {
+    handleSignup(formData)
+ }
  
 
 
-
+ const handleChange = (e) => {
+  const {name,value} = e.target
+  setFormData({
+    ...formData, 
+    [name]:value
+  })
+  console.log(name, value);
+}
 
   
 
@@ -142,26 +158,26 @@ const Login =(props) => {
                   <> */}
                
                 <div className="tab-pane fade show active" id="loginPage" role="tabpanel" aria-labelledby="login-page-tab">
-                  <form id="loginForm" method="post" >
+                  <form id="loginForm"  >
                     <div className="form-group">
-                      <input type="email" className="form-control"  required id="email"  name='email' autofocus placeholder="Mobile or Email ID" value={email} onChange={(event) => setEmail(event.target.value)}/>
+                      <input type="email" className="form-control"  required id="email"  name='email'  placeholder="Mobile or Email ID" value={formData.email} onChange={handleChange}/>
                       <p className='errorMsg ' style={{color:'red'}}>{emailError}</p>
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="Password"  name='password' required placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)}/>
+                      <input type="password" className="form-control" id="Password"  name='password' required placeholder="Password" value={formData.password} onChange={handleChange}/>
                       <p className='errorMsg' style={{color:'red'}}>{passwordError}</p>
                     </div>
                     <div className="row mb-4">
                       <div className="col-sm">
                         <div className="form-check custom-control custom-checkbox">
                           <input id="remember-me" name="checked" className="custom-control-input" type="checkbox" />
-                          <label className="custom-control-label" for="remember-me">Remember Me</label>
+                          <label className="custom-control-label" htmlFor="remember-me">Remember Me</label>
                         </div>
                       </div>
                       <div className="col-sm text-right"> <a className="justify-content-end" href="#">Forgot Password ?</a> </div>
 
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={handleLogin} >Login</button>
+                    <button className="btn btn-primary btn-block" type="button" onClick={onSignin} >Login</button>
                     
                   </form>
                 </div>
@@ -169,17 +185,17 @@ const Login =(props) => {
                 ):(
                   <> */}
                 <div className="tab-pane fade" id="signupPage" role="tabpanel" aria-labelledby="signup-page-tab">
-                  <form id="signupForm" method="post" >
+                  <form id="signupForm" >
                     <div className="form-group">
-                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" name='email' required placeholder="Email ID" value={email} onChange={(e) => setEmail(e.target.value)}  />
+                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" name='email' required placeholder="Email ID" value={formData.email} onChange={handleChange}  />
                     </div>
                     <div className="form-group">
-                      <input type="text" className="form-control" id="signupMobile" maxlength="10" required placeholder="Mobile Number" name='phonenumber'   />
+                      <input type="text" className="form-control" id="signupMobile" maxLength="10" required placeholder="Mobile Number" value={formData.phoneNumber} name='phonenumber'  onChange={handleChange} />
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password" name='password' value={password} onChange={(e) => setPassword(e.target.value)}  />
+                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password" name='password' value={formData.password} onChange={handleChange}  />
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={handleSignup} >Signup</button>
+                    <button className="btn btn-primary btn-block" type="button" onClick={onSignup} >Signup</button>
                   </form>
                 </div>
                 {/* </>

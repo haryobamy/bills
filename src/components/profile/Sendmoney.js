@@ -2,18 +2,23 @@ import React, { useState, useEffect} from 'react';
 import Profileheader from './Pofileheader';
 import Profilefooter from './Profilefooter';
 import axios from 'axios'
+import { useHistory } from 'react-router-dom';
 
 
 
   const Sendmoney = () => {
+    const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
     const [banks, setBanks] =  useState([])
+    const [serviceID, setServiceID] = useState('');
     const [ formData, setFormData] = useState({
       amount:'',
       bank:'', 
       accountNumber:"", 
       recipient:"",
        beneficiaryName:"",
-       beneficiaryMobile:""
+       beneficiaryMobile:"",
+       amount:''
     })
 
     useEffect(() => {
@@ -21,7 +26,9 @@ import axios from 'axios'
       .then((response) => {
         //handle success
         const data = response.data.content.varations
+        const service = response.data.content.serviceID
         setBanks(data);
+        setServiceID(service)
       
     })
     .catch((error) => {
@@ -53,10 +60,7 @@ import axios from 'axios'
       })
       console.log(name, value);
     }
-    const handleSubmit = (e) => {
-      
-     console.log(formData);
-    }
+    
 
     // verfy account number
     const handleVerify = (e) => {
@@ -77,6 +81,34 @@ import axios from 'axios'
       console.log(error)
     })
     }
+
+    const handleSubmit = (e) => {
+      if(!user){
+        history.push('/login')
+        return
+      }
+      
+        const params = {
+          request_id:'',
+          billersCode:formData.accountNumber,
+          serviceID:serviceID,
+          phone:formData.beneficiaryName,
+          variation_code:formData.bank,
+          amount:formData.amount
+        }
+        axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+        .then((response) => {
+          //handle success
+          const data = response.data
+          console.log(data)
+        
+      })
+      .catch((error) => {
+        //handle error
+        console.log(error)
+      })
+      console.log(formData);
+      }
 
     
      

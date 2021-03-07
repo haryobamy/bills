@@ -9,10 +9,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import banner1 from '../assests/images/slider/banner1.jpg';
 import { Carousel } from 'bootstrap';
 import Login from './Login';
+import { useHistory } from 'react-router-dom';
 
 
 
 const Home = (props) => {
+  const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
@@ -25,7 +28,10 @@ const Home = (props) => {
 
 
   const handleSubmit = (e) => {
-    
+    if(!user){
+      history.push('/login')
+      return
+    }
     const params = {
       request_id:'',
       serviceID:formData.network,
@@ -70,11 +76,11 @@ const Home = (props) => {
     console.log(name, value);
   } 
 
-  const {user}= props;
+  // const {user}= props;
         return ( 
          
         
-
+  
 
           <>
         
@@ -136,10 +142,17 @@ const Home = (props) => {
               <div className="col-md-6 col-lg-4 form-group">
                 <input className="form-control" id="amount" name='amount'required placeholder="Enter Amount"  type="text" onChange={handleChange} />
               </div>
+              {/* {user && (<div className="col-md-6 col-lg-2 form-group">
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button>
+              </div>)} */}
               <div className="col-md-6 col-lg-2 form-group">
               <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button>
               </div>
-              <div className="col-md-6 col-lg-2 form-group">
+              
+              {/* <div className={`col-md-${user?'6':'12'} col-lg-${user?'2':'4'} form-group`} >
+              <button className="btn btn-danger btn-lg btn-block" type="reset">Cancle</button>
+              </div> */}
+              <div className="col-md-6 col-lg-2 form-group" >
               <button className="btn btn-danger btn-lg btn-block" type="reset">Cancle</button>
               </div>
               </div>

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import axios from 'axios'
 import Header from '../components/Header';
+import { useHistory } from 'react-router-dom';
 
 
 
 
 
 const Education = (props) => {
+  const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
   const [waec, setWaec] = useState([]);
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -106,6 +109,10 @@ useEffect(() => {
       }
 
       const handleSubmit = (e) => {
+        if(!user){
+          history.push('/login')
+          return
+        }
     
         const params = {
           request_id:'',

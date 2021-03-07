@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import axios from 'axios'
 import Header from '../components/Header';
+import { useHistory } from 'react-router-dom';
 
 
 
 
 
 const Electricity = (props) => {
+  const history = useHistory()
+  const user = JSON.parse(localStorage.getItem('user'))
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"",
@@ -53,6 +56,10 @@ const Electricity = (props) => {
 
 
   const handleSubmit = (e) => {
+    if(!user){
+      history.push('/login')
+      return
+    }
     
     const params = {
       request_id:'',
