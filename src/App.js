@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link ,Redirect, useHistory} from 'react-router-dom';
 import fire from './fire';
-
+import firebase from 'firebase';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
@@ -30,6 +30,7 @@ import Sendmoney from './components/profile/Sendmoney';
 import Addcard from './components/profile/Addcard';
 import Notification from './components/profile/Notification';
 import Sent from './components/profile/Sent';
+import Deposit from './components/profile/Deposit';
 import AllNav from './components/AllNav';
 import Profileheader from './components/profile/Pofileheader';
 import Header from './components/Header';
@@ -37,13 +38,14 @@ import Header from './components/Header';
 
 import { signInWithGoogle } from './fire';
 import { auth } from './fire';
+import db from "./fire";
 
 
 const App = () => {
  
 const history = useHistory()
   const [user, setUser] = useState('');
-  
+ 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   // const [hasPassword, setHasPassword] = useState('');
@@ -77,7 +79,7 @@ const history = useHistory()
 
   const handleLogin = ({email, password}) => {
     // clearErrors();
-    fire
+    firebase
     .auth()
     .signInWithEmailAndPassword(email,password)
     .then(() => {
@@ -99,7 +101,7 @@ const history = useHistory()
 
   const handleSignup = ({email, password}) =>{
     // clearErrors();
-    fire
+    firebase
     .auth()
     .createUserWithEmailAndPassword(email,password)
     .then(() => {
@@ -118,12 +120,12 @@ const history = useHistory()
     })
   }
   const handleLogout = () => {
-    fire.auth().signOut().then(() => localStorage.clear() )
+    firebase.auth().signOut().then(() => localStorage.clear() )
 
   }
 
   const authListener = () => {
-    fire.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if(user){
 
         localStorage.setItem("user", JSON.stringify(user))
@@ -142,6 +144,10 @@ const history = useHistory()
   useEffect(() => {
       authListener();
   },[]);
+
+
+
+  
 
  
 
@@ -182,13 +188,14 @@ const history = useHistory()
                <Route path="/faq" component={Faq} />
                <Route path="/support" component={Support} />
                <Route path="/contact" component={Contact} />
-               <Route path="/profile" component={Myprofile} />
-               <Route path="/dashboard" component={ Dashboard} />
+               <Route path="/profile" component= {Myprofile} />
+               <Route path="/dashboard" component={Dashboard} />
                <Route path="/transaction" component={Transaction} />
                <Route path="/sendmoney" component={Sendmoney} />
                <Route path="/addcard" component={Addcard} />
                <Route path="/notification" component={Notification} />
                <Route path="/sent" component={Sent} />
+               <Route path="/deposit" component={Deposit} />
                </>
              ):(
                <>
@@ -206,6 +213,7 @@ const history = useHistory()
                <Route path="/contact" component={Contact} />
               <Route path="/login" component=  {() => <Login  handleLogin={handleLogin} handleSignup={handleSignup} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle}  />} />
               {/* <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} /> */}
+
               </>
              )}
 

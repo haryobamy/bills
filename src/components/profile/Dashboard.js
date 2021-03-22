@@ -1,41 +1,46 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './Pofileheader';
 import eva from  '../../assests/images/eva.jpg';
 import Profilefooter from './Profilefooter';
+import db from "../../fire";
 
 
 
 
-class Dashboard extends Component {
-    state = {  }
+
+const Dashboard = () => {
+  const [users, setUsers] = useState([]);
 
 
 
-    componentDidMount(){
 
-      
+ 
 
-      axios.get('http://localhost:4000/app/user')
-      .then((res) => {
+  const fetchUsers=async()=>{
+    const response=db.collection('users');
+    const data=await response.get();
+    data.docs.forEach(item=>{
+     setUsers([...users,item.data()])
+    })
+}
 
-        this.setState({
-          user: res.userData 
-        })
-        console.log(res)
-      })
-      .catch((error) => {
-        //handle error
-        console.log(error)
-      })
-    }
+useEffect(() => {
+  fetchUsers();
+}, [])
 
-    render() {
-      if(this.props.user){
-        return(
-          <h2>Hi {this.props.user.firstName} {this.props.user.lastName} </h2>
-        )
-      }
+
+
+
+
+    
+
+    // render() {
+    //   if(this.props.user){
+    //     return(
+    //       <h2>Hi {this.props.user.firstName} {this.props.user.lastName} </h2>
+    //     )
+    //   }
         return ( 
             <>
             
@@ -72,8 +77,16 @@ class Dashboard extends Component {
                 <input type="file" className="custom-file-input" id="customFile"/>
               </div>
             </div>
-            <p className="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
-            <p className="mb-2"><a href="profile.html" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
+            {
+        users && users.map(user => {
+          return(
+            <>
+            <p className="text-3 font-weight-500 mb-2">Hello,{user.lastName} </p>
+            <p className="mb-2"><a href="/profile" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
+            </>
+            )
+          })
+        }
           </div>
            {/* Profile Details End  */}
           
@@ -84,7 +97,7 @@ class Dashboard extends Component {
             <h3 className="text-9 font-weight-400">$2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3"/>
-            <div className="d-flex"><a href="#" className="btn-link mr-auto">Withdraw</a> <a href="#" className="btn-link ml-auto">Deposit</a></div>
+            <div className="d-flex"><a href="#" className="btn-link mr-auto">Withdraw</a> <a href="/deposit" className="btn-link ml-auto">Deposit</a></div>
           </div>
           {/* Available Balance End */}
           
@@ -283,6 +296,6 @@ class Dashboard extends Component {
             </>
          );
     }
-}
+
  
 export default Dashboard;

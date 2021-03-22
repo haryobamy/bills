@@ -3,16 +3,18 @@ import eva from  '../../assests/images/team/leader.jpg';
 // import Datetime from "react-datetime";
 import {storage} from '../../firebase';
 import firebase from 'firebase'
+import db from "../../fire";
+
 
 
 import './Myprofile.css';
-import SecNav from './Sent';
-import Profileheader from './Pofileheader';
 import Profilefooter from './Profilefooter';
 
 
 const Myprofile = () =>{
   const [image, setImage] = useState(null)
+  const [users, setUsers] = useState([]);
+  
   const [ formData, setFormData] = useState({
     firstName:'', 
     lastName:"", 
@@ -66,15 +68,47 @@ const Myprofile = () =>{
     console.log(name, value);
   }
 
-  const handleSave = e => {
-    e.preventDefault();
-    // 1
+  const handleSave = () => {
+
+    const profile ={
+      firstName:formData.firstName, 
+      lastName:formData.lastName, 
+       address:formData.address,
+       country:formData.country,
+       zipCode:formData.zipCode,
+       city:formData.city,
+       state:formData.state,
+    }
+
+    
+    if (profile) {
+      // updating and adding user profile
+      db.collection('users').add({
+          name:profile
+      })
+   }
+    
 
   }
 
-  const edit = obj => {
 
-  }
+
+ 
+
+  const fetchUsers=async()=>{
+    const response=db.collection('users');
+    const data=await response.get();
+    data.docs.forEach(item=>{
+     setUsers([...users,item.data()])
+    })
+}
+
+useEffect(() => {
+  fetchUsers();
+}, [])
+
+
+
 
 
         return ( 
@@ -106,13 +140,23 @@ const Myprofile = () =>{
          {/* Profile Details */}
          
          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
-            <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={eva} alt=""/>
+           
+        
+            <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={eva} width='120' alt=""/>
               <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute" onChange={handleUpload} ></i>
                 <input type="file" className="custom-file-input" id="customFile"  />
               </div>
             </div>
-            <p className="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
+            {
+        users && users.map(user => {
+          return(
+            <>
+            <p className="text-3 font-weight-500 mb-2" >Hello,{user.lastName}  </p>
             <p className="mb-2"><a href="profile.html" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
+            </>
+            )
+          })
+        }
           </div>
            {/* Profile Details End  */}
           
@@ -147,22 +191,30 @@ const Myprofile = () =>{
           {/* <!-- Personal Details
           ============================================= --> */}
           <div className="bg-light shadow-sm rounded p-4 mb-4">
+          {
+        users && users.map(user => {
+          return(
+            <>
             <h3 className="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-              <p className="col-sm-9">Smith Rhodes</p>
+              <p className="col-sm-9"> {user.firstName}  {user.lastName} </p>
             </div>
-            <div className="row">
+            {/* <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-              <p className="col-sm-9">12-09-1982</p>
-            </div>
+              <p className="col-sm-9">nil</p>
+            </div> */}
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Address</p>
-              <p className="col-sm-9">4th Floor, Plot No.22, Above Public Park, 145 Murphy Canyon Rd,  Suite 100-18,<br/>
-                San Ditego,<br/>
-                California - 22434,<br/>
-                United States.</p>
+              <p className="col-sm-9"> {user.address} <br/>
+                {user.city},<br/>
+                {user.state} - {user.zipcode},<br/>
+                {user.country}.</p>
             </div>
+            </>
+            )
+          })
+        }
           </div>
           {/* <!-- Edit Details Modal
           ================================== --> */}
@@ -188,18 +240,18 @@ const Myprofile = () =>{
                           <input type="text"  className="form-control" data-bv-field="lastName" id="lastName" required placeholder="Last Name"  onChange={handleInputChange} />
                         </div>
                       </div>
-                      <div className="col-12">
+                      {/* <div className="col-12">
                         <div className="form-group">
                           <label for="birthDate">Date of Birth</label>
                           <div className="position-relative">
                             <input id="DOB"  type="text" className="form-control" Name='DOB'  required placeholder="Date of Birth"/>
-                            {/* <Datetime
+                            <Datetime
                         timeFormat={false}
                         inputProps={{ placeholder: "Datetime Picker Here" }}
-                      /> */}
+                      />
                             <span className="icon-inside"><i className="fa fa-calendar-alt"></i></span> </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-12">
                         <h3 className="text-5 font-weight-400 mt-3">Address</h3>
                         <hr/>
@@ -256,6 +308,10 @@ const Myprofile = () =>{
           {/* Account Settings */}
           
           <div className="bg-light shadow-sm rounded p-4 mb-4">
+          {
+        users && users.map(user => {
+          return(
+            <>
             <h3 className="text-5 font-weight-400 mb-3">Account Settings <a href="#edit-account-settings" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Language</p>
@@ -263,12 +319,21 @@ const Myprofile = () =>{
             </div>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Time Zone</p>
-              <p className="col-sm-9">(GMT-06:00) Central America</p>
+              <p className="col-sm-9">(GMT+01:00) West Central Africa</p>
             </div>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Account Status</p>
-              <p className="col-sm-9"><span className="bg-success text-white rounded-pill d-inline-block px-2 mb-0"><i className="fa fa-check-circle"></i> Active</span></p>
+             
+              <p className="col-sm-9">
+                <span className={`bg-${user.accountStatus ?'success' : 'danger'} text-white rounded-pill d-inline-block px-2 mb-0`}>
+                <i className={`fa fa-${user.accountStatus ? 'check' : 'times'}-circle`}></i></span> {user.accountStatus ? "Active" : "Inactive"} </p> 
+                
+                
+                
             </div>
+            </>
+          )
+        })}
           </div>
           {/* <!-- Edit Details Modal
           ================================== --> */}
@@ -287,13 +352,10 @@ const Myprofile = () =>{
                           <label for="language">Language</label>
                           <select className="custom-select" id="language" name="language_id">
                             <option value="1">English (United States)</option>
-                            <option value="2">Spanish </option>
-                            <option value="3">Chinese</option>
-                            <option value="4">Russian</option>
                           </select>
                         </div>
                       </div>
-                      <div className="col-12">
+                      {/* <div className="col-12">
                         <div className="form-group">
                           <label for="input-timezone">Time Zone</label>
                           <select className="custom-select" id="input-timezone" name="timezone_id">
@@ -381,7 +443,7 @@ const Myprofile = () =>{
                             <option value="13">(GMT+13:00) Nuku'alofa</option>
                           </select>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-12">
                         <div className="form-group">
                           <label for="accountStatus">Account Status</label>
@@ -402,13 +464,20 @@ const Myprofile = () =>{
           
           <!-- Email Addresses
           ============================================= --> */}
+           {
+        users && users.map(user => {
+          return(
+            <>
           <div className="bg-light shadow-sm rounded p-4 mb-4">
             <h3 className="text-5 font-weight-400 mb-3">Email Addresses <a href="#edit-email" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Email ID <span className="text-muted font-weight-500">(Primary)</span></p>
-              <p className="col-sm-9">smithrhodes1982@gmail.com</p>
+              <p className="col-sm-9">{user.email}  </p>
             </div>
           </div>
+          </>
+          )
+           })}
           {/* <!-- Edit Details Modal
           ================================== --> */}
           <div id="edit-email" className="modal fade " role="dialog" aria-hidden="true">
@@ -439,13 +508,20 @@ const Myprofile = () =>{
           
           <!-- Phone
           ============================================= --> */}
+           {
+        users && users.map(user => {
+          return(
+            <>
           <div className="bg-light shadow-sm rounded p-4 mb-4">
             <h3 className="text-5 font-weight-400 mb-3">Phone <a href="#edit-phone" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Mobile <span className="text-muted font-weight-500">(Primary)</span></p>
-              <p className="col-sm-9">+1 202-555-0125</p>
+              <p className="col-sm-9">{user.mobile}</p>
             </div>
           </div>
+          </>
+          )
+           })}
           {/* <!-- Edit Details Modal
           ================================== --> */}
           <div id="edit-phone" className="modal fade " role="dialog" aria-hidden="true">
