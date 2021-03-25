@@ -3,6 +3,7 @@ import Footer from '../components/Footer';
 import axios from 'axios'
 import Header from '../components/Header';
 import { useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 
@@ -11,7 +12,7 @@ import { useHistory } from 'react-router-dom';
 const Electricity = (props) => {
   const history = useHistory()
    const user = JSON.parse(localStorage.getItem('user'))
-  const email = JSON.parse(localStorage.getItem('user'))
+   const email = JSON.parse(localStorage.getItem('user'))
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"",
@@ -71,18 +72,22 @@ const Electricity = (props) => {
       billersCode:formData.meterNumber,
       serviceID:formData.network,
       phone:formData.phoneNumber,
+      service_type:'electricity',
       variation_code:formData.meterType,
       amount:formData.amount
     }
     axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
     .then((response) => {
       //handle success
+      console.log(response)
       const data = response.data
+      swal("Success!", "Your Payment was Successful", "success");
       console.log(data)
     
   })
   .catch((error) => {
     //handle error
+    swal("Error!", "Your Payment wasn't Successful", "warning");
     console.log(error)
   })
   console.log(formData);

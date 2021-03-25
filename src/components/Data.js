@@ -2,6 +2,7 @@ import React, {useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 
@@ -192,19 +193,17 @@ const Data = (props) => {
         variation_code:formData.variation_code,
         amount:formData.variation_amount
       }
-      axios.post( url, params,{
-        headers: {
-          'Authentication': `Basic ${token}`
-        },
-      })
+      axios.post( url, params)
       .then((response) => {
         //handle success
         const data = response.data
+        swal("Success!", "Your Payment was Successful", "success");
         console.log(data)
       
     })
     .catch((error) => {
       //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
       console.log(error)
     })
     console.log(formData);

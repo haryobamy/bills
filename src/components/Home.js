@@ -3,6 +3,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
+import swal from 'sweetalert';
 
 
 
@@ -37,17 +38,21 @@ const Home = (props) => {
       email:user.email,
       serviceID:formData.network,
       phone:formData.phoneNumber,
-      amount:formData.amount
+      amount:formData.amount,
+      service_type:'airtime'
     }
     axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
     .then((response) => {
       //handle success
       const data = response.data
+      swal("Success!", "Your Payment was Successful", "success");
       console.log(data)
     
   })
   .catch((error) => {
     //handle error
+    swal("Error!", "Your Payment wasn't Successful", "warning");
+    
     console.log(error)
   })
   console.log(formData);

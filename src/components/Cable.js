@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import Footer from '../components/Footer';
 import { useHistory } from 'react-router-dom';
-
+import swal from 'sweetalert';
 import Header from '../components/Header';
 
 
@@ -142,11 +142,13 @@ const Cable = (props) => {
     .then((response) => {
       //handle success
       const data = response.data
+      swal("Success!", "Your Payment was Successful", "success");
       console.log(data)
     
   })
   .catch((error) => {
     //handle error
+    swal("Error!", "Your Payment wasn't Successful", "warning");
     console.log(error)
   })
   console.log(formData);
@@ -154,7 +156,7 @@ const Cable = (props) => {
      
         return ( 
           <>
-          
+
         
         <div id="content">
     

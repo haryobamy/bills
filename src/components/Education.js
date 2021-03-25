@@ -3,6 +3,7 @@ import Footer from '../components/Footer';
 import axios from 'axios'
 import Header from '../components/Header';
 import { useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 
@@ -127,11 +128,13 @@ useEffect(() => {
         .then((response) => {
           //handle success
           const data = response.data
+          swal("Success!", "Your Payment was Successful", "success");
           console.log(data)
         
       })
       .catch((error) => {
         //handle error
+        swal("Error!", "Your Payment wasn't Successful", "warning");
         console.log(error)
       })
       console.log(formData);
