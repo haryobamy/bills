@@ -10,17 +10,21 @@ import { useHistory } from 'react-router-dom';
 
 const Electricity = (props) => {
   const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
+   const user = JSON.parse(localStorage.getItem('user'))
+  const email = JSON.parse(localStorage.getItem('user'))
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"",
     meterNumber:'', 
      network:'',
      meterType:''
+     
 
   })
 
-
+  
+ console.log(email)
+ console.log(user.email)
   
   const handleChange = (e) => {
     const {name,value} = e.target
@@ -63,13 +67,14 @@ const Electricity = (props) => {
     
     const params = {
       request_id:'',
+      email:user.email,
       billersCode:formData.meterNumber,
       serviceID:formData.network,
       phone:formData.phoneNumber,
       variation_code:formData.meterType,
       amount:formData.amount
     }
-    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+    axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
     .then((response) => {
       //handle success
       const data = response.data

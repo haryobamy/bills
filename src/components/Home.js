@@ -34,11 +34,12 @@ const Home = (props) => {
     }
     const params = {
       request_id:'',
+      email:user.email,
       serviceID:formData.network,
       phone:formData.phoneNumber,
       amount:formData.amount
     }
-    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+    axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
     .then((response) => {
       //handle success
       const data = response.data

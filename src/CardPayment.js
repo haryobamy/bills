@@ -34,7 +34,7 @@ const CardPayment = () =>{
                 <p className="text-md-right pb-0 mb-0">Transaction ID: <span className="text-body">25246584</span></p>
               </div>
             </div>
-            <hr className="m-0">
+            <hr className="m-0"/>
             <div className="p-4">
               <h3 className="text-6 mb-4">How would you like to pay?</h3>
               <div className="row">
@@ -51,7 +51,7 @@ const CardPayment = () =>{
                         <div className="col-lg-8">
                           <form id="payment" method="post">
                             <div className="form-group">
-                              <input type="text" className="form-control" data-bv-field="cardnumber" id="cardNumber" required placeholder="Card Number">
+                              <input type="text" className="form-control" data-bv-field="cardnumber" id="cardNumber" required placeholder="Card Number"/>
                             </div>
                             <div className="form-row">
                               <div className="col-lg-4">

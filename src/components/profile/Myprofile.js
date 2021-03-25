@@ -167,7 +167,7 @@ useEffect(() => {
             <h3 className="text-9 font-weight-400">₦2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3" />
-            <div className="d-flex"><a href="withdraw-money.html" className="btn-link mr-auto">Withdraw</a> <a href="" className="btn-link ml-auto">Deposit</a></div>
+            <div className="d-flex"><a href="/withdraw" className="btn-link mr-auto">Withdraw</a> <a href="/deposit" className="btn-link ml-auto">Deposit</a></div>
           </div>
            {/* Available Balance End  */}
           
