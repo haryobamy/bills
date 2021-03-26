@@ -106,23 +106,13 @@ const Data = (props) => {
 
   useEffect(() => {
     mtnData();
-  }, [])
-
-  useEffect(() => {
     airtelData();
-  }, [])
-
-  useEffect(() => {
     gloData();
-  }, [])
-
-  useEffect(() => {
     etisalatData();
-  }, [])
-
-  useEffect(() => {
     smileData();
   }, [])
+
+ 
   
 
   useEffect(() => {
