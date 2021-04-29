@@ -166,7 +166,7 @@ const history = useHistory()
  
 
   const { user: {isAuthenticated}  } = props;
-console.log(isAuthenticated)
+
  
    
     return ( 
