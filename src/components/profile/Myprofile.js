@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import eva from  '../../assests/images/team/leader.jpg';
 // import Datetime from "react-datetime";
 import {storage} from '../../firebase';
 import firebase from 'firebase'
 import db from "../../fire";
+import PropTypes from 'prop-types';
+import { connect, useSelector,useDispatch } from 'react-redux';
+import {getUserData} from '../../redux/actions/userAction';
+
 
 
 
@@ -11,9 +15,31 @@ import './Myprofile.css';
 import Profilefooter from './Profilefooter';
 
 
-const Myprofile = () =>{
+const Myprofile = (props) =>{
   const [image, setImage] = useState(null)
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+  
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+
+  // const user = useSelector(state => state.user)
+
+//   const dispatch = useDispatch();
+
+
+//  useEffect(() => {
+//    dispatch(getUserData(user))
+//  }, [])
+
+  
+
+
+// const { user: { userdata: { username, createdAt, imageUrl, bio, website, location },loading,authenticated
+//   }
+// } = props;
+
+//  console.log(username)
+
+
   
   const [ formData, setFormData] = useState({
     firstName:'', 
@@ -68,25 +94,43 @@ const Myprofile = () =>{
     console.log(name, value);
   }
 
+ 
+  // var name, email, photoUrl, uid, emailVerified;
+  
+  // if (user != null) {
+  //   name = user.displayName;
+  //   email = user.email;
+  //   photoUrl = user.photoURL;
+  //   emailVerified = user.emailVerified;
+  //   uid = user.uid; 
+    
+  // }
+
+
+  
+
+
   const handleSave = () => {
 
-    const profile ={
-      firstName:formData.firstName, 
-      lastName:formData.lastName, 
-       address:formData.address,
-       country:formData.country,
-       zipCode:formData.zipCode,
-       city:formData.city,
-       state:formData.state,
-    }
+   
+
+    // const profile ={
+    //   firstName:formData.firstName, 
+    //   lastName:formData.lastName, 
+    //    address:formData.address,
+    //    country:formData.country,
+    //    zipCode:formData.zipCode,
+    //    city:formData.city,
+    //    state:formData.state,
+    // }
 
     
-    if (profile) {
-      // updating and adding user profile
-      db.collection('users').add({
-          name:profile
-      })
-   }
+  //   if (profile) {
+  //     // updating and adding user profile
+  //     db.collection('users').add({
+  //         name:profile
+  //     })
+  //  }
     
 
   }
@@ -95,17 +139,17 @@ const Myprofile = () =>{
 
  
 
-  const fetchUsers=async()=>{
-    const response=db.collection('users');
-    const data=await response.get();
-    data.docs.forEach(item=>{
-     setUsers([...users,item.data()])
-    })
-}
+//   const fetchUsers=async()=>{
+//     const response=db.collection('users');
+//     const data=await response.get();
+//     data.docs.forEach(item=>{
+//      setUsers([...users,item.data()])
+//     })
+// }
 
-useEffect(() => {
-  fetchUsers();
-}, [])
+// useEffect(() => {
+//   fetchUsers();
+// }, [])
 
 
 
@@ -147,16 +191,13 @@ useEffect(() => {
                 <input type="file" className="custom-file-input" id="customFile"  />
               </div>
             </div>
-            {
-        users && users.map(user => {
-          return(
-            <>
-            <p className="text-3 font-weight-500 mb-2" >Hello,{user.lastName}  </p>
+           
+       
+            
+            <p className="text-3 font-weight-500 mb-2" >Hello,{user.username}  </p>
             <p className="mb-2"><a href="profile.html" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
-            </>
-            )
-          })
-        }
+           
+          
           </div>
            {/* Profile Details End  */}
           
@@ -191,14 +232,13 @@ useEffect(() => {
           {/* <!-- Personal Details
           ============================================= --> */}
           <div className="bg-light shadow-sm rounded p-4 mb-4">
-          {
-        users && users.map(user => {
-          return(
+        
             <>
             <h3 className="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-              <p className="col-sm-9"> {user.firstName}  {user.lastName} </p>
+              {user?(<p className="col-sm-9"> fix this </p>): (<p className="col-sm-9"> Ciroma adeola  </p>) }
+              
             </div>
             {/* <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
@@ -206,16 +246,14 @@ useEffect(() => {
             </div> */}
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Address</p>
-              <p className="col-sm-9"> {user.address} <br/>
+              
+              <p className="col-sm-9"> <p>{user.address?("uuuuu"):('block  sos osososos')}</p> <br/>
                 {user.city},<br/>
                 {user.state} - {user.zipcode},<br/>
                 {user.country}.</p>
             </div>
             </>
-            )
-          })
-        }
-          </div>
+            </div>
           {/* <!-- Edit Details Modal
           ================================== --> */}
           <div id="edit-personal-details" className="modal fade " role="dialog" aria-hidden="true">
@@ -308,10 +346,7 @@ useEffect(() => {
           {/* Account Settings */}
           
           <div className="bg-light shadow-sm rounded p-4 mb-4">
-          {
-        users && users.map(user => {
-          return(
-            <>
+         
             <h3 className="text-5 font-weight-400 mb-3">Account Settings <a href="#edit-account-settings" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Language</p>
@@ -331,9 +366,6 @@ useEffect(() => {
                 
                 
             </div>
-            </>
-          )
-        })}
           </div>
           {/* <!-- Edit Details Modal
           ================================== --> */}
@@ -464,10 +496,7 @@ useEffect(() => {
           
           <!-- Email Addresses
           ============================================= --> */}
-           {
-        users && users.map(user => {
-          return(
-            <>
+           
           <div className="bg-light shadow-sm rounded p-4 mb-4">
             <h3 className="text-5 font-weight-400 mb-3">Email Addresses <a href="#edit-email" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
@@ -475,9 +504,7 @@ useEffect(() => {
               <p className="col-sm-9">{user.email}  </p>
             </div>
           </div>
-          </>
-          )
-           })}
+          
           {/* <!-- Edit Details Modal
           ================================== --> */}
           <div id="edit-email" className="modal fade " role="dialog" aria-hidden="true">
@@ -508,10 +535,7 @@ useEffect(() => {
           
           <!-- Phone
           ============================================= --> */}
-           {
-        users && users.map(user => {
-          return(
-            <>
+          
           <div className="bg-light shadow-sm rounded p-4 mb-4">
             <h3 className="text-5 font-weight-400 mb-3">Phone <a href="#edit-phone" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
@@ -519,9 +543,7 @@ useEffect(() => {
               <p className="col-sm-9">{user.mobile}</p>
             </div>
           </div>
-          </>
-          )
-           })}
+         
           {/* <!-- Edit Details Modal
           ================================== --> */}
           <div id="edit-phone" className="modal fade " role="dialog" aria-hidden="true">
@@ -604,6 +626,15 @@ useEffect(() => {
             </>
          );
     }
+    Myprofile.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
 
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+export default  connect(mapStateToProps)(Myprofile);
  
-export default Myprofile;

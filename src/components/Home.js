@@ -4,6 +4,10 @@ import Header from '../components/Header';
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import swal from 'sweetalert';
+import { v4 as uuidv4 } from 'uuid';
+import { PaystackButton } from 'react-paystack'
+import home from '../assests/images/bg/home.jpg';
+
 
 
 
@@ -11,51 +15,92 @@ import banner1 from '../assests/images/slider/banner1.jpg';
 import { Carousel } from 'bootstrap';
 import Login from './Login';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 
 const Home = (props) => {
   const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
+  const [email, setEmail] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
   })
-
  
-   
+  const { user: {isAuthenticated}, user } = props
 
 
+const handleValidation =(e)=>{
+  
+  if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated){
+    if(!isAuthenticated){
+      history.push('/login')
+      return 
+    }}else{
+      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+    }
+
+}
+
+  
+ 
 
   const handleSubmit = (e) => {
-    if(!user){
-      history.push('/login')
-      return
+    e.persist();
+    if(formData.amount && formData.phoneNumber && formData.network){
+      if(!isAuthenticated){
+        history.push('/login')
+        return
+      }
+  
+      const username = "plus27solutions@gmail.com";
+      const password =  "blessing1";
+      const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+      
+      const url = 'https://sandbox.vtpass.com/api/pay'
+      const params = {
+        request_id:uuidv4(),
+        email:user.email,
+        serviceID:formData.network,
+        phone:formData.phoneNumber,
+        amount:formData.amount,
+        service_type:'airtime'
+      }
+      axios.post( url, params,   {
+        headers: {
+          'Authorization': `Basic ${token}`
+        },
+      })
+      .then((response) => {
+        //handle success
+        const data = response.data
+        // if(response.data.content.errors && response.data.content.errors.length){
+        //   swal("Error!", response.data.content.errors[0], "error");
+        //   return 
+        // }
+        swal("Success!", "Your Payment was Successful", "success");
+        setFormData({...formData, amount:"", phoneNumber:"", network:null})
+        console.log(response)
+      
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      
+      console.log(error)
+    })
+    }else{
+      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
     }
-    const params = {
-      request_id:'',
-      email:user.email,
-      serviceID:formData.network,
-      phone:formData.phoneNumber,
-      amount:formData.amount,
-      service_type:'airtime'
-    }
-    axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
-    .then((response) => {
-      //handle success
-      const data = response.data
-      swal("Success!", "Your Payment was Successful", "success");
-      console.log(data)
     
-  })
-  .catch((error) => {
-    //handle error
-    swal("Error!", "Your Payment wasn't Successful", "warning");
-    
-    console.log(error)
-  })
   console.log(formData);
+  }
+
+
+  const handleReset = () => {
+    setFormData({...formData, amount:"", phoneNumber:"", network:null})
   }
     
 
@@ -97,7 +142,7 @@ const Home = (props) => {
         <div className="hero-wrap py-5">
           
           <div className="hero-mask opacity-7 bg-dark"></div>
-          <div className="hero-bg" style={{backgroundImage:"url('./images/bg/image-6.jpg')"}}></div>
+          <div className="hero-bg" style={{backgroundImage:`url('${home}')`}}></div>
         <div className="hero-content py-2 py-lg-4 my-2 my-md-4">
         {/* <div className="container mt-5"> */}
 
@@ -125,41 +170,48 @@ const Home = (props) => {
            
               <div className="mb-3">
               <div className="custom-control custom-radio custom-control-inline">
-                <input id="mtn" name="network" value='mtn' className="custom-control-input" required type="radio"   onClick={handleNetworkSelect} />
+                <input id="mtn" name="network" value='mtn' className="custom-control-input" required type="radio"  checked={formData.network === "mtn"}  onClick={handleNetworkSelect} />
                   <label className="custom-control-label" for='mtn' >MTN</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="airtel" name="network" value='airtel' className="custom-control-input" required type="radio"  onChange={handleNetworkSelect} />
+                <input id="airtel" name="network" value='airtel' className="custom-control-input" required type="radio" checked={formData.network === "airtel"}   onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for="airtel" >AIRTEL</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="etisalat" name="network" className="custom-control-input" value='etisalat' required type="radio"  onChange={handleNetworkSelect} />
+                  <input id="etisalat" name="network" className="custom-control-input" value='etisalat' checked={formData.network === "etisalat"}  required type="radio"  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='etisalat' >9MObile</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="glo" name="network" value='glo' className="custom-control-input" required type="radio"   onChange={handleNetworkSelect} />
+                  <input id="glo" name="network" value='glo' className="custom-control-input" required type="radio" checked={formData.network === "glo"}   onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='glo' >GLO</label>
                 </div>
               </div>
               <div className="form-row">
               <div className="col-md-6 col-lg-4 form-group">
-                <input type="text" className="form-control" data-bv-field="number" id="phoneNumber"  name='phoneNumber' required placeholder="Enter Mobile Number" onChange={handleChange} />
+                <input type="text" className="form-control" data-bv-field="number" id="phoneNumber"  name='phoneNumber'  placeholder="Enter Mobile Number" onChange={handleChange} value={formData.phoneNumber} required />
               </div>
               <div className="col-md-6 col-lg-4 form-group">
-                <input className="form-control" id="amount" name='amount'required placeholder="Enter Amount"  type="text" onChange={handleChange} />
+                <input className="form-control" id="amount" name='amount'  placeholder="Enter Amount"  type="text" value={formData.amount} onChange={handleChange} required/>
               </div>
               {/* {user && (<div className="col-md-6 col-lg-2 form-group">
               <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button>
               </div>)} */}
               <div className="col-md-6 col-lg-2 form-group">
-              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button>
+              {/* <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button> */}
+             {  formData.amount && formData.phoneNumber && formData.network ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
+              }
+            
+              
+            
               </div>
               
               {/* <div className={`col-md-${user?'6':'12'} col-lg-${user?'2':'4'} form-group`} >
               <button className="btn btn-danger btn-lg btn-block" type="reset">Cancle</button>
               </div> */}
               <div className="col-md-6 col-lg-2 form-group" >
-              <button className="btn btn-danger btn-lg btn-block" type="reset">Cancle</button>
+              <button className="btn btn-danger btn-lg btn-block" type="button" onClick={handleReset}>Cancel</button>
               </div>
               </div>
             </form>
@@ -218,12 +270,7 @@ const Home = (props) => {
                 <div className="col-sm-6 col-md-3">
                   <div className="team"> <img className="img-fluid rounded" alt="" src="images/team/leader.jpg"/>
                     <h3>Neil Patel</h3>
-                    {/* <p className="text-muted">CEO & Founder</p> */}
-                    {/* <ul className="social-icons social-icons-sm d-inline-flex">
-                      <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fab fa-facebook-f"></i></a></li>
-                      <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fab fa-twitter"></i></a></li>
-                      <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fab fa-google"></i></a></li>
-                    </ul> */}
+                    
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-3">
@@ -271,5 +318,15 @@ const Home = (props) => {
          );
     }
 
+    
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+     Home.prototype = {
+      user: PropTypes.object.isRequired
+}
+
+
  
-export default Home;
+export default connect(mapStateToProps)(Home);

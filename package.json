@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
     "@popperjs/core": "^2.6.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -10,11 +11,14 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "bootstrap-navbar-dropdowns": "^5.0.2",
+    "classname": "0.0.0",
     "date-time": "^3.1.0",
     "datetimepicker": "^0.1.39",
     "firebase": "^8.0.2",
     "firebase-tools": "^9.6.1",
     "jquery": "^3.5.1",
+    "jwt-decode": "^3.1.2",
+    "mkcert": "^1.4.0",
     "popper": "^1.0.1",
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
@@ -27,10 +31,14 @@
     "react-fontawesome": "^1.7.1",
     "react-owl-carousel": "^2.3.3",
     "react-paystack": "^3.0.3",
+    "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "reactstrap": "^8.9.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "sweetalert": "^2.1.2",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
@@ -60,6 +68,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.0.5",
     "css-loader": "^5.0.2",
+    "remote-redux-devtools": "^0.5.16",
     "style-loader": "^2.0.0"
   }
 }

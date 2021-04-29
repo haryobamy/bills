@@ -7,13 +7,8 @@ import './App.css';
 
 import 'firebase/auth';
 
-
-
-
-
-
 import Home from './components/Home';
-import Recharge from './components/Recharge';
+
 import Data from './components/Data';
 import Electricity from './components/Electricity';
 import Cable from './components/Cable';
@@ -36,18 +31,26 @@ import Profileheader from './components/profile/Pofileheader';
 import Header from './components/Header';
 
 
+
 import { signInWithGoogle } from './fire';
-import { auth } from './fire';
-import db from "./fire";
+import AuthRoute from './util/AuthRoute';
 
 
-const App = () => {
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import axios from 'axios';
+
+
+
+
+const App = (props) => {
  
 const history = useHistory()
-  const [user, setUser] = useState('');
+  
  
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  // const [emailError, setEmailError] = useState('');
+  // const [passwordError, setPasswordError] = useState('');
   // const [hasPassword, setHasPassword] = useState('');
   // const [hasAcount, setHasAcount] = useState(false);
   // const [currentUser, setCurrentUser] = useState(null)
@@ -75,110 +78,111 @@ const history = useHistory()
   // }, [])
 
 
+
+
+  
+  
+
+  // const { user: authenticated } = props;
+
+  
+
+
  
 
-  const handleLogin = ({email, password}) => {
-    // clearErrors();
-    firebase
-    .auth()
-    .signInWithEmailAndPassword(email,password)
-    .then(() => {
-      history.push('/dashboard')
-    } )
-    .catch(err => {
-      switch(err.code){
-        case "auth/invalid-email":
-          case "auth/user-disabled":
-            case "auth/user-not-found":
-              setEmailError(err.message);
-              break;
-              case "auth/wrong-password":
-                setPasswordError(err.message);
-                break;
-      }
-    })
-  }
+  // const handleLogin = ({email, password}) => {
+  //   // clearErrors();
+  //   firebase
+  //   .auth()
+  //   .signInWithEmailAndPassword(email,password)
+  //   .then(() => {
+  //     history.push('/dashboard')
+  //   } )
+  //   .catch(err => {
+  //     switch(err.code){
+  //       case "auth/invalid-email":
+  //         case "auth/user-disabled":
+  //           case "auth/user-not-found":
+  //             setEmailError(err.message);
+  //             break;
+  //             case "auth/wrong-password":
+  //               setPasswordError(err.message);
+  //               break;
+  //     }
+  //   })
+  // }
 
-  const handleSignup = ({email, password}) =>{
-    // clearErrors();
-    firebase
-    .auth()
-    .createUserWithEmailAndPassword(email,password)
-    .then(() => {
-      history.push('/dashboard')
-    } )
-    .catch(err => {
-      switch(err.code){
-        case "auth/email-already-in-use":
-          case "auth/invalid-email":
-              setEmailError(err.message);
-              break;
-              case "auth/weak-password":
-                setPasswordError(err.message);
-                break;
-      }
-    })
-  }
-  const handleLogout = () => {
-    firebase.auth().signOut().then(() => localStorage.clear() )
+  // const handleSignup = ({email, password}) =>{
+  //   // clearErrors();
+  //   firebase
+  //   .auth()
+  //   .createUserWithEmailAndPassword(email,password)
+  //   .then(() => {
+  //     history.push('/dashboard')
+  //   } )
+  //   .catch(err => {
+  //     switch(err.code){
+  //       case "auth/email-already-in-use":
+  //         case "auth/invalid-email":
+  //             setEmailError(err.message);
+  //             break;
+  //             case "auth/weak-password":
+  //               setPasswordError(err.message);
+  //               break;
+  //     }
+  //   })
+  // }
+  // const handleLogout = () => {
+  //   firebase.auth().signOut().then(() => localStorage.clear() )
 
-  }
-
-  const authListener = () => {
-    firebase.auth().onAuthStateChanged(user => {
-      if(user){
-
-        localStorage.setItem("user", JSON.stringify(user))
-        
-          // history.push('/dashboard')
-      
-        // clearInputs();
-      
-        setUser(user);
-      } else{
-        setUser("");
-      }
-    })
-  }
-
-  useEffect(() => {
-      authListener();
-  },[]);
-
+  // }
 
 
   
 
+  // const authListener = () => {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     if(user){
+
+  //       localStorage.setItem("user", JSON.stringify(user))
+        
+  //         // history.push('/dashboard')
+      
+  //       // clearInputs();
+      
+  //       setUser(user);
+  //     } else{
+  //       setUser("");
+  //     }
+  //   })
+  // }
+
+  // useEffect(() => {
+  //     authListener();
+  // },[]);
+ 
+  
+
  
 
-
-
-
-
-
+  const { user: {isAuthenticated}  } = props;
+console.log(isAuthenticated)
+ 
    
     return ( 
+       <>
+       {
+         isAuthenticated?(< Profileheader />):(<Header />)
+       }
 
-      
-  
-           <>
-             {user ? (
-               <Profileheader handleLogout={handleLogout}/>
-             ):(
-               <Header/>
-             )}
-             {/* <AllNav  /> */} 
-              
-    
-
+            
     <div className="auth-wrapper">
         <div className="auth-inner">
         <Switch>
 
-    {user ? (
+    { isAuthenticated? (
       <>
-               <Route exact path='/' component={ () => <Home user={user} />} />
-               {/* <Route path="/mobile" component={Recharge} /> */}
+               <Route exact path='/' component={Home} />
                <Route path="/data" component={Data} />
                <Route path="/electricity" component={Electricity} />
                <Route path="/cable" component={Cable} />
@@ -211,28 +215,18 @@ const history = useHistory()
                <Route path="/faq" component={Faq} />
                <Route path="/support" component={Support} />
                <Route path="/contact" component={Contact} />
-              <Route path="/login" component=  {() => <Login  handleLogin={handleLogin} handleSignup={handleSignup} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle}  />} />
+              <  Route path="/login" component=  {Login}   />
+              {/* <Route path="/login" component=  {() => <Login  handleLogin={handleLogin} handleSignup={handleSignup} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle}  />} /> */}
               {/* <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} /> */}
 
               </>
              )}
 
-      
-          
-            
-
-            {/* 
-            <Route path="/sign-in" component={Login} />
-            <Route path="/sign-up" component={SignUp} />
-            <Route path="/forgot-password" component={ForgotPassword} />
-            <Route path="/verification" component={Verification} />
-            {/* <Route path="/welcome" component={Welcome} /> */}
-            
           </Switch>
         </div>
       </div>
      
-  
+                
             
     </>
     
@@ -240,4 +234,22 @@ const history = useHistory()
     }
 
 
-export default App;
+
+   
+
+    App.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(App);

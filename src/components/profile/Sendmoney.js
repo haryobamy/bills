@@ -1,8 +1,12 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import Profileheader from './Pofileheader';
 import Profilefooter from './Profilefooter';
 import axios from 'axios'
 import { useHistory } from 'react-router-dom';
+
+import { AuthContext } from "../../context";
+import internet from '../../assests/images/bg/home.jpg';
+
 
 
 
@@ -11,15 +15,18 @@ import { useHistory } from 'react-router-dom';
   const user = JSON.parse(localStorage.getItem('user'))
     const [banks, setBanks] =  useState([])
     const [serviceID, setServiceID] = useState('');
+    const [beneficiaryName, setBeneficiaryName] = useState('')
+    const [error, setError] = useState('')
     const [ formData, setFormData] = useState({
       amount:'',
       bank:'', 
       accountNumber:"", 
       recipient:"",
-       beneficiaryName:"",
        beneficiaryMobile:"",
        amount:''
     })
+
+   
 
     useEffect(() => {
      axios.get('https://sandbox.vtpass.com/api/service-variations?serviceID=bank-deposit')
@@ -63,17 +70,31 @@ import { useHistory } from 'react-router-dom';
     
 
     // verfy account number
+    
+
     const handleVerify = (e) => {
+
+      const username = "plus27solutions@gmail.com";
+      const password =  "blessing1";
+      const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+     
       const params = {
         billersCode:formData.accountNumber,
         serviceID:'bank-deposit',
         type:formData.bank
       }
-      axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params)
+      axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params, {
+        headers: {
+          'Authorization': `Basic ${token}`
+        },
+      })
       .then((response) => {
         //handle success
         const data = response.data
-        console.log(data)
+        setBeneficiaryName(response.data.content.account_name)
+        setError(response.data.content.error)
+       
+        console.log(response)
       
     })
     .catch((error) => {
@@ -90,13 +111,15 @@ import { useHistory } from 'react-router-dom';
       
         const params = {
           request_id:'',
+          email:user.email,
           billersCode:formData.accountNumber,
           serviceID:serviceID,
-          phone:formData.beneficiaryName,
+          phone:formData.beneficiaryMobile,
           variation_code:formData.bank,
-          amount:formData.amount
+          amount:formData.amount,
+          service_type:'bank'
         }
-        axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+        axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
         .then((response) => {
           //handle success
           const data = response.data
@@ -144,8 +167,10 @@ import { useHistory } from 'react-router-dom';
 
 
             <div className="container">
+              <div >
               <h2 className="font-weight-400 text-center mt-3">Send Money</h2>
               <p className="text-4 text-center mb-4">Send your money on anytime, anywhere in the world.</p>
+              </div>
               <div className="row">
                 <div className="col-md-8 col-lg-6 col-xl-5 mx-auto">
                   <div className="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
@@ -173,7 +198,8 @@ import { useHistory } from 'react-router-dom';
                       <div className="form-group">
                         <label for="accountNumber">Account Number</label>
                         <div className="input-group">
-                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number" autocomplete="off" maxlength="11" data-parsley-required="true" data-parsley-minlength="11" data-parsley-minlength-message="Please enter a valid account number" data-parsley-required-message="Please enter an account number" data-safe="true"  onChange={handleChange} value={formData.accountNumber} onInput={handleVerify} />
+                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number"    onChange={handleChange} value={formData.accountNumber} onInput={handleVerify}  />
+                        <p>{error}</p>
                         {/* <button className="btn btn-warning" type="button"  onClick={handleVerify} >Verify</button> */}
                         </div>
                       </div>
@@ -182,7 +208,7 @@ import { useHistory } from 'react-router-dom';
                         <div className="form-group">
                         <label for="beneficiaryName">Beneficiary's Name</label>
                         <div className="input-group"></div>
-                        <input type="text" name="beneficiaryName" id="beneficiaryName" class="form-control float__input required__warning" placeholder="Beneficiary's Name" autocomplete="off"  data-parsley-required="true" data-parsley-required-message="Please enter beneficiary's name" data-safe="true" onChange={handleChange} value={formData.beneficiaryName}  />
+                        <input type="text" name="beneficiaryName" id="beneficiaryName" class="form-control float__input required__warning" placeholder="Beneficiary's Name" autocomplete="off"  data-parsley-required="true" data-parsley-required-message="Please enter beneficiary's name" data-safe="true"  value={beneficiaryName}  />
                         </div>
 
                     

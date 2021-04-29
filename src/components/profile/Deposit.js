@@ -1,10 +1,90 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
+
+import { useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
 
 
 
 
 
 const Deposit = () => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  const [ formData, setFormData] = useState({
+    amount:'', 
+     
+
+  })
+
+  console.log(user.uid)
+
+  // const handleSubmit = (e) => {
+   
+  //   const params = {
+  //     email:user.email,
+  //     user_id:user.uid,
+  //     amount:formData.amount,
+  //     service_type:'wallet'
+  //   }
+  //   axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
+  //   .then((response) => {
+  //     //handle success
+  //     const data = response.data
+  //     swal("Success!", "Your Payment was Successful", "success");
+  //     console.log(data)
+    
+  // })
+  // .catch((error) => {
+  //   //handle error
+  //   swal("Error!", "Your Payment wasn't Successful", "warning");
+  //   console.log(error)
+  // })
+  // console.log(formData);
+  // }
+  const handleSubmit = (e) => {
+   try {
+    const params = {
+      email:user.email,
+      user_id:user.uid,
+      amount:formData.amount,
+      service_type:'wallet'
+    }
+    axios.post(`http://desolate-shore-36733.herokuapp.com/api/pay`, params)
+
+
+    .then((response) => {
+      //handle success
+      const data = response.data
+      swal("Success!", "Your Payment was Successful", "success");
+      console.log(data)
+    
+  })
+  .catch((error) => {
+    //handle error
+    swal("Error!", "Your Payment wasn't Successful", "warning");
+    console.log(error)
+  })
+  console.log(formData);
+  
+   } catch (err) {
+     console.error(err)
+   }
+  }
+
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    // console.log(name, value);
+    
+    console.log(e.target.value);
+    
+
+  }
+
+
 
     return(
         <>
@@ -29,21 +109,13 @@ const Deposit = () => {
             <label for="youSend">Amount</label>
             <div className="input-group">
               <div className="input-group-prepend"> <span className="input-group-text">₦</span> </div>
-              <input type="text" className="form-control" data-bv-field="youSend" id="youSend" value="34,000" placeholder=""/>
+              <input type="text" className="form-control" data-bv-field="youSend" id="youSend" name='amount' onChange={handleChange} value={formData.amount}   placeholder="Enter amount" required/>
             </div>
           </div>
-          <div className="form-group">
-            <label for="paymentMethod">Payment Method</label>
-            <select id="cardType" className="custom-select" required="">
-              <option value="">Select Payment Method</option>
-              <option>Credit or Debit Cards</option>
-              <option>Bank Accounts</option>
-            </select>
-          </div>
-          <p className="text-muted mt-4">Transactions fees <span className="float-right d-flex align-items-center"><del>1.00 USD</del> <span className="bg-success text-1 text-white font-weight-500 rounded d-inline-block px-2 line-height-4 ml-2">Free</span></span></p>
+          <p className="text-muted mt-4">Transactions fees <span className="float-right d-flex align-items-center"><del></del> <span className="bg-success text-1 text-white font-weight-500 rounded d-inline-block px-2 line-height-4 ml-2">Free</span></span></p>
           <hr/>
-          <p className="font-weight-500">You'll deposit <span className="text-3 float-right">1,000.00 USD</span></p>
-          <button className="btn btn-primary btn-block">Continue</button>
+          <p className="font-weight-500">You'll deposit <span className="text-3 float-right">₦ {formData.amount}</span></p>
+          <button className="btn btn-primary btn-block" type='button' onClick={handleSubmit} >Continue</button>
         </form>
         </div>
         </div>

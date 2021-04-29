@@ -1,38 +1,83 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useRef, useState, Component} from 'react';
 import Footer from '../components/Footer';
+import { useHistory, withRouter } from 'react-router-dom'
+import { CircularProgress } from '@material-ui/core';
+
+// redux 
+import { connect } from 'react-redux';
+import { loginUser, signupUser} from '../redux/actions/userAction';
+import PropTypes from 'prop-types';
+
+import {useDispatch, useSelector} from "react-redux";
 
 
 
 
 
 
+class Login extends Component {
+ 
+  constructor() {
+    super();
+    this.state = {
+      usermame : "",
+      email: "",
+      password: "",
+      confirm_password: "",
+      errors: {}
+    };
+  }
+ 
+ 
+  handleSignup = (e) => {
+    e.preventDefault();
+    
+    const newUserData = {
+      username:this.state.username,
+      email: this.state.email,
+      password: this.state.password,
+      confirm_password:this.state.confirm_password
+    }
+    this.props.signupUser(newUserData, this.props.history)
+    
+ }
 
-
-const Login =(props) => {
+  handleLogin = (e) => {
+    e.preventDefault();
   
-
-  const {handleLogin, handleSignup,  emailError, passwordError, signInWithGoogle} = props;
-  const [formData, setFormData] = useState({
-
-  })
- const onSignin = e => {
-    handleLogin(formData)
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    }
+      this.props.loginUser(userData, this.props.history)
+  
  }
- 
- const onSignup = e => {
-    handleSignup(formData)
- }
- 
 
-
- const handleChange = (e) => {
-  const {name,value} = e.target
-  setFormData({
-    ...formData, 
-    [name]:value
-  })
-  console.log(name, value);
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
 }
+
+
+componentWillReceiveProps(nextProps) {
+  // if (nextProps.user.isAuthenticated) {
+  //   this.props.history.push("/profile"); // push user to dashboard when they login
+  // }
+if (nextProps.errors) {
+    this.setState({
+      errors: nextProps.errors
+    });
+  }
+}
+
+// componentDidMount() {
+//   // If logged in and user navigates to Login page, should redirect them to dashboard
+//   if (this.props.auth.isAuthenticated) {
+//     this.props.history.push("/dashboard");
+//   }
+// }
+
+
 
   
 
@@ -120,7 +165,11 @@ const Login =(props) => {
     //   })
     // }
 
-     
+    render() { 
+
+      // const { UI: { loading } } = this.props;
+
+      const { errors } = this.state;
         return ( 
           <>
           
@@ -140,12 +189,6 @@ const Login =(props) => {
       </div>
     </section>
 
-    {/* <section>
-      <div className='container'>
-        <label>Email</label>
-        <input type='text'  required value={email} onChange={(event) => setEmail(event.target.value)} />
-      </div>
-    </section> */}
 
             <div className="container">
             <div id="login-signup-page" className="bg-light shadow-md rounded mx-auto p-4">
@@ -160,12 +203,12 @@ const Login =(props) => {
                 <div className="tab-pane fade show active" id="loginPage" role="tabpanel" aria-labelledby="login-page-tab">
                   <form id="loginForm"  >
                     <div className="form-group">
-                      <input type="email" className="form-control"  required id="email"  name='email'  placeholder="Mobile or Email ID" value={formData.email} onChange={handleChange}/>
-                      <p className='errorMsg ' style={{color:'red'}}>{emailError}</p>
+                      <input type="email" className="form-control" error={errors.email} required id="email"  name='email'  placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.email}</p>
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="Password"  name='password' required placeholder="Password" value={formData.password} onChange={handleChange}/>
-                      <p className='errorMsg' style={{color:'red'}}>{passwordError}</p>
+                      <input type="password" className="form-control" id="Password"  name='password' required placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                      <p className='errorMsg' style={{color:'red',textTransform:'capitalize'}}>{errors.password}</p>
                     </div>
                     <div className="row mb-4">
                       <div className="col-sm">
@@ -177,25 +220,35 @@ const Login =(props) => {
                       <div className="col-sm text-right"> <a className="justify-content-end" href="#">Forgot Password ?</a> </div>
 
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={onSignin} >Login</button>
+                    {errors.general && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.general}</p>)}
+                    <button className="btn btn-primary btn-block"  type="button" onClick={this.handleLogin} >Login </button>
                     
                   </form>
                 </div>
-                {/* </>
-                ):(
-                  <> */}
+               
                 <div className="tab-pane fade" id="signupPage" role="tabpanel" aria-labelledby="signup-page-tab">
                   <form id="signupForm" >
-                    <div className="form-group">
-                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" name='email' required placeholder="Email ID" value={formData.email} onChange={handleChange}  />
+
+                  <div className="form-group">
+                      <input type="text" className="form-control" id="username" required placeholder=" Enter a username" value={this.state.username} name='username'  onChange={this.handleChange} />
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.username}</p>
                     </div>
+
                     <div className="form-group">
-                      <input type="text" className="form-control" id="signupMobile" maxLength="10" required placeholder="Mobile Number" value={formData.phoneNumber} name='phonenumber'  onChange={handleChange} />
+                      <input type="text" className="form-control" data-bv-field="number" id="signupEmail" name='email' required placeholder="Email " value={this.state.email} onChange={this.handleChange}  />
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.email}</p>
                     </div>
+                    
                     <div className="form-group">
-                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password" name='password' value={formData.password} onChange={handleChange}  />
+                      <input type="password" className="form-control" id="signuploginPassword" required placeholder="Password" name='password' value={this.state.password} onChange={this.handleChange}  />
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.password}</p>
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={onSignup} >Signup</button>
+
+                    <div className="form-group">
+                      <input type="password" className="form-control" id="signuploginconfirm_password" required placeholder="Confirm Password" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange}  />
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.confirm_password}</p>
+                    </div>
+                    <button className="btn btn-primary btn-block" type="button" onClick={this.handleSignup}  >Signup </button>
                   </form>
                 </div>
                 {/* </>
@@ -210,7 +263,7 @@ const Login =(props) => {
                     <button type="button" className="btn btn-block btn-outline-primary">Login with Facebook</button>
                   </div>
                   <div className="col-12">
-                    <button type="button" className="btn btn-block btn-outline-danger" onClick={signInWithGoogle} >Login with Google</button>
+                    <button type="button" className="btn btn-block btn-outline-danger"  >Login with Google</button>
                   </div>
                 </div>
                
@@ -221,7 +274,32 @@ const Login =(props) => {
           <Footer />
           </>
          );
+
+    
+    }
+  }
+
+    Login.propTypes = {
+          // classes:PropTypes.object.isRequired
+          loginUser: PropTypes.func.isRequired,
+          user: PropTypes.object.isRequired,
+          UI: PropTypes.object.isRequired,
+          signupUser: PropTypes.func.isRequired,
+    
+        };
+
+
+    const mapStateToProps = (state) => ({
+      user: state.user,
+      errors: state.errors
+    });
+
+    const mapActionToProps = {
+      loginUser,
+      signupUser
     }
 
+
+    
  
-export default Login;
+export default connect(mapStateToProps, mapActionToProps)(withRouter(Login));

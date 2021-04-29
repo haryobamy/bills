@@ -8,7 +8,7 @@ class Footer extends Component {
         return (  
 
             <div id="footer" className="mt-0">
-    <section className="section bg-primary shadow-md pt-4 pb-3">
+    <section className="section bg-secondary shadow-md pt-4 pb-3">
       <div className="container">
         <div className="row">
           <div className="col-sm-6 col-md-3">
@@ -55,12 +55,15 @@ class Footer extends Component {
           </ul>
         </div>
         <div className="col-md-4 mb-3 mb-md-0">
+          <form>
           <p>Subscribe</p>
           <div className="input-group newsletter">
             <input className="form-control" placeholder="Your Email Address" name="newsletterEmail" id="newsletterEmail" type="text" />
             <span className="input-group-append">
             <button className="btn btn-secondary" type="submit">Subscribe</button>
-            </span> </div>
+            </span> 
+            </div>
+            </form>
         </div>
         <div className="col-md-4 d-flex align-items-md-end flex-column">
           <p>Keep in touch</p>

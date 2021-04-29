@@ -48,7 +48,7 @@ class Transaction extends Component {
             <h3 className="text-3 font-weight-400 my-4">Need Help?</h3>
             <p className="text-muted opacity-8 mb-4">Have questions or concerns regrading your account?<br/>
               Our experts are here to help!.</p>
-            <a href="#" className="btn btn-primary btn-block">Chate with Us</a> </div>
+            <a href="#" className="btn btn-primary btn-block">Chat with Us</a> </div>
           {/* <!-- Need Help? End --> */}
           
         </aside>

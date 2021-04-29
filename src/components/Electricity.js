@@ -4,6 +4,9 @@ import axios from 'axios'
 import Header from '../components/Header';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import light from '../assests/images/bg/light.jpg';
 
 
 
@@ -11,8 +14,8 @@ import swal from 'sweetalert';
 
 const Electricity = (props) => {
   const history = useHistory()
-   const user = JSON.parse(localStorage.getItem('user'))
-   const email = JSON.parse(localStorage.getItem('user'))
+  const [meterError, setMeterError] = useState('')
+  const [meterName, setMeterName] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"",
@@ -23,9 +26,11 @@ const Electricity = (props) => {
 
   })
 
+  const { user: {isAuthenticated}, user } = props;
+
   
- console.log(email)
- console.log(user.email)
+ 
+//  console.log(user.email)
   
   const handleChange = (e) => {
     const {name,value} = e.target
@@ -41,17 +46,28 @@ const Electricity = (props) => {
 
   // VERIFY METER NUMBER
   const handleVerify = (e) => {
+    const username = "plus27solutions@gmail.com";
+    const password =  "blessing1";
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    
+    const url = 'https://sandbox.vtpass.com/api/merchant-verify'
+
     const params = {
       billersCode:formData.meterNumber,
       serviceID:formData.network,
       type:formData.meterType
     }
-    axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params)
+    axios.post(url, params,  {
+      headers: {
+        'Authorization': `Basic ${token}`
+      },})
     .then((response) => {
       //handle success
-      const data = response.data
-      console.log(data)
-    
+      const data = response.data.content.error
+      setMeterError(data)
+      const meterName = response.data.content.Customer_Name
+      setMeterName(meterName)
+   
   })
   .catch((error) => {
     //handle error
@@ -59,12 +75,32 @@ const Electricity = (props) => {
   })
   }
 
+  const handleValidation =(e)=>{
+       
+    if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){
+      if(!isAuthenticated){
+        history.push('/login')
+        return 
+      }}else{
+        swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+      }
+  
+  }
+
 
   const handleSubmit = (e) => {
-    if(!user){
+    if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){
+    if(!isAuthenticated){
       history.push('/login')
       return
     }
+
+    const username = "plus27solutions@gmail.com";
+    const password =  "blessing1";
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    
+    const url = 'https://sandbox.vtpass.com/api/pay'
+
     
     const params = {
       request_id:'',
@@ -76,7 +112,10 @@ const Electricity = (props) => {
       variation_code:formData.meterType,
       amount:formData.amount
     }
-    axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
+    axios.post(url, params,  {
+      headers: {
+        'Authorization': `Basic ${token}`
+      },})
     .then((response) => {
       //handle success
       console.log(response)
@@ -90,15 +129,20 @@ const Electricity = (props) => {
     swal("Error!", "Your Payment wasn't Successful", "warning");
     console.log(error)
   })
+  
   console.log(formData);
+  }else{
+    swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
   }
+
+}
         return ( 
           <>
           
 
             <div id="content">
     
-    <div className="bg-secondary pt-4 pb-5">
+    <div className="bg-secondary pt-4 pb-5" style={{backgroundImage:`url('${light}')`}}>
       <div className="container">
       
       <ul className="nav primary-nav alternate">
@@ -112,8 +156,8 @@ const Electricity = (props) => {
           <li className="nav-item"> <a className="nav-link serviceNav" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
    
-      <div className="bg-light shadow-md rounded px-4 pt-4 pb-3">
-      <h2 class="text-4 mb-3">Pay Your Electricity Bill</h2>
+      <div className=" shadow-md rounded px-4 pt-4 pb-3"  style={{color:'silver',backgroundColor:'rgba(77,58,50,0.5)'}}>
+      <h2 class="text-4 mb-3"  style={{color:'silver'}}>Pay Your Electricity Bill</h2>
             <form id="gasBill" method="post">
             <div className="mb-3">
               <div className="custom-control custom-radio custom-control-inline">
@@ -158,7 +202,9 @@ const Electricity = (props) => {
                   </select>
               </div>
               <div class="col-md-6 col-lg-3 form-group">
-                <input type="text" class="form-control" data-bv-field="number" id="meterNumber" name='meterNumber' value={formData.meterNumber} required placeholder="Enter Meter Number" onInput={handleVerify} onChange={handleChange} />
+                <input type="text" class="form-control" data-bv-field="number" id="meterNumber" name='meterNumber' value={formData.meterNumber} required placeholder="Enter Meter Number"  onInput={handleVerify} onChange={handleChange} />
+                <p style={{color:'red',fontWeight:'700'}} >{meterError}</p>
+                <p style={{color:'white', marginBottom:-20,marginTop:-20, textAlign:'center',fontWeight:'bold'}} >{meterName}</p>
               </div>
               <div class="col-md-6 col-lg-3 form-group">
                 <input class="form-control" id="amount" autoComplete='off' placeholder="Enter Amount" name='amount' value={formData.amount} onChange={handleChange} required type="text"/>
@@ -167,7 +213,10 @@ const Electricity = (props) => {
                 <input class="form-control" id="phoneNumber" placeholder="Enter Phone Number " name='phoneNumber' value={formData.phoneNumber} onChange={handleChange} required type="text"/>
               </div>
               <div class="col-md-6 col-lg-2 form-group">
-              <button class="btn btn-success btn-block btn-lg" type="button" onClick={handleSubmit} >Continue</button>
+              { formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
+              }
               </div >
               <div class="col-md-6 col-lg-2 form-group" >
               <button class="btn btn-danger btn-block btn-lg" type="reset">Cancel</button>
@@ -224,21 +273,21 @@ const Electricity = (props) => {
         <div className="row">
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
               <h3>You Refer Friends</h3>
               <p className="text-3">Share your referral link with friends. They get $10.</p>
             </div>
           </div>
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
               <h3>Your Friends Register</h3>
               <p className="text-3">Your friends Register with using your referral link.</p>
             </div>
           </div>
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
               <h3>Earn You</h3>
               <p className="text-3">You get $20. You can use these credits to take recharge.</p>
             </div>
@@ -249,7 +298,7 @@ const Electricity = (props) => {
     </section>
     
     
-    <section className="section pb-0">
+    {/* <section className="section pb-0">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 text-center"> <img className="img-fluid" alt="" src="images/app-mobile-2.png"/> </div>
@@ -261,7 +310,7 @@ const Electricity = (props) => {
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
     
   </div>
   <Footer />
@@ -269,4 +318,20 @@ const Electricity = (props) => {
          );
     }
 
-export default Electricity ;
+    Electricity.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(Electricity);
+

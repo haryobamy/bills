@@ -3,14 +3,18 @@ import Footer from '../components/Footer';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import { v4 as uuidv4 } from 'uuid';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import internet from '../assests/images/bg/home.jpg';
 
 
 
 
 const Data = (props) => {
   const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
   const [planAmount, setPlanAmount] = useState('')
+  const user = JSON.parse(localStorage.getItem('userInfo'));
   const [service, setService] = useState([])
   // const [username, setUsername] = useState('')
   // const [password, setPassword] = useState('')
@@ -23,14 +27,8 @@ const Data = (props) => {
 
   })
 
- 
-
+  const { user: {isAuthenticated} } = props;
   
-    // setUsername('plus27solutions@gmail.com');
-    // setPassword('blessing1');
-  
-
-
 
 
   const mtnData = async () => {
@@ -133,7 +131,7 @@ const Data = (props) => {
     })
     console.log(name, value);
   }
-
+  
 
   const handleNetworkSelect = (e) => {
     
@@ -148,56 +146,70 @@ const Data = (props) => {
     setPlanAmount(service.find(v => v.variation_code === value)?.variation_amount )
 
   }
-  // const handlePlanSelect = (e) => {
-
-  //   const {name,value} = e.target
-  //   setService({
-  //     [name]:value
-  //   })
-    
-  //   console.log('plan selected')
-  // }
-
-
-  
   
 
 
   const handleSubmit = (e) => {
+    if(formData.variation_code && formData.phoneNumber && formData.network){
+      if(!isAuthenticated){
+        history.push('/login')
+        return
+      }
+
+      // {
+      //   headers: {
+      //     'Authorization': `Basic ${token}`
+      //   },
+  
+      // const username = "plus27solutions@gmail.com";
+      
+      // const password =  "blessing1";
+      // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+      
+      const url = 'https://desolate-shore-36733.herokuapp.com/api/pay'
+        const params = {
+  
+          request_id:uuidv4(),
+          email:user.email,
+          billersCode:formData.phoneNumber,
+          serviceID:formData.network,
+          phone:formData.phoneNumber,
+          variation_code:formData.variation_code,
+          amount:formData.variation_amount,
+          service_type:'data'
+        }
+        axios.post( url, params)
+        .then((response) => {
+          //handle success
+          const data = response.data
+          swal("Success!", "Your Payment was Successful", "success");
+          setFormData({...formData,  phoneNumber:"", network:null,variation_code:''})
+          console.log(response)
+        
+      })
+      .catch((error) => {
+        //handle error
+        swal("Error!", "Your Payment wasn't Successful", "warning");
+        console.log(error)
+      })
+    }else{
+      swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
+    }
+    
+    }
+
+    
+const handleValidation =(e)=>{
+  e.persist();
+  if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated){
     if(!user){
       history.push('/login')
-      return
+      return 
+    }}else{
+      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
     }
 
-    const username = 'plus27solutions@gmail.com'
-    const password = 'blessing1'
-    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-    
-    const url = 'https://sandbox.vtpass.com/api/pay/'
-      const params = {
-
-        request_id:'',
-        billersCode:formData.phoneNumber,
-        serviceID:formData.network,
-        phone:formData.phoneNumber,
-        variation_code:formData.variation_code,
-        amount:formData.variation_amount
-      }
-      axios.post( url, params)
-      .then((response) => {
-        //handle success
-        const data = response.data
-        swal("Success!", "Your Payment was Successful", "success");
-        console.log(data)
-      
-    })
-    .catch((error) => {
-      //handle error
-      swal("Error!", "Your Payment wasn't Successful", "warning");
-      console.log(error)
-    })
-    console.log(formData);
-    }
+}
       
     
 
@@ -222,8 +234,9 @@ const Data = (props) => {
         
         
     <div>
-    <div className="bg-secondary pt-4 pb-5">
-      <div className="container">
+    <div className="bg-secondary pt-4 pb-5" style={{backgroundImage:`url('${internet}')`}}>
+      <div className="container" >
+      
       
       <ul className="nav primary-nav alternate">
           <li className="nav-item"> <a className="nav-link serviceNav" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
@@ -237,28 +250,28 @@ const Data = (props) => {
         </ul> 
 
 
-      <div className="bg-light shadow-md rounded px-4 pt-4 pb-3">
-          <h2 className="text-4 mb-3">Pay your Broadbanad Bill</h2>
+      <div className="bg-secondary shadow-md rounded px-4 pt-4 pb-3"   >
+          <h2 className="text-4 mb-3"  >Pay your Broadbanad Bill</h2>
             <form id="form-data" method="post">
             <div className="mb-3">
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="mtn-data" name="network" value='mtn-data' className="custom-control-input" required type="radio" onClick={ () => mtnData()}  onChange={handleNetworkSelect} />
+                <input id="mtn-data" name="network" value='mtn-data' className="custom-control-input" required type="radio" checked={formData.network === "mtn-data"}  onClick={ () => mtnData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='mtn-data' >MTN</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="airtel-data" name="network" value='airtel-data' className="custom-control-input" required type="radio" onClick={ () => airtelData()}  onChange={handleNetworkSelect} />
+                <input id="airtel-data" name="network" value='airtel-data' className="custom-control-input" required type="radio" checked={formData.network === "airtel-data"}  onClick={ () => airtelData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for="airtel-data" >AIRTEL</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="9mobile-data" name="network" className="custom-control-input" value='9mobile-data' required type="radio" onClick={ () => etisalatData()} onChange={handleNetworkSelect} />
+                  <input id="9mobile-data" name="network" className="custom-control-input" value='9mobile-data' required type="radio" onClick={ () => etisalatData()} onChange={handleNetworkSelect} checked={formData.network === "9mobile-data"}  />
                   <label className="custom-control-label" for='9mobile-data' >9MObile</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="glo-data" name="network" value='glo-data' className="custom-control-input" required type="radio"  onClick={() =>  gloData()} onChange={handleNetworkSelect} />
+                  <input id="glo-data" name="network" value='glo-data' className="custom-control-input" required type="radio" checked={formData.network === "glo-data"}  onClick={() =>  gloData()} onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='glo-data' >GLO</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="smile-direct" name="network" value='smile-direct' className="custom-control-input" required type="radio" onClick={() =>  smileData()}  onChange={handleNetworkSelect} />
+                  <input id="smile-direct" name="network" value='smile-direct' className="custom-control-input" required type="radio" onClick={() =>  smileData()}  onChange={handleNetworkSelect} checked={formData.network === "smile-direct"}  />
                   <label className="custom-control-label" for='smile-direct' >SMILE</label>
                 </div>
               </div>
@@ -274,14 +287,17 @@ const Data = (props) => {
                             </select>
                 </div>
               <div className="col-md-6 col-lg-3 form-group">
-                <input type="text" className="form-control" data-bv-field="phoneNumber" id="phoneNumber" name='phoneNumber' required placeholder="Enter Telephone Number" onChange={handleChange}/>
+                <input type="text" className="form-control" data-bv-field="phoneNumber" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Telephone Number" onChange={handleChange}/>
               </div>
               <div className="col-md-6 col-lg-3 form-group">
                 <a href="#" data-target="#view-plans" data-toggle="modal" className="view-plans-link">View Plans</a>
                 <input className="form-control" id="amount" placeholder="Enter Amount"  required type="text" onChange={handleChange} value={planAmount} />
               </div>
               <div className="col-md-6 col-lg-3 form-group">
-              <button className="btn btn-primary btn-block btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button>
+              {  formData.amount && formData.phoneNumber && formData.network ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
+              }
               </div>
               </div>
             </form>
@@ -303,7 +319,7 @@ const Data = (props) => {
     <div className="section py-4">
       <div className="container">
         <ul className="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-          <li className="nav-item"> <a className="nav-link actives" id="mobile-recharge-tab" data-toggle="tab" href="#mobile-recharge" role="tab" aria-controls="mobile-recharge" aria-selected="true">Broadband Bill Payment</a> </li>
+          <li className="nav-item"> <a className="nav-link active" id="mobile-recharge-tab" data-toggle="tab" href="#mobile-recharge" role="tab" aria-controls="mobile-recharge" aria-selected="true"  style={{color:'silver'}}>Broadband Bill Payment</a> </li>
           <li className="nav-item"> <a className="nav-link" id="billpayment-tab" data-toggle="tab" href="#billpayment" role="tab" aria-controls="billpayment" aria-selected="false">Best Offers</a> </li>
           <li className="nav-item"> <a className="nav-link" id="why-quickai-tab" data-toggle="tab" href="#why-quickai" role="tab" aria-controls="why-quickai" aria-selected="false">Pay Online</a> </li>
         </ul>
@@ -332,21 +348,21 @@ const Data = (props) => {
         <div className="row">
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
               <h3>You Refer Friends</h3>
               <p className="text-3">Share your referral link with friends. They get ₦10.</p>
             </div>
           </div>
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
               <h3>Your Friends Register</h3>
               <p className="text-3">Your friends Register with using your referral link.</p>
             </div>
           </div>
           <div className="col-md-4">
             <div className="featured-box style-4">
-              <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
+              <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
               <h3>Earn You</h3>
               <p className="text-3">You get ₦20. You can use these credits to take recharge.</p>
             </div>
@@ -357,7 +373,7 @@ const Data = (props) => {
     </section>
     
    
-    <section className="section pb-0">
+    {/* <section className="section pb-0">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 text-center"> <img className="img-fluid" alt="" src="images/app-mobile-2.png"/> </div>
@@ -369,7 +385,7 @@ const Data = (props) => {
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
 
 
     
@@ -381,47 +397,6 @@ const Data = (props) => {
         <button type="button" className="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
       </div>
       <div className="modal-body">
-        {/* <form className="form-row mb-4 mb-sm-2" method="post">
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">Select Your Operator</option>
-                
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">Select Your Circle</option>
-                <option>1st Circle</option>
-                <option>2nd Circle</option>
-                <option>3rd Circle</option>
-                <option>4th Circle</option>
-                <option>5th Circle</option>
-                <option>6th Circle</option>
-                <option>7th Circle</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <div className="form-group">
-              <select className="custom-select" required="">
-                <option value="">All Plans</option>
-                <option>Topup</option>
-                <option>Full Talktime</option>
-                <option>Validity Recharge</option>
-                <option>SMS</option>
-                <option>Data</option>
-                <option>Unlimited Talktime</option>
-                <option>STD</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-12 col-sm-6 col-lg-3">
-            <button className="btn btn-primary btn-block" type="submit">View Plans</button>
-          </div>
-        </form> */}
         <div className="plans">
           <div className="table-responsive-md">
           {
@@ -439,100 +414,6 @@ const Data = (props) => {
                             }
 
 
-{/* 
-            <table className="table table-hover border" >
-              <tbody>
-                <tr>
-                {
-                               service.map(network =>  <td key={network.variation_code} value={network.variation_code} >{network.variation_amount} <span></span> amount</td>)
-                             }
-                  <td className="text-5 text-primary text-center align-middle"> <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">8 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">7 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Talktime $8 & 2 Local & National SMS & Free SMS valid for 2 day(s)</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$15 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">13 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">15 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Regular Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$50 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">47 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">47 Local Vodafone min free </td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$100 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">92 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Local min 92 & 10 Local & National SMS & Free SMS valid for 
-                    7 day(s).</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$150 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">143 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">60 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Talktime $143 & 50 Local & National SMS & Free SMS valid for 
-                    15 day(s).</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$220 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">220 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$250 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">250 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 50 SMS per day for 7 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$300 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">301 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">64 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$410 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">0 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">28 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Unlimited Local,STD & Roaming calls</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$501 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">510 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">180 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 28 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$799 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">820 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">250 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 84 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-                <tr>
-                  <td className="text-5 text-primary text-center align-middle">$999 <span className="text-1 text-muted d-block">Amount</span></td>
-                  <td className="text-3 text-center align-middle">1099 <span className="text-1 text-muted d-block">Talktime</span></td>
-                  <td className="text-3 text-center align-middle">356 Days <span className="text-1 text-muted d-block">Validity</span></td>
-                  <td className="text-1 text-muted align-middle">Full Talktime + 100 SMS per day for 90 days.</td>
-                  <td className="align-middle"><button className="btn btn-sm btn-outline-primary shadow-none text-nowrap" type="submit">Recharge Now</button></td>
-                </tr>
-              </tbody>
-            </table> */}
           </div>
         </div>
       </div>
@@ -548,7 +429,25 @@ const Data = (props) => {
         );
     }
 
-export default Data;
+    
+    Data.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(Data);
+
+
 
 
  

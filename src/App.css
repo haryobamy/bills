@@ -51,12 +51,13 @@
  }
  .nav-item
  :hover{
-   color:#546834 !important;
+   color:#fff !important;
+   background-color: #144d7d87;
    
    
  }
 
   .actives  {
-  background-color: #144d7d87;
+  background-color: #1384e4;
   color: #fff !important;
 }

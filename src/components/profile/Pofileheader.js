@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import { logoutUser} from '../../redux/actions/userAction';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
+class Profileheader extends Component {
+  
+ 
+ 
 
-const Profileheader = (props) => {
-  const {handleLogout} = props;
+// const Profileheader = (props) => {
+  // const {handleLogout} = props;
+
+  
+
+   handleLogout = (e) => {
+    e.preventDefault();
+   
+    this.props.logoutUser();
+    
+ }
+
+ render() { 
+
+  const { user } = this.props.user;
         return ( 
             
             <div>
@@ -37,7 +57,7 @@ const Profileheader = (props) => {
               <nav className="login-signup navbar navbar-expand">
                 <ul className="navbar-nav">
                 <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-success shadow-none d-none d-sm-block" href="/profile">Settings</a></li>
-                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" href="/" onClick={handleLogout}  >Sign out</a></li>
+                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" href="/" onClick={this.handleLogout}  >Sign out</a></li>
                 </ul>
               </nav>
               
@@ -51,6 +71,26 @@ const Profileheader = (props) => {
       
         );
     }
+  }
+
+
+    Profileheader.propTypes = {
+      
+      logoutUser: PropTypes.func.isRequired,
+      user: PropTypes.object.isRequired,
+   
+    };
+
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI
+});
+
+const mapActionToProps = {
+  logoutUser
+  
+}
 
  
-export default Profileheader;
+export default connect(mapStateToProps, mapActionToProps) (Profileheader);

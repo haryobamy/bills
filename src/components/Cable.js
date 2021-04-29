@@ -4,15 +4,20 @@ import Footer from '../components/Footer';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import Header from '../components/Header';
+import { v4 as uuidv4 } from 'uuid';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import tv from '../assests/images/bg/tv.jpg';
 
 
 
 
 const Cable = (props) => {
   const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
+  const [meterName, setMeterName] = useState('')
   const [planAmount, setPlanAmount] = useState('')
   const [cables, setCables] = useState([]);
+  const [smartError, setSmartError] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
@@ -23,6 +28,8 @@ const Cable = (props) => {
      
 
   })
+
+  const { user: {isAuthenticated}, user } = props;
 
 
   useEffect(() => {
@@ -106,15 +113,29 @@ const Cable = (props) => {
 
      // VERIFY SMART CARD NUMBER
   const handleVerify = (e) => {
+
+    const username = "plus27solutions@gmail.com";
+    const password =  "blessing1";
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+
+
     const params = {
       billersCode:formData.smartCardNumber,
       serviceID:formData.network
     }
-    axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params)
+    axios.post(`https://sandbox.vtpass.com/api/merchant-verify`, params,  {
+      headers: {
+        'Authorization': `Basic ${token}`
+      },
+    })
     .then((response) => {
       //handle success
-      const data = response.data
-      console.log(data)
+      const err = response.data.content.error
+      setSmartError(err)
+     
+      const meterName = response.data.content.Customer_Name
+      setMeterName(meterName)
+ console.log(meterName)
     
   })
   .catch((error) => {
@@ -125,34 +146,71 @@ const Cable = (props) => {
 
 
    const handleSubmit = (e) => {
-    if(!user){
-      history.push('/login')
-      return
+    if(formData.phoneNumber && formData.network && formData.smartCardNumber && formData.variation_code){
+      if(!user){
+        history.push('/login')
+        return
+      }
+
+      const username = "plus27solutions@gmail.com";
+      const password =  "blessing1";
+      const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+      
+      const params = {
+        request_id:uuidv4(),
+        email:user.email,
+        billersCode:formData.smartCardNumber,
+        serviceID:formData.network,
+        phone:formData.phoneNumber,
+        variation_code:formData.variation_code,
+        amount:formData.amount,
+        service_type:'tv'
+      }
+      axios.post(`https://sandbox.vtpass.com/api/pay`, params,   {
+        headers: {
+          'Authorization': `Basic ${token}`
+        },
+      })
+      .then((response) => {
+        //handle success
+        const data = response.data
+        swal("Success!", "Your Payment was Successful", "success");
+        setFormData({...formData, amount:"", phoneNumber:"", network:null, smartCardNumber:''})
+        setPlanAmount('')
+        setCables([])
+        console.log(response)
+      
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      console.log(error)
+    })
+    }else{
+      swal("Error!", "Ensure All details are Filled Correctly ", "error");
     }
     
-    const params = {
-      request_id:'',
-      billersCode:formData.smartCardNumber,
-      serviceID:formData.network,
-      phone:formData.phoneNumber,
-      variation_code:formData.variation_code,
-      amount:formData.amount
-    }
-    axios.post(`https://sandbox.vtpass.com/api/pay`, params)
-    .then((response) => {
-      //handle success
-      const data = response.data
-      swal("Success!", "Your Payment was Successful", "success");
-      console.log(data)
-    
-  })
-  .catch((error) => {
-    //handle error
-    swal("Error!", "Your Payment wasn't Successful", "warning");
-    console.log(error)
-  })
-  console.log(formData);
   }
+
+  
+  const handleReset = () => {
+    setFormData({...formData, amount:"", phoneNumber:"", network:null, smartCardNumber:''})
+    setCables([])
+    setPlanAmount('')
+  }
+
+  const handleValidation =(e)=>{
+       
+    if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){
+      if(!isAuthenticated){
+        history.push('/login')
+        return 
+      }}else{
+        swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+      }
+  
+  }
+    
      
         return ( 
           <>
@@ -160,7 +218,7 @@ const Cable = (props) => {
         
         <div id="content">
     
-        <div className="bg-secondary pt-4 pb-5">
+        <div className="bg-secondary pt-4 pb-5" style={{backgroundImage:`url('${tv}')`}}>
           <div className="container">
           
           <ul className="nav primary-nav alternate">
@@ -174,27 +232,27 @@ const Cable = (props) => {
           <li className="nav-item"> <a className="nav-link serviceNav" href="/sendmoney"><span><i className="fa fa-bank"></i></span> Bank Transfer</a> </li>
         </ul> 
 
-          <div className="bg-light shadow-md rounded px-4 pt-4 pb-3">
-              <h2 className="text-4 mb-3">CableTv Recharge</h2>
+          <div className=" shadow-md rounded px-4 pt-4 pb-3"  style={{color:'silver'}}>
+              <h2 className="text-4 mb-3" style={{color:'silver'}}>CableTv Recharge</h2>
                 <form id="cableTvRecharge" method="post">
                 <div className="mb-3">
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="dstv" name="network" value='dstv' className="custom-control-input" required type="radio"  onClick={() => dstv()} onChange={handleChange} />
+                <input id="dstv" name="network" value='dstv' className="custom-control-input" required type="radio"  checked={formData.network === "dstv"} onClick={() => dstv()} onChange={handleChange} />
                   <label className="custom-control-label" for='dstv' >DSTV</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="gotv" name="network" value='gotv' className="custom-control-input" required type="radio" onClick={() => gotv()} onChange={handleChange} />
+                <input id="gotv" name="network" value='gotv' className="custom-control-input" required type="radio"  checked={formData.network === "gotv"} onClick={() => gotv()} onChange={handleChange} />
                   <label className="custom-control-label" for="gotv" >GOTV</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="startimes" name="network" className="custom-control-input" value='startimes' required type="radio" onClick={() => startimes()}  onChange={handleChange} />
+                  <input id="startimes" name="network" className="custom-control-input" value='startimes' required type="radio"  checked={formData.network === "startimes"} onClick={() => startimes()}  onChange={handleChange} />
                   <label className="custom-control-label" for='startimes' >STARTIMES</label>
                 </div>
               </div>
                 <div className="form-row">
                   <div className="col-md-6 col-lg-3 form-group">
                       <select className="custom-select" id="variation_code" name='variation_code' required onChange={handleChange}  value={formData.variation_code} >
-                        <option value="">Select Your Operator</option>
+                        <option value="">Select Your Plan</option>
                         {
                                cables.map(cable =>  <option key={cable.variation_code} value={cable.variation_code} >{cable.name} </option>)
                              }
@@ -202,6 +260,8 @@ const Cable = (props) => {
                     </div>
                   <div className="col-md-6 col-lg-3 form-group">
                     <input type="text" className="form-control" data-bv-field="number" id="smartCardNumber" name='smartCardNumber' value={formData.smartCardNumber} required placeholder="Enter Smart card Number" onChange={handleChange} onInput={handleVerify}/>
+                    <p style={{color:'red'}}>{smartError}</p>
+                    <p style={{color:'green', marginBottom:-20,marginTop:-20, textAlign:'center'}} >{meterName}</p>
                   </div>
                   <div className="col-md-6 col-lg-3 form-group">
                     <input type="text" className="form-control" data-bv-field="number" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Phone Number" onChange={handleChange}/>
@@ -212,10 +272,13 @@ const Cable = (props) => {
                   </div>
 
                   <div className="col-md-6 col-lg-2 form-group">
-                  <button className="btn btn-success btn-block" type="button" onClick={handleSubmit}>Continue</button>
+                  { formData.smartCardNumber  && formData.phoneNumber && formData.network && formData.variation_code ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
+              }
                   </div>
                   <div className="col-md-6 col-lg-2 form-group">
-                  <button className="btn btn-danger btn-block" type="reset">Cancel</button>
+                  <button className="btn btn-danger btn-lg btn-block" type="button" onClick={handleReset}>Cancel</button>
                   </div>
                   </div>
                 </form>
@@ -268,21 +331,21 @@ const Cable = (props) => {
             <div className="row">
               <div className="col-md-4">
                 <div className="featured-box style-4">
-                  <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
+                  <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-bullhorn"></i> </div>
                   <h3>You Refer Friends</h3>
                   <p className="text-3">Share your referral link with friends. They get ₦10.</p>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="featured-box style-4">
-                  <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
+                  <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-sign-in-alt"></i> </div>
                   <h3>Your Friends Register</h3>
                   <p className="text-3">Your friends Register with using your referral link.</p>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="featured-box style-4">
-                  <div className="featured-box-icon bg-primary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
+                  <div className="featured-box-icon bg-secondary text-light rounded-circle"> <i className="fas fa-dollar-sign"></i> </div>
                   <h3>Earn You</h3>
                   <p className="text-3">You get ₦20. You can use these credits to take recharge.</p>
                 </div>
@@ -292,7 +355,7 @@ const Cable = (props) => {
         </div>
         </section>
         
-        <section className="section pb-0">
+        {/* <section className="section pb-0">
           <div className="container">
             <div className="row">
               <div className="col-lg-6 text-center"> <img className="img-fluid" alt="" src="images/app-mobile-2.png"/> </div>
@@ -304,7 +367,7 @@ const Cable = (props) => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
       <Footer />
       </>
@@ -312,5 +375,21 @@ const Cable = (props) => {
        );
     }
 
+    Cable.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(Cable);
+
  
-export default Cable;

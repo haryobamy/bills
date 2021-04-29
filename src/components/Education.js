@@ -4,6 +4,12 @@ import axios from 'axios'
 import Header from '../components/Header';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import educ from '../assests/images/bg/edu.jpg';
+import home from '../assests/images/bg/home.jpg';
+
+
 
 
 
@@ -11,18 +17,23 @@ import swal from 'sweetalert';
 
 const Education = (props) => {
   const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
   const [planAmount, setPlanAmount] = useState('')
+  const [totalAmount, setTotalAmount] = useState('')
   const [waec, setWaec] = useState([]);
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
-     quantity:'',
+     quantity:'1',
      variation_code:''
      
 
   })
+
+  
+  const { user: {isAuthenticated}, user } = props;
+
+  
 
   const waceReg = async () => {
     try {
@@ -57,44 +68,27 @@ const Education = (props) => {
 
 useEffect(() => {
   waceReg();
- 
-}, [])
-  
-useEffect(() => {
   wacePin();
  
 }, [])
+
+console.log(totalAmount)
+
+const myamount = () => {
+  let quantity = formData.quantity
+  let price = planAmount
+  const data = quantity * price
+  console.log(data)
+  setTotalAmount(data)
+}
+
+
+useEffect(() => {
+  myamount();
+}, [myamount])
   
 
  
- 
-
-
-  // useEffect(() => {
-  //    let Cable = 'waec-registration';
-  //   // if (network === 'waec-registration')
-  //   // {
-  //   //   let Cable = 'waec-registration';
-  //   // } else{
-  //   //   let Cable = 'waec';
-  //   // }
-
-  //   const url = `service-variations?serviceID=${Cable}`;
-  //   axios.get(`https://sandbox.vtpass.com/api/${url}`)
-  //    .then((response) => {
-  //      //handle success
-  //      const data = response.data.content.varations
-  //      setWaec(data);
-  //      console.log(data)
-  //  })
-  //  .catch((error) => {
-  //    //handle error
-  //    console.log(error)
-  //  })
-  //    return () => {
-  //     setWaec([])
-  //    }
-  //  }, [props])
 
 
 
@@ -111,20 +105,56 @@ useEffect(() => {
     
       }
 
+      useEffect(() => {
+
+        setFormData({
+          ...formData, 
+          amount:planAmount
+        })
+      
+         
+       }, [planAmount])
+
+
+       const handleValidation =(e)=>{
+       
+        if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated && formData.quantity){
+          if(!isAuthenticated){
+            history.push('/login')
+            return 
+          }}else{
+            swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+          }
+      
+      }
+
       const handleSubmit = (e) => {
-        if(!user){
+
+        if(formData.variation_code && formData.phoneNumber && formData.network){
+        if(!isAuthenticated){
           history.push('/login')
           return
         }
+
+        const username = "plus27solutions@gmail.com";
+        const password =  "blessing1";
+        const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+        
+        const url = 'https://sandbox.vtpass.com/api/pay'
     
         const params = {
           request_id:'',
+          email:user.email,
           serviceID:formData.network,
           phone:formData.phoneNumber,
           variation_code:formData.variation_code,
-          amount:formData.amount
+          amount:planAmount,
+          service_type:'education'
         }
-        axios.post(`https://sandbox.vtpass.com/api/pay`, params)
+        axios.post(url, params,  {
+          headers: {
+            'Authorization': `Basic ${token}`
+          },})
         .then((response) => {
           //handle success
           const data = response.data
@@ -138,6 +168,10 @@ useEffect(() => {
         console.log(error)
       })
       console.log(formData);
+      }else{
+        swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
+      }
+      
       }
 
 
@@ -149,7 +183,7 @@ useEffect(() => {
             <div id="content">
     
 
-    <div className="bg-secondary">
+    <div className="bg-secondary"  style={{backgroundImage:`url('${home}')`}}>
       <div className="container">
       <ul className="nav primary-nav alternate">
           <li className="nav-item"> <a className="nav-link serviceNav" href="/"><span><i className="fa fa-phone"></i></span> Airtime</a> </li>
@@ -164,33 +198,43 @@ useEffect(() => {
       </div>
     </div>
     
-    <section className="container">
-      <div className="bg-light shadow-md rounded p-4">
+    <section className=""  style={{backgroundImage:`url('${educ}')`}} >
+    
+    
+      <div className=" shadow-md rounded p-4">
         <div className="row d-flex justify-content-center">
           
 
-
-          
-        
-          <div className="col-lg-10 mb-4 mb-lg-0 justify-content-center">
-            <h2 className="text-center mb-3">
+          <div className="col-lg-10 mb-4 mb-lg-0 justify-content-center"  style={{color:'silver'}}>
+            <h2 className="text-center mb-3" style={{color:'silver'}}>
                         WAEC Result Checker PIN</h2>
                         
-                        <h6 className='text-center mb-3'>WAEC Result Checking PIN / Scratch Card</h6>
+                        <h6 className='text-center mb-3'  style={{color:'silver'}}>WAEC Result Checking PIN / Scratch Card</h6>
             <form id="broadbanadBill" method="post">
+              <div className='row'>
+              <div className='col-md-6 col-lg-3'>
+                </div>
 
-            <div className="mb-3">
+            <div className="mb-3 col-md-6 col-lg-6">
                 <div className="custom-control custom-radio custom-control-inline">
                 <input id="waec" name="network" value='waec' className="custom-control-input" required type="radio"  onClick={() => wacePin()} onChange={handleChange} />
                   <label className="custom-control-label" for='waec' >WAEC Result Checker PIN</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
                 <input id="waec-registration" name="network" value='waec-registration' className="custom-control-input" required type="radio" onClick={() => waceReg()} onChange={handleChange} />
-                  <label className="custom-control-label" for="waec-registration" >WAEC Registration PIN</label>
+                  <label className="custom-control-label"  for="waec-registration" >WAEC Registration PIN</label>
+                </div>
+              </div>
+              <div className='col-md-6 col-lg-3'>
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className='row'>
+                <div className='col-md-6 col-lg-3'>
+                </div>
+                <div className='col-md-6 col-lg-6'>
+
+              <div className="form-group col-md-6 col-lg-12">
               <select id="variation_code" name='variation_code' data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" className="selectpicker form-control bg-transparent" required onChange={handleChange}  value={formData.variation_code} >
                     <option >Please Select Exam Type</option>
                     {
@@ -198,27 +242,43 @@ useEffect(() => {
                              }
                   </select>
                 </div>
-              <div className="form-group">
+              <div className="form-group col-md-6 col-lg-12">
               <label className="input-item-label" for="phone-number">Phone Number</label>
                 <input type="text" className="form-control" data-bv-field="number" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Telephone Number" onChange={handleChange}/>
               </div>
-              <label className="input-item-label" >Amount</label>
-              <div className="form-group input-group">
+              <label className="input-item-label" >Unit Amount</label>
+              <div className="form-group input-group col-md-6 col-lg-12">
                 <div className="input-group-prepend"> <span className="input-group-text">&#8358;</span> </div>
                 <input className="form-control" id="amount" placeholder="Enter Amount" name='amount' required type="text" value={planAmount}  onChange={handleChange}/>
               </div>
-              <div className="form-group">
+              <div className="form-group col-md-6 col-lg-12">
               <label className="input-item-label">Email</label>
-                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email"/>
+                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email" value={user.email}/>
               </div>
               <label className="input-item-label" >Quantity</label>
-              <div className="form-group input-group">
+              <div className="form-group input-group col-md-6 col-lg-12">
                 <div className="input-group-prepend">  </div>
                 <input className="form-control" id="quantity" placeholder="Enter Quantity" name='quantity' value={formData.quantity} onChange={handleChange} required type="text"/>
               </div>
+              <label className="input-item-label" >Total Amount</label>
+              <div className="form-group input-group col-md-6 col-lg-12">
+                <div className="input-group-prepend">  </div>
+                <input className="form-control" id="quantity" placeholder="Enter Quantity" name='quantity' value={totalAmount}  required type="text"/>
+              </div>
+
+              <div className='row ' style={{justifyContent:'center'}}>
+              {/* <button className="btn btn-success  btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button> */}
+              { formData.variation_code  && formData.phoneNumber && formData.network && formData.quantity ?(
+              <button className="btn btn-success btn-lg   col-md-6 col-lg-3" type="button"  onClick={handleSubmit}>Pay Now</button>):
+              (<button className="btn btn-secondary btn-lg col-md-6 col-lg-3" type="button" onClick={handleValidation} >Pay Now</button>)
+              }
+              <button className="btn btn-danger btn-lg ml-5 col-md-6 col-lg-3" type="button">Cancel</button>
+              </div>
+              </div>
+              <div className='col-md-6 col-lg-3'></div>
+              </div>
               
-              <button className="btn btn-success btn-block btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button>
-              <button className="btn btn-danger btn-block btn-lg" type="reset">Cancel</button>
+             
             </form>
           </div>
 
@@ -291,7 +351,7 @@ useEffect(() => {
       </section>
     </div>
     
-    <section className="section pb-0">
+    {/* <section className="section pb-0">
       <div className="container">
         <div className="row">
           <div className="col-md-5 col-lg-6 text-center"> <img className="img-fluid" alt="" src="images/app-mobile.png"/> </div>
@@ -310,7 +370,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
     
   </div>
   <Footer />
@@ -318,5 +378,23 @@ useEffect(() => {
         );
     }
 
+    
+    Education.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(Education);
+
+
  
-export default Education;
