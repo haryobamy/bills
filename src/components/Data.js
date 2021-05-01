@@ -129,7 +129,6 @@ const Data = (props) => {
       ...formData, 
       [name]:value
     })
-    console.log(name, value);
   }
   
 

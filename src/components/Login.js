@@ -37,7 +37,8 @@ class Login extends Component {
       username:this.state.username,
       email: this.state.email,
       password: this.state.password,
-      confirm_password:this.state.confirm_password
+      confirm_password:this.state.confirm_password,
+      account_status:"1"
     }
     this.props.signupUser(newUserData, this.props.history)
     
@@ -167,7 +168,7 @@ if (nextProps.errors) {
 
     render() { 
 
-      // const { UI: { loading } } = this.props;
+      const { user: { loading } } = this.props;
 
       const { errors } = this.state;
         return ( 
@@ -221,7 +222,8 @@ if (nextProps.errors) {
 
                     </div>
                     {errors.general && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.general}</p>)}
-                    <button className="btn btn-primary btn-block"  type="button" onClick={this.handleLogin} >Login </button>
+                    <button className={`btn btn-${loading? "success":"primary" } btn-block` } type="button" onClick={this.handleLogin} >  {loading? (
+                <CircularProgress size={20} />):"Login"}</button>
                     
                   </form>
                 </div>
@@ -248,7 +250,8 @@ if (nextProps.errors) {
                       <input type="password" className="form-control" id="signuploginconfirm_password" required placeholder="Confirm Password" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange}  />
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.confirm_password}</p>
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={this.handleSignup}  >Signup </button>
+                    <button className="btn btn-primary btn-block" type="button" onClick={this.handleSignup}  > {loading? (
+                <CircularProgress size={20} />):"Signup"}</button>
                   </form>
                 </div>
                 {/* </>

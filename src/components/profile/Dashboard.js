@@ -28,10 +28,10 @@ const Dashboard = (props) => {
 
   // const user = useSelector(state => state.user)
 
-  const { user: {
-    userData: { username,  email ,phonenumber}}} = props;
+//   const { user: {
+//     userData: { username,  email ,phonenumber}}} = props;
 
-console.log(username)
+// console.log(username)
 
 
  
@@ -138,8 +138,8 @@ console.log(username)
             <h3 className="text-5 font-weight-400 d-flex align-items-center mb-3">Profile Completeness <span className="bg-light-4 text-success rounded px-2 py-1 font-weight-400 text-2 ml-2">50%</span></h3>
             <div className="row profile-completeness">
               <div className="col-sm-6 col-md-3 mb-4 mb-md-0">
-                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-mobile-alt"></i></span> <span className={`text-5 d-block text-${phonenumber?'success' : 'danger'} mt-4 mb-3`}><i className={`fa fa-${phonenumber? 'check' : 'times'}-circle`}></i></span>
-                {phonenumber? (<p className="mb-0"> Mobile Added </p>): (<a className="btn-link stretched-link" href="#edit-phone" data-toggle="modal"> Add Number</a>)}
+                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-mobile-alt"></i></span> <span className={`text-5 d-block text-${user.phone?'success' : 'danger'} mt-4 mb-3`}><i className={`fa fa-${user.phone != null? 'check' : 'times'}-circle`}></i></span>
+                {user.phone != null? (<p className="mb-0"> Mobile Added </p>): (<a className="btn-link stretched-link" href="#edit-phone" data-toggle="modal"> Add Mobile</a>)}
                   
                 </div>
               </div>

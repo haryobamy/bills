@@ -6,7 +6,7 @@ import firebase from 'firebase'
 import db from "../../fire";
 import PropTypes from 'prop-types';
 import { connect, useSelector,useDispatch } from 'react-redux';
-import {getUserData} from '../../redux/actions/userAction';
+import {getUserData, editUserDetails} from '../../redux/actions/userAction';
 
 
 
@@ -17,9 +17,57 @@ import Profilefooter from './Profilefooter';
 
 const Myprofile = (props) =>{
   const [image, setImage] = useState(null)
-  // const [users, setUsers] = useState([]);
-  
   const user = JSON.parse(localStorage.getItem('userInfo'));
+  
+  // const token =JSON.parse(localStorage.getItem('jwtToken'))
+  const [formData, setFormData] = useState({
+    first_name:"",
+    last_name:"",
+    address:"",
+    city:"",
+    state:"",
+    zipCode:"",
+    phone:"",
+    account_status:""
+  })
+ 
+
+  
+  
+  
+
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    
+    const userDetails  = {
+      first_name:formData.first_name,
+      last_name:formData.last_name,
+      address:formData.address,
+      city:formData.city,
+      zip_code:formData.zipCode,
+      phone:"null"
+    }
+    props.editUserDetails(userDetails)
+    
+ }
+
+ const  mapUserDetailsToState = (userData) => {
+  setFormData({
+    ...formData,
+    first_name: userData.first_name ? userData.first_name : '',
+    last_name: userData.last_name ? userData.last_name : '',
+    address: userData.address ? userData.address : '',
+    city: userData.city ? userData.city : '',
+    zip_code: userData.zip_code ? userData.zip_code : '',
+    phone: userData.phone ? userData.phone : ''
+  });
+};
+
+ useEffect(() => {
+  const { userData } = props;
+  mapUserDetailsToState(userData);
+ }, [])
 
   // const user = useSelector(state => state.user)
 
@@ -30,7 +78,15 @@ const Myprofile = (props) =>{
 //    dispatch(getUserData(user))
 //  }, [])
 
+const {
+  user: {
+    userData: { first_name, last_name, address, city, state, zip_code },
+    loading
+  }
+} = props;
+
   
+console.log(user.first_name)
 
 
 // const { user: { userdata: { username, createdAt, imageUrl, bio, website, location },loading,authenticated
@@ -41,17 +97,7 @@ const Myprofile = (props) =>{
 
 
   
-  const [ formData, setFormData] = useState({
-    firstName:'', 
-    lastName:"", 
-     DOB:'',
-     address:'',
-     country:'',
-     zipCode:'',
-     city:'',
-     state:'',
-
-  })
+ 
 
   const handleFileChange = e => {
     if (e.target.file[0]) {
@@ -85,14 +131,25 @@ const Myprofile = (props) =>{
   }
 
 
-  const handleInputChange = e => {
+  
+  const handleChange = (e) => {
     const {name,value} = e.target
     setFormData({
       ...formData, 
       [name]:value
     })
     console.log(name, value);
-  }
+  } 
+
+
+  // const handleChange = e => {
+  //   const {name,value} = e.target
+  //   setFormData({
+  //     ...formData, 
+  //     [name]:value
+  //   })
+  //   console.log(name, value);
+  // }
 
  
   // var name, email, photoUrl, uid, emailVerified;
@@ -110,7 +167,7 @@ const Myprofile = (props) =>{
   
 
 
-  const handleSave = () => {
+  const Save = () => {
 
    
 
@@ -237,7 +294,7 @@ const Myprofile = (props) =>{
             <h3 className="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-              {user?(<p className="col-sm-9"> fix this </p>): (<p className="col-sm-9"> Ciroma adeola  </p>) }
+              {user.first_name || user.last_name !=null?(<p className="col-sm-9" style={{textTransform:"capitalize"}}> {user.first_name}  {user.last_name}</p>): (<p className="col-sm-9">Name Here  </p>) }
               
             </div>
             {/* <div className="row">
@@ -247,10 +304,13 @@ const Myprofile = (props) =>{
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Address</p>
               
-              <p className="col-sm-9"> <p>{user.address?("uuuuu"):('block  sos osososos')}</p> <br/>
+               {user.address !=null?(<p className="col-sm-9" style={{textTransform:"capitalize"}}>{user.address}<br/>
                 {user.city},<br/>
-                {user.state} - {user.zipcode},<br/>
-                {user.country}.</p>
+                {user.state} - {user.zip_code},<br/>
+                Nigeria.</p>):(<p className="col-sm-9" style={{textTransform:"capitalize"}} ><br/>your address
+                your city,<br/>
+                your state - your zipcode,<br/>
+                Nigeria.</p>)}
             </div>
             </>
             </div>
@@ -269,13 +329,13 @@ const Myprofile = (props) =>{
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="firstName">First Name</label>
-                          <input type="text"  className="form-control" data-bv-field="firstName" id="firstName" required placeholder="First Name" onChange={handleInputChange} />
+                          <input type="text"  className="form-control" data-bv-field="firstName" name="first_name" id="firstName" required placeholder="First Name" onChange={handleChange} value={formData.first_name} />
                         </div>
                       </div>
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="lastName">Last Name</label>
-                          <input type="text"  className="form-control" data-bv-field="lastName" id="lastName" required placeholder="Last Name"  onChange={handleInputChange} />
+                          <input type="text"  className="form-control" data-bv-field="lastName" name="last_name" id="lastName" value={formData.last_name} required placeholder="Last Name"  onChange={handleChange}  />
                         </div>
                       </div>
                       {/* <div className="col-12">
@@ -297,35 +357,31 @@ const Myprofile = (props) =>{
                       <div className="col-12">
                         <div className="form-group">
                           <label for="address">Address</label>
-                          <input type="text"  name='address' className="form-control" data-bv-field="address" id="address" value={formData.address} required placeholder="Address 1" onChange={handleInputChange} />
+                          <input type="text"  name='address' className="form-control" data-bv-field="address" id="address" value={formData.address} required placeholder="Address 1" onChange={handleChange}/>
                         </div>
                       </div>
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="city">City</label>
-                          <input id="city"  name='city' type="text" className="form-control" required placeholder="City" onChange={handleInputChange} />
+                          <input id="city"  name='city' type="text" className="form-control" required placeholder="City" onChange={handleChange} value={formData.city} />
                         </div>
                       </div>
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="input-zone">State</label>
-                          <select className="custom-select" id="input-zone" name="zone_id" onChange={handleInputChange} >
-                            <option value=""> --- Please Select --- </option>
-                            <option value="3613">Alabama</option>
-                           
-                          </select>
+                          <input id="state"  name='state' type="text" className="form-control" required placeholder="state" onChange={handleChange} value={formData.state} />
                         </div>
                       </div>
                       <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="zipCode">Zip Code</label>
-                          <input id="zipCode"  name='zipCode' type="text" className="form-control" required placeholder="100343" onChange={handleInputChange}/>
+                          <input id="zipCode"  name='zipCode' type="text" className="form-control" required placeholder="100343" onChange={handleChange} value={formData.zipCode} />
                         </div>
                       </div>
-                      <div className="col-12 col-sm-6">
+                      {/* <div className="col-12 col-sm-6">
                         <div className="form-group">
                           <label for="inputCountry">Country</label>
-                          <select className="custom-select" id="inputCountry" name="country"    onChange={handleInputChange} >
+                          <select className="custom-select" id="inputCountry" name="country"    onChange={handleChange} >
                             <option value=""> --- Please Select --- </option>
                             <option value='nigeria' >Nigeria</option>
                             <option value='ghana' >Ghana</option>
@@ -333,9 +389,9 @@ const Myprofile = (props) =>{
                            
                           </select>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
-                    <button className="btn btn-primary btn-block mt-2" type="button" onClick={handleSave}  >Save Changes</button>
+                    <button className="btn btn-primary btn-block mt-2" type="button" onClick={handleSave} data-dismiss="modal" aria-label="Close" >Save Changes</button>
                   </form>
                 </div>
               </div>
@@ -360,8 +416,8 @@ const Myprofile = (props) =>{
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Account Status</p>
              
               <p className="col-sm-9">
-                <span className={`bg-${user.accountStatus ?'success' : 'danger'} text-white rounded-pill d-inline-block px-2 mb-0`}>
-                <i className={`fa fa-${user.accountStatus ? 'check' : 'times'}-circle`}></i></span> {user.accountStatus ? "Active" : "Inactive"} </p> 
+                <span className={`bg-${user.account_status ===1 ?'success' : 'danger'} text-white rounded-pill d-inline-block px-2 mb-0`}>
+                <i className={`fa fa-${user.account_status ===1 ? 'check' : 'times'}-circle`}></i></span> {user.account_status ===1? "Active" : "Inactive"} </p> 
                 
                 
                 
@@ -387,95 +443,7 @@ const Myprofile = (props) =>{
                           </select>
                         </div>
                       </div>
-                      {/* <div className="col-12">
-                        <div className="form-group">
-                          <label for="input-timezone">Time Zone</label>
-                          <select className="custom-select" id="input-timezone" name="timezone_id">
-                            <option value="-12">(GMT-12:00) International Date Line West</option>
-                            <option value="-11">(GMT-11:00) Midway Island, Samoa</option>
-                            <option value="-10">(GMT-10:00) Hawaii</option>
-                            <option value="-9">(GMT-09:00) Alaska</option>
-                            <option value="-8">(GMT-08:00) Pacific Time (US & Canada)</option>
-                            <option value="-8">(GMT-08:00) Tijuana, Baja California</option>
-                            <option value="-7">(GMT-07:00) Arizona</option>
-                            <option value="-7">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-                            <option value="-7">(GMT-07:00) Mountain Time (US & Canada)</option>
-                            <option selected="selected" value="-6">(GMT-06:00) Central America</option>
-                            <option value="-6">(GMT-06:00) Central Time (US & Canada)</option>
-                            <option value="-6">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-                            <option value="-6">(GMT-06:00) Saskatchewan</option>
-                            <option value="-5">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-                            <option value="-5">(GMT-05:00) Eastern Time (US & Canada)</option>
-                            <option value="-5">(GMT-05:00) Indiana (East)</option>
-                            <option value="-4">(GMT-04:00) Atlantic Time (Canada)</option>
-                            <option value="-4">(GMT-04:00) Caracas, La Paz</option>
-                            <option value="-4">(GMT-04:00) Manaus</option>
-                            <option value="-4">(GMT-04:00) Santiago</option>
-                            <option value="-3.5">(GMT-03:30) Newfoundland</option>
-                            <option value="-3">(GMT-03:00) Brasilia</option>
-                            <option value="-3">(GMT-03:00) Buenos Aires, Georgetown</option>
-                            <option value="-3">(GMT-03:00) Greenland</option>
-                            <option value="-3">(GMT-03:00) Montevideo</option>
-                            <option value="-2">(GMT-02:00) Mid-Atlantic</option>
-                            <option value="-1">(GMT-01:00) Cape Verde Is.</option>
-                            <option value="-1">(GMT-01:00) Azores</option>
-                            <option value="0">(GMT+00:00) Casablanca, Monrovia, Reykjavik</option>
-                            <option value="0">(GMT+00:00) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London</option>
-                            <option value="1">(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
-                            <option value="1">(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
-                            <option value="1">(GMT+01:00) Brussels, Copenhagen, Madrid, Paris</option>
-                            <option value="1">(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
-                            <option value="1">(GMT+01:00) West Central Africa</option>
-                            <option value="2">(GMT+02:00) Amman</option>
-                            <option value="2">(GMT+02:00) Athens, Bucharest, Istanbul</option>
-                            <option value="2">(GMT+02:00) Beirut</option>
-                            <option value="2">(GMT+02:00) Cairo</option>
-                            <option value="2">(GMT+02:00) Harare, Pretoria</option>
-                            <option value="2">(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
-                            <option value="2">(GMT+02:00) Jerusalem</option>
-                            <option value="2">(GMT+02:00) Minsk</option>
-                            <option value="2">(GMT+02:00) Windhoek</option>
-                            <option value="3">(GMT+03:00) Kuwait, Riyadh, Baghdad</option>
-                            <option value="3">(GMT+03:00) Moscow, St. Petersburg, Volgograd</option>
-                            <option value="3">(GMT+03:00) Nairobi</option>
-                            <option value="3">(GMT+03:00) Tbilisi</option>
-                            <option value="3.5">(GMT+03:30) Tehran</option>
-                            <option value="4">(GMT+04:00) Abu Dhabi, Muscat</option>
-                            <option value="4">(GMT+04:00) Baku</option>
-                            <option value="4">(GMT+04:00) Yerevan</option>
-                            <option value="4.5">(GMT+04:30) Kabul</option>
-                            <option value="5">(GMT+05:00) Yekaterinburg</option>
-                            <option value="5">(GMT+05:00) Islamabad, Karachi, Tashkent</option>
-                            <option value="5.5">(GMT+05:30) Sri Jayawardenapura</option>
-                            <option value="5.5">(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
-                            <option value="5.75">(GMT+05:45) Kathmandu</option>
-                            <option value="6">(GMT+06:00) Almaty, Novosibirsk</option>
-                            <option value="6">(GMT+06:00) Astana, Dhaka</option>
-                            <option value="6.5">(GMT+06:30) Yangon (Rangoon)</option>
-                            <option value="7">(GMT+07:00) Bangkok, Hanoi, Jakarta</option>
-                            <option value="7">(GMT+07:00) Krasnoyarsk</option>
-                            <option value="8">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
-                            <option value="8">(GMT+08:00) Kuala Lumpur, Singapore</option>
-                            <option value="8">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
-                            <option value="8">(GMT+08:00) Perth</option>
-                            <option value="8">(GMT+08:00) Taipei</option>
-                            <option value="9">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
-                            <option value="9">(GMT+09:00) Seoul</option>
-                            <option value="9">(GMT+09:00) Yakutsk</option>
-                            <option value="9.5">(GMT+09:30) Adelaide</option>
-                            <option value="9.5">(GMT+09:30) Darwin</option>
-                            <option value="10">(GMT+10:00) Brisbane</option>
-                            <option value="10">(GMT+10:00) Canberra, Melbourne, Sydney</option>
-                            <option value="10">(GMT+10:00) Hobart</option>
-                            <option value="10">(GMT+10:00) Guam, Port Moresby</option>
-                            <option value="10">(GMT+10:00) Vladivostok</option>
-                            <option value="11">(GMT+11:00) Magadan, Solomon Is., New Caledonia</option>
-                            <option value="12">(GMT+12:00) Auckland, Wellington</option>
-                            <option value="12">(GMT+12:00) Fiji, Kamchatka, Marshall Is.</option>
-                            <option value="13">(GMT+13:00) Nuku'alofa</option>
-                          </select>
-                        </div>
-                      </div> */}
+                    
                       <div className="col-12">
                         <div className="form-group">
                           <label for="accountStatus">Account Status</label>
@@ -540,7 +508,7 @@ const Myprofile = (props) =>{
             <h3 className="text-5 font-weight-400 mb-3">Phone <a href="#edit-phone" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Mobile <span className="text-muted font-weight-500">(Primary)</span></p>
-              <p className="col-sm-9">{user.mobile}</p>
+              <p className="col-sm-9">{user.phone}</p>
             </div>
           </div>
          
@@ -628,13 +596,19 @@ const Myprofile = (props) =>{
     }
     Myprofile.propTypes = {
       user: PropTypes.object.isRequired,
+      editUserDetails: PropTypes.func.isRequired,
     };
 
     const mapStateToProps = (state) => ({
+      userData: state.user.userData,
       user: state.user
      });
 
+     const mapActionToProps = {
+      editUserDetails
+    }
 
 
-export default  connect(mapStateToProps)(Myprofile);
+
+export default  connect(mapStateToProps, mapActionToProps)(Myprofile);
  

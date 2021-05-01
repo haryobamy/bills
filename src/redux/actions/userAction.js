@@ -84,6 +84,8 @@ const url = "https://desolate-shore-36733.herokuapp.com/api"
 
 // Register User
 export const signupUser = (newUserData, history) => dispatch => {
+
+  dispatch({ type: USER_LOADING });
   axios
     .post(url+'/register', newUserData)
     .then(res => {
@@ -115,6 +117,8 @@ export const signupUser = (newUserData, history) => dispatch => {
 // Login - get user token 
 
 export const loginUser = (userData, history) => dispatch => {
+  dispatch({ type: USER_LOADING });
+
   axios
     .post(url+'/login', userData)
     .then(res => {
@@ -158,8 +162,8 @@ export const setCurrentUser = (decoded) => {
 
 
 
-export const getUserData = (user)  => {
-  
+export const getUserData = (user) => {
+ 
   return {
     type: GET_USERDATA,
     payload: user
@@ -175,7 +179,8 @@ export const setUserLoading = () => {
 // Log user out
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
-  localStorage.removeItem("jwtToken");
+  localStorage.clear();
+  
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
@@ -183,4 +188,19 @@ export const logoutUser = () => dispatch => {
         // Redirect to login
     window.location.href = "/";
   
+};
+
+export const editUserDetails = (userDetails) => (dispatch) => {
+
+  dispatch({ type: USER_LOADING });
+
+  axios
+    .post(url+'/profile', userDetails)
+    .then((res) => {
+      const {user} = res.data;
+      localStorage.setItem('userInfo', JSON.stringify(user));
+      
+      dispatch(getUserData(user));
+    })
+    .catch((err) => console.log(err));
 };

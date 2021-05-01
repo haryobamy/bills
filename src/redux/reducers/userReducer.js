@@ -56,6 +56,7 @@ import {
           ...state,
           isAuthenticated: true,
           user: action.payload,
+          loading: false
           
         };
       case GET_USERDATA:
