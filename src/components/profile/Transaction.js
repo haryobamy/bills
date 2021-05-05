@@ -21,7 +21,7 @@ class Transaction extends Component {
           =============================== --> */}
           <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src="images/profile-thumb.jpg" alt=""/>
-              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute"></i>
+              <div className="profile-thumb-edit custom-file bg-secondary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute"></i>
                 <input type="file" className="custom-file-input" id="customFile"/>
               </div>
             </div>
@@ -32,7 +32,7 @@ class Transaction extends Component {
           
           <!-- Available Balance
           =============================== --> */}
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
+          <div className="bg-secondary shadow-sm rounded text-center p-3 mb-4">
             <div className="text-17 text-light my-3"><i className="fa fa-wallet"></i></div>
             <h3 className="text-9 font-weight-400">$2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>

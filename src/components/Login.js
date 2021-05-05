@@ -15,6 +15,21 @@ import {useDispatch, useSelector} from "react-redux";
 
 
 
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required!
+      </div>
+    );
+  }
+};
+
+
+
+
+
+
 
 class Login extends Component {
  
@@ -70,6 +85,10 @@ if (nextProps.errors) {
     });
   }
 }
+
+
+
+
 
 // componentDidMount() {
 //   // If logged in and user navigates to Login page, should redirect them to dashboard
@@ -204,11 +223,12 @@ if (nextProps.errors) {
                 <div className="tab-pane fade show active" id="loginPage" role="tabpanel" aria-labelledby="login-page-tab">
                   <form id="loginForm"  >
                     <div className="form-group">
-                      <input type="email" className="form-control" error={errors.email} required id="email"  name='email'  placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
+                      <input type="email" className="form-control" error={errors.email}  required id="email"  name='email'  placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.email}</p>
+                      <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.error}</p>
                     </div>
                     <div className="form-group">
-                      <input type="password" className="form-control" id="Password"  name='password' required placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
+                      <input type="password" className="form-control" id="Password"  name='password' placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
                       <p className='errorMsg' style={{color:'red',textTransform:'capitalize'}}>{errors.password}</p>
                     </div>
                     <div className="row mb-4">

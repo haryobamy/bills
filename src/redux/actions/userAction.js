@@ -74,7 +74,7 @@
 import axios from "axios";
 import setAuthToken from "../../util/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING,SET_UNAUTHENTICATED, CLEAR_ERRORS, GET_USERDATA} from "../types";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING,SET_UNAUTHENTICATED, CLEAR_ERRORS, GET_USERDATA, STOP_LOADING_UI, LOADING_UI} from "../types";
 
 
 // const url = 'http://localhost:5000/bills-com-ng/europe-west2/api'
@@ -85,7 +85,7 @@ const url = "https://desolate-shore-36733.herokuapp.com/api"
 // Register User
 export const signupUser = (newUserData, history) => dispatch => {
 
-  dispatch({ type: USER_LOADING });
+  dispatch({ type: LOADING_UI });
   axios
     .post(url+'/register', newUserData)
     .then(res => {
@@ -97,13 +97,14 @@ export const signupUser = (newUserData, history) => dispatch => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
-          // clearing errors
-          dispatch({ type: CLEAR_ERRORS});
+         
            // Set current user
           dispatch(getUserData(user));
           //setting use
       dispatch(setCurrentUser(decoded));
       // re-direct to dashboard on successful register
+       // clearing errors
+          dispatch({ type: CLEAR_ERRORS});
       history.push("/dashboard")
     }) 
 
@@ -117,7 +118,7 @@ export const signupUser = (newUserData, history) => dispatch => {
 // Login - get user token 
 
 export const loginUser = (userData, history) => dispatch => {
-  dispatch({ type: USER_LOADING });
+  dispatch({ type: LOADING_UI });
 
   axios
     .post(url+'/login', userData)
@@ -131,27 +132,34 @@ export const loginUser = (userData, history) => dispatch => {
       // Decode token to get user data
       const decoded = jwt_decode(token);
       // clearing errors
-      dispatch({ type: CLEAR_ERRORS}); 
+      // dispatch({ type: CLEAR_ERRORS}); 
+      dispatch({ type: USER_LOADING });
       //getting user data
       dispatch(getUserData(user));
       // dispatch(getUserData());
      
        // Set current user
       dispatch(setCurrentUser(decoded));
+
+      dispatch({ type: CLEAR_ERRORS });
      
       // re-direct to dashboard on successful register
       history.push("/dashboard")
     }) 
 
     .catch(err =>
+      
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
       })
+       
+      
     );
 };
 
 export const setCurrentUser = (decoded) => {
+  
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -204,3 +212,17 @@ export const editUserDetails = (userDetails) => (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const uploadImage = (formData) => (dispatch) => {
+  dispatch({ type: USER_LOADING });
+  axios
+    .post(url+'/pic', formData)
+    .then((res) => {
+      const {user} = res.data;
+      localStorage.setItem('userInfo', JSON.stringify(user));
+      dispatch(getUserData(user));
+    })
+    .catch((err) => console.log(err));
+};
+
+

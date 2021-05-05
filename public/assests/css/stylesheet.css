@@ -64,7 +64,7 @@ img {
   vertical-align: inherit;
 }
 
-a, a:focus {
+/* a, a:focus {
   color: #2dbe60;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
@@ -87,7 +87,7 @@ a:focus, a:active,
 button:focus,
 button:active {
   outline: none;
-}
+} */
 
 p {
   line-height: 1.9;
@@ -113,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*-------- Preloader --------*/
-#preloader {
+/* #preloader {
   position: fixed;
   z-index: 999999999 !important;
   background-color: #fff;
@@ -140,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 5px solid #2dbe60;
   border-color: #2dbe60 transparent #2dbe60 transparent;
   animation: dual-ring 1.2s linear infinite;
-}
+} */
 
 @keyframes dual-ring {
   0% {
@@ -544,7 +544,7 @@ hr {
   justify-content: inherit;
 }
 
-.navbar-light .navbar-nav .active > .nav-link {
+.navbar-light .navbar-nav .active > {
   color: #0c2f55;
 }
 .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show {
@@ -2633,11 +2633,11 @@ select.form-control:not([size]):not([multiple]):not(.form-control-sm) {
 }
 
 .text-primary, .btn-light, .btn-outline-light:hover, .btn-link {
-  color: #2dbe60 !important;
+  color: #fff !important;
 }
 
 .btn-link:hover {
-  color: #22b355 !important;
+  color: #6c757d !important;
 }
 
 .text-secondary {

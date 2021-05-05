@@ -37,8 +37,8 @@ class Addcard extends Component {
                   =============================== --> */}
                   <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
                     <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src="images/profile-thumb.jpg" alt=""/>
-                      <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fas fa-camera position-absolute"></i>
-                        <input type="file" className="custom-file-input" id="customFile"/>
+                      <div className="profile-thumb-edit custom-file bg-secondary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fas fa-camera position-absolute"></i>
+                        {/* <input type="file" className="custom-file-input" id="customFile"/> */}
                       </div>
                     </div>
                     <p className="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>

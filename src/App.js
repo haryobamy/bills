@@ -47,8 +47,120 @@ import axios from 'axios';
 const App = (props) => {
  
 const history = useHistory()
+
+
+const  handleImageChange = (event) =>{
+  const image = event.target.files[0];
+  const formData = new FormData();
+  formData.append('image', image, image.name);
+
+  console.log(formData)
+
+  console.log(image)
+
+  const token= localStorage.getItem('jwtToken');
+
+  axios.post( "https://desolate-shore-36733.herokuapp.com/api/pic", formData,   {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+  })
+  .then((res) => {
+    const {user} = res.data;
+    localStorage.setItem('userInfo', JSON.stringify(user));
+
+    console.log(user)
+    
+  })
+  .catch((err) => console.log(err));
+}
   
  
+
+  const { user: {isAuthenticated}  } = props;
+
+ 
+   
+    return ( 
+       <>
+       
+       {
+         isAuthenticated?(< Profileheader />):(<Header />)
+       }
+    
+    <div className="auth-wrapper" id="main-wrapper" >
+        <div className="auth-inner" >
+        <Switch>
+
+    { isAuthenticated? (
+      <>
+               <Route exact path='/' component={Home} />
+               <Route path="/data" component={Data} />
+               <Route path="/electricity" component={Electricity} />
+               <Route path="/cable" component={Cable} />
+               <Route path="/education" component={Education} />
+               
+               <Route path="/about" component={About} />
+               <Route path="/faq" component={Faq} />
+               <Route path="/support" component={Support} />
+               <Route path="/contact" component={Contact} />
+               
+               <Route path="/profile" component=  {() => <Myprofile handleImageChange={handleImageChange}  />} />
+               <Route path="/dashboard" component=  {() => <Dashboard  handleImageChange={handleImageChange}  />} />
+               <Route path="/transaction" component={Transaction} />
+               <Route path="/sendmoney" component={Sendmoney} />
+               <Route path="/addcard" component={Addcard} />
+               <Route path="/notification" component={Notification} />
+               <Route path="/sent" component={Sent} />
+               <Route path="/deposit" component={Deposit} />
+               </>
+             ):(
+               <>
+
+              <Route exact path='/' component={Home} />
+               {/* <Route path="/mobile" component={Recharge} /> */}
+               <Route path="/data" component={Data} />
+               <Route path="/electricity" component={Electricity} />
+               <Route path="/cable" component={Cable} />
+               <Route path="/education" component={Education} />
+               <Route path="/sendmoney" component={Sendmoney} />
+               <Route path="/about" component={About} />
+               <Route path="/faq" component={Faq} />
+               <Route path="/support" component={Support} />
+               <Route path="/contact" component={Contact} />
+              <  Route path="/login" component=  {Login}   />
+              {/* <Route path="/login" component=  {() => <Dashboard  handleLogin={handleLogin} }  />} /> */}
+              {/* <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} /> */}
+
+              </>
+             )}
+
+          </Switch>
+        </div>
+      </div>
+     
+                
+            
+    </>
+    
+  );
+    }
+
+
+
+    App.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+export default  connect(mapStateToProps)(App);
+
+
+
+
   // const [emailError, setEmailError] = useState('');
   // const [passwordError, setPasswordError] = useState('');
   // const [hasPassword, setHasPassword] = useState('');
@@ -163,92 +275,3 @@ const history = useHistory()
   
 
  
-
-  const { user: {isAuthenticated}  } = props;
-
- 
-   
-    return ( 
-       <>
-       {
-         isAuthenticated?(< Profileheader />):(<Header />)
-       }
-
-            
-    <div className="auth-wrapper">
-        <div className="auth-inner">
-        <Switch>
-
-    { isAuthenticated? (
-      <>
-               <Route exact path='/' component={Home} />
-               <Route path="/data" component={Data} />
-               <Route path="/electricity" component={Electricity} />
-               <Route path="/cable" component={Cable} />
-               <Route path="/education" component={Education} />
-               
-               <Route path="/about" component={About} />
-               <Route path="/faq" component={Faq} />
-               <Route path="/support" component={Support} />
-               <Route path="/contact" component={Contact} />
-               <Route path="/profile" component= {Myprofile} />
-               <Route path="/dashboard" component={Dashboard} />
-               <Route path="/transaction" component={Transaction} />
-               <Route path="/sendmoney" component={Sendmoney} />
-               <Route path="/addcard" component={Addcard} />
-               <Route path="/notification" component={Notification} />
-               <Route path="/sent" component={Sent} />
-               <Route path="/deposit" component={Deposit} />
-               </>
-             ):(
-               <>
-
-              <Route exact path='/' component={Home} />
-               {/* <Route path="/mobile" component={Recharge} /> */}
-               <Route path="/data" component={Data} />
-               <Route path="/electricity" component={Electricity} />
-               <Route path="/cable" component={Cable} />
-               <Route path="/education" component={Education} />
-               <Route path="/sendmoney" component={Sendmoney} />
-               <Route path="/about" component={About} />
-               <Route path="/faq" component={Faq} />
-               <Route path="/support" component={Support} />
-               <Route path="/contact" component={Contact} />
-              <  Route path="/login" component=  {Login}   />
-              {/* <Route path="/login" component=  {() => <Login  handleLogin={handleLogin} handleSignup={handleSignup} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle}  />} /> */}
-              {/* <Route path="/login" component=  {() => <Login email={email} setEmail={setEmail} password={password} setPassword={setPassword} handleLogin={handleLogin} handleSignup={handleSignup} hasAcount={hasAcount} setHasAcount={setHasAcount} emailError={emailError} passwordError={passwordError}  signInWithGoogle={signInWithGoogle} />} /> */}
-
-              </>
-             )}
-
-          </Switch>
-        </div>
-      </div>
-     
-                
-            
-    </>
-    
-  );
-    }
-
-
-
-   
-
-    App.propTypes = {
-      user: PropTypes.object.isRequired,
-    };
-
-    const mapStateToProps = (state) => ({
-      user: state.user
-     });
-
-
-
-
-    
-
-
-
-export default  connect(mapStateToProps)(App);

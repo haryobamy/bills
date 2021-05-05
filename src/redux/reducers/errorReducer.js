@@ -30,7 +30,7 @@
 // }
 
 
-import { GET_ERRORS,CLEAR_ERRORS,LOADING_UI,STOP_LOADING_UI } from "../types";
+import { GET_ERRORS,CLEAR_ERRORS,LOADING_UI,STOP_LOADING_UI,USER_LOADING } from "../types";
 const initialState = {
   loading: false,
   errors: null

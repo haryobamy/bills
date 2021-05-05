@@ -272,7 +272,7 @@ useEffect(() => {
               <button className="btn btn-success btn-lg   col-md-6 col-lg-3" type="button"  onClick={handleSubmit}>Pay Now</button>):
               (<button className="btn btn-secondary btn-lg col-md-6 col-lg-3" type="button" onClick={handleValidation} >Pay Now</button>)
               }
-              <button className="btn btn-danger btn-lg ml-5 col-md-6 col-lg-3" type="button">Cancel</button>
+              <button className="btn btn-danger btn-lg ml-1 col-md-6 col-lg-3" type="button">Cancel</button>
               </div>
               </div>
               <div className='col-md-6 col-lg-3'></div>

@@ -8,64 +8,41 @@ import db from "../../fire";
 
 import PropTypes from 'prop-types';
 import { connect, useSelector,useDispatch } from 'react-redux';
-import {getUserData} from '../../redux/actions/userAction';
+import {getUserData, uploadImage} from '../../redux/actions/userAction';
 
 
 
 
 
 const Dashboard = (props) => {
-  
-
-
-
 
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
 
+  const handleEditPicture = () => {
+    const fileInput = document.getElementById('imageInput');
+    fileInput.click();
+  };
+  const { handleImageChange  } = props;
+
+
+  // const  handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append('image', file);
+  //  props.uploadImage(formData);
+  // };
+
+  
 
 
 
-  // const user = useSelector(state => state.user)
-
-//   const { user: {
-//     userData: { username,  email ,phonenumber}}} = props;
-
-// console.log(username)
-
-
- 
-
-//   const fetchUsers=async()=>{
-//     const response=db.collection('users');
-//     const data=await response.get();
-//     data.docs.forEach(item=>{
-//      setUsers([...users,item.data()])
-//     })
-// }
-
-// useEffect(() => {
-//   fetchUsers();
-// }, [])
-
-
-
-
-
-    
-
-    // render() {
-    //   if(this.props.user){
-    //     return(
-    //       <h2>Hi {this.props.user.firstName} {this.props.user.lastName} </h2>
-    //     )
-    //   }
         return ( 
             <>
             
 
             <div>
-            <div className="bg-primary">
+            <div className="bg-secondary">
                 
                 <div className="container d-flex justify-content-center">
                   <ul className="nav secondary-nav">
@@ -92,21 +69,21 @@ const Dashboard = (props) => {
          
           <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
             <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={eva} alt=""/>
-              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute"></i>
-                <input type="file" className="custom-file-input" id="customFile"/>
+            <div className="profile-thumb-edit custom-file bg-secondary text-white" data-toggle="tooltip" title="Edit profile picture"> <i className="fa fa-camera position-absolute" onClick={handleEditPicture}  ></i>
+                <input type="file" className="custom-file-input" id="imageInput" name="image" accept="image/*" multiple={false}  onChange={handleImageChange}/>
               </div>
             </div>
          
             <p className="text-3 font-weight-500 mb-2">Hello,{user.username} </p>
-            <p className="mb-2"><a href="/profile" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fa fa-edit"></i></a></p>
+            <p className="mb-2"><a href="/profile" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className=" fa fa-edit"></i></a></p>
             
           </div>
            {/* Profile Details End  */}
           
           {/* Available Balance */}
           
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
-            <div className="text-17 text-light my-3"><i className="fa fa-wallet"></i></div>
+          <div className="bg-secondary shadow-sm rounded text-center p-3 mb-4">
+            <div className="text-17 text-light my-3"><i className=" fa fa-wallet"></i></div>
             <h3 className="text-9 font-weight-400">$2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3"/>
@@ -134,17 +111,17 @@ const Dashboard = (props) => {
           
           {/* Profile Completeness */}
          
-          <div className="bg-light shadow-sm rounded p-4 mb-4">
+          <div className=" bg-light shadow-sm rounded p-4 mb-4" >
             <h3 className="text-5 font-weight-400 d-flex align-items-center mb-3">Profile Completeness <span className="bg-light-4 text-success rounded px-2 py-1 font-weight-400 text-2 ml-2">50%</span></h3>
-            <div className="row profile-completeness">
+            <div className=" bg-light-4 row profile-completeness">
               <div className="col-sm-6 col-md-3 mb-4 mb-md-0">
-                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-mobile-alt"></i></span> <span className={`text-5 d-block text-${user.phone?'success' : 'danger'} mt-4 mb-3`}><i className={`fa fa-${user.phone != null? 'check' : 'times'}-circle`}></i></span>
+                <div className=" border rounded p-3 text-center"> <span className=" d-block text-10 text-light mt-2 mb-3"><i className=" fa fa-mobile-alt"></i></span> <span className={`text-5 d-block text-${user.phone?'success' : 'danger'} mt-4 mb-3`}><i className={`fa fa-${user.phone != null? 'check' : 'times'}-circle`}></i></span>
                 {user.phone != null? (<p className="mb-0"> Mobile Added </p>): (<a className="btn-link stretched-link" href="#edit-phone" data-toggle="modal"> Add Mobile</a>)}
                   
                 </div>
               </div>
               <div className="col-sm-6 col-md-3 mb-4 mb-md-0">
-                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className="fa fa-envelope"></i></span> <span className="text-5 d-block text-success mt-4 mb-3"><i className="fa fa-check-circle"></i></span>
+                <div className="border rounded p-3 text-center"> <span className="d-block text-10 text-light mt-2 mb-3"><i className=" fa fa-envelope"></i></span> <span className="text-5 d-block text-success mt-4 mb-3"><i className="fa fa-check-circle"></i></span>
                   <p className="mb-0">Email Added</p>
                 </div>
               </div>

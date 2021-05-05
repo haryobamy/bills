@@ -6,7 +6,7 @@ import firebase from 'firebase'
 import db from "../../fire";
 import PropTypes from 'prop-types';
 import { connect, useSelector,useDispatch } from 'react-redux';
-import {getUserData, editUserDetails} from '../../redux/actions/userAction';
+import {uploadImage, editUserDetails} from '../../redux/actions/userAction';
 
 
 
@@ -32,12 +32,8 @@ const Myprofile = (props) =>{
   })
  
 
-  
-  
-  
 
-
-  const handleSave = (e) => {
+  const handleProfileSave = (e) => {
     e.preventDefault();
     
     const userDetails  = {
@@ -46,7 +42,41 @@ const Myprofile = (props) =>{
       address:formData.address,
       city:formData.city,
       zip_code:formData.zipCode,
-      phone:"null"
+      phone:user.phone,
+      account_status:user.account_status
+
+    }
+    props.editUserDetails(userDetails)
+    
+ }
+  const handlePhoneUpdate = (e) => {
+    e.preventDefault();
+    
+    const userDetails  = {
+      first_name:user .first_name,
+      last_name:user.last_name,
+      address:user.address,
+      city:user.city,
+      zip_code:user.zipCode,
+      phone:formData.phone,
+      account_status:user.account_status
+
+    }
+    props.editUserDetails(userDetails)
+    
+ }
+  const handleStatusUpdate = (e) => {
+    e.preventDefault();
+    
+    const userDetails  = {
+      first_name:user.first_name,
+      last_name:user.last_name,
+      address:user.address,
+      city:user.city,
+      zip_code:user.zipCode,
+      phone:user.phone,
+      account_status:formData.account_status
+
     }
     props.editUserDetails(userDetails)
     
@@ -60,7 +90,8 @@ const Myprofile = (props) =>{
     address: userData.address ? userData.address : '',
     city: userData.city ? userData.city : '',
     zip_code: userData.zip_code ? userData.zip_code : '',
-    phone: userData.phone ? userData.phone : ''
+    phone: userData.phone ? userData.phone : '',
+    account_status: userData.account_status ? userData.account_status : ""
   });
 };
 
@@ -69,66 +100,19 @@ const Myprofile = (props) =>{
   mapUserDetailsToState(userData);
  }, [])
 
-  // const user = useSelector(state => state.user)
+  
 
-//   const dispatch = useDispatch();
-
-
-//  useEffect(() => {
-//    dispatch(getUserData(user))
-//  }, [])
-
-const {
-  user: {
-    userData: { first_name, last_name, address, city, state, zip_code },
-    loading
-  }
-} = props;
+const { handleImageChange, user: { userData: { first_name, last_name, address, city, state, zip_code }, loading }} = props;
 
   
-console.log(user.first_name)
 
-
-// const { user: { userdata: { username, createdAt, imageUrl, bio, website, location },loading,authenticated
-//   }
-// } = props;
-
-//  console.log(username)
-
-
-  
  
-
-  const handleFileChange = e => {
-    if (e.target.file[0]) {
-      setImage(e.target.file[0])
-
-    }
-  }
-
-  const handleUpload = e => {
-
   
-
-
-      const uploadTask = storage.ref(`images/${image.name}`).put(image);
-      uploadTask.on(
-        'state_changed',
-        snapshot => {},
-        error => {
-          console.log(error);
-        },
-        () => {
-          storage
-          .ref('images')
-          .child(image.name)
-          .getDownLoadUrl()
-          .then(url => {
-            //console.log(url)
-          });
-        }
-      )
-  }
+  const handleEditPicture = () => {
+    const fileInput = document.getElementById('imageInput');
+    fileInput.click();
+  };
+  
 
 
   
@@ -138,77 +122,7 @@ console.log(user.first_name)
       ...formData, 
       [name]:value
     })
-    console.log(name, value);
   } 
-
-
-  // const handleChange = e => {
-  //   const {name,value} = e.target
-  //   setFormData({
-  //     ...formData, 
-  //     [name]:value
-  //   })
-  //   console.log(name, value);
-  // }
-
- 
-  // var name, email, photoUrl, uid, emailVerified;
-  
-  // if (user != null) {
-  //   name = user.displayName;
-  //   email = user.email;
-  //   photoUrl = user.photoURL;
-  //   emailVerified = user.emailVerified;
-  //   uid = user.uid; 
-    
-  // }
-
-
-  
-
-
-  const Save = () => {
-
-   
-
-    // const profile ={
-    //   firstName:formData.firstName, 
-    //   lastName:formData.lastName, 
-    //    address:formData.address,
-    //    country:formData.country,
-    //    zipCode:formData.zipCode,
-    //    city:formData.city,
-    //    state:formData.state,
-    // }
-
-    
-  //   if (profile) {
-  //     // updating and adding user profile
-  //     db.collection('users').add({
-  //         name:profile
-  //     })
-  //  }
-    
-
-  }
-
-
-
- 
-
-//   const fetchUsers=async()=>{
-//     const response=db.collection('users');
-//     const data=await response.get();
-//     data.docs.forEach(item=>{
-//      setUsers([...users,item.data()])
-//     })
-// }
-
-// useEffect(() => {
-//   fetchUsers();
-// }, [])
-
-
 
 
 
@@ -216,13 +130,13 @@ console.log(user.first_name)
             <>
 
             
-            <div className="bg-primary">
+            <div className="bg-secondary">
                 
                 <div className="container d-flex justify-content-center">
                   <ul className="nav secondary-nav">
         
           
-                    <li className="nav-item"> <a className="nav-link active" href="/profile">Profile</a></li>
+                    <li className="nav-item"> <a className="nav-link active"  href="/profile">Profile</a></li>
                     <li className="nav-item"> <a className="nav-link"   href="/addcard">Cards & Bank Accounts</a></li>
                     <li className="nav-item"> <a className="nav-link" href="/notification">Notifications</a></li>
                     
@@ -243,9 +157,10 @@ console.log(user.first_name)
          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
            
         
-            <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={eva} width='120' alt=""/>
-              <div className="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute" onChange={handleUpload} ></i>
-                <input type="file" className="custom-file-input" id="customFile"  />
+            <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src={user.pic} width='120' alt=""/>
+              <div className="profile-thumb-edit custom-file bg-secondary text-white" data-toggle="tooltip" title="Change Profile Picture"> <i className="fa fa-camera position-absolute" onClick={handleEditPicture}></i>
+                <input type="file" className="custom-file-input" id="imageInput" name="image" accept="image/*" multiple={false} 
+                onChange={handleImageChange}  />
               </div>
             </div>
            
@@ -260,7 +175,7 @@ console.log(user.first_name)
           
            {/* Available Balance */}
          
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
+          <div className="bg-secondary shadow-sm rounded text-center p-3 mb-4">
             <div className="text-17 text-light my-3"><i className="fa fa-wallet"></i></div>
             <h3 className="text-9 font-weight-400">₦2956.00</h3>
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
@@ -294,7 +209,7 @@ console.log(user.first_name)
             <h3 className="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" className="float-right text-1 text-uppercase text-muted btn-link"><i className="fa fa-edit mr-1"></i>Edit</a></h3>
             <div className="row">
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-              {user.first_name || user.last_name !=null?(<p className="col-sm-9" style={{textTransform:"capitalize"}}> {user.first_name}  {user.last_name}</p>): (<p className="col-sm-9">Name Here  </p>) }
+              {user.first_name || user.last_name !=null?(<p className="col-sm-9" style={{textTransform:"capitalize"}}> {user.first_name}  {user.last_name}</p>): (<p className="col-sm-9" style={{textTransform:"capitalize"}}>enter your name Here  </p>) }
               
             </div>
             {/* <div className="row">
@@ -307,9 +222,9 @@ console.log(user.first_name)
                {user.address !=null?(<p className="col-sm-9" style={{textTransform:"capitalize"}}>{user.address}<br/>
                 {user.city},<br/>
                 {user.state} - {user.zip_code},<br/>
-                Nigeria.</p>):(<p className="col-sm-9" style={{textTransform:"capitalize"}} ><br/>your address
+                Nigeria.</p>):(<p class="col-sm-9" style={{textTransform:"capitalize"}}>4th Floor, Plot No.22, Above Public Park, 145 Murphy Canyon Rd,  Suite 100-18,<br/>
                 your city,<br/>
-                your state - your zipcode,<br/>
+                your state - your zip code,<br/>
                 Nigeria.</p>)}
             </div>
             </>
@@ -391,7 +306,7 @@ console.log(user.first_name)
                         </div>
                       </div> */}
                     </div>
-                    <button className="btn btn-primary btn-block mt-2" type="button" onClick={handleSave} data-dismiss="modal" aria-label="Close" >Save Changes</button>
+                    <button className="btn btn-primary btn-block mt-2" type="button" onClick={handleProfileSave} data-dismiss="modal" aria-label="Close" >Save Changes</button>
                   </form>
                 </div>
               </div>
@@ -416,8 +331,8 @@ console.log(user.first_name)
               <p className="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Account Status</p>
              
               <p className="col-sm-9">
-                <span className={`bg-${user.account_status ===1 ?'success' : 'danger'} text-white rounded-pill d-inline-block px-2 mb-0`}>
-                <i className={`fa fa-${user.account_status ===1 ? 'check' : 'times'}-circle`}></i></span> {user.account_status ===1? "Active" : "Inactive"} </p> 
+                <span className={`bg-${user.account_status != 1 ? 'danger' :'success' } text-white rounded-pill d-inline-block px-2 mb-0`}>
+                <i className={`fa fa-${user.account_status != 1 ?  'times':'check' }-circle`}></i></span> {user.account_status != 1? "Inactive":  "Active" } </p> 
                 
                 
                 
@@ -447,14 +362,15 @@ console.log(user.first_name)
                       <div className="col-12">
                         <div className="form-group">
                           <label for="accountStatus">Account Status</label>
-                          <select className="custom-select" id="accountStatus" name="language_id">
+                          <select className="custom-select" id="account_status" name="account_status" value={formData.account_status} onChange={handleChange} >
+                            <option value=""></option>
                             <option value="1">Active</option>
                             <option value="2">In Active</option>
                           </select>
                         </div>
                       </div>
                     </div>
-                    <button className="btn btn-primary btn-block mt-2" type="submit">Save Changes</button>
+                    <button className="btn btn-primary btn-block mt-2" type="button" data-dismiss="modal" aria-label="Close" onClick={handleStatusUpdate}>Save Changes</button>
                   </form>
                 </div>
               </div>
@@ -527,12 +443,12 @@ console.log(user.first_name)
                       <div className="col-12">
                         <div className="form-group">
                           <label for="mobileNumber">Mobile <span className="text-muted font-weight-500">(Primary)</span></label>
-                          <input type="text" value="+1 202-555-0125" className="form-control" data-bv-field="mobilenumber" id="mobileNumber" required placeholder="Mobile Number"/>
+                          <input type="tel" value={formData.phone} className="form-control" data-bv-field="mobilenumber" name="phone" id="mobileNumber" required placeholder="Mobile Number" onChange={handleChange} />
                         </div>
                       </div>
                     </div>
-                    <a className="btn-link text-uppercase d-flex align-items-center text-1 float-right mb-3" href="#"><span className="text-3 mr-1"><i className="fa fa-plus-circle"></i></span>Add another Phone</a>
-                    <button className="btn btn-primary btn-block" type="submit">Save Changes</button>
+                    <a className="btn-link text-uppercase d-flex align-items-center text-1 float-right mb-3"><span className="text-3 mr-1"><i className="fa fa-plus-circle"></i></span>Add another Phone</a>
+                    <button className="btn btn-primary btn-block" data-dismiss="modal" aria-label="Close" type="button" onClick={handlePhoneUpdate} >Save Changes</button>
                   </form>
                 </div>
               </div>
@@ -596,6 +512,7 @@ console.log(user.first_name)
     }
     Myprofile.propTypes = {
       user: PropTypes.object.isRequired,
+      uploadImage: PropTypes.func.isRequired,
       editUserDetails: PropTypes.func.isRequired,
     };
 

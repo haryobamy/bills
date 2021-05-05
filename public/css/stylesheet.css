@@ -110,6 +110,36 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.8;
 }
 
+.profile-thumb {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+}
+.profile-thumb .profile-thumb-edit {
+  font-size: 16px;
+  width: 37px;
+  height: 37px;
+  border-radius: 100%;
+  position: absolute;
+  overflow: hidden;
+  bottom: 0px;
+  right: 0;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -ms-flex-pack: center !important;
+  justify-content: center !important;
+  -ms-flex-align: center !important;
+  align-items: center !important;
+}
+.profile-thumb .profile-thumb-edit .custom-file-input {
+  cursor: pointer;
+}
+
+.profile-completeness .border {
+  border: 1px solid #ecf1f2 !important;
+}
+
 /*-------- Preloader --------*/
 #preloader {
   position: fixed;

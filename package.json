@@ -2,6 +2,7 @@
   "name": "bills",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://desolate-shore-36733.herokuapp.com/api/pay",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@popperjs/core": "^2.6.0",
@@ -18,6 +19,7 @@
     "firebase-tools": "^9.6.1",
     "jquery": "^3.5.1",
     "jwt-decode": "^3.1.2",
+    "local-cors-proxy": "^1.1.0",
     "mkcert": "^1.4.0",
     "popper": "^1.0.1",
     "popper.js": "^1.16.1",

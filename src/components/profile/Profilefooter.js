@@ -22,9 +22,9 @@ class Profilefooter extends Component {
                     <li className="nav-item"> <a className="nav-link" href="#">Fees</a></li>
                   </ul>
                 </div>
-                <div className="col-lg d-lg-flex justify-content-lg-end mt-3 mt-lg-0">
+                <div className=" col-lg d-lg-flex justify-content-lg-end mt-3 mt-lg-0">
                   <ul className="social-icons justify-content-center">
-                    <li className="social-icons-facebook"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className="fa fa-facebook-f"></i></a></li>
+                    <li className="social-icons-facebook primary"><a data-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i className=" fa fa-facebook"></i></a></li>
                     <li className="social-icons-twitter"><a data-toggle="tooltip" href="http://www.twitter.com/" target="_blank" title="Twitter"><i className="fa fa-twitter"></i></a></li>
                     <li className="social-icons-google"><a data-toggle="tooltip" href="http://www.google.com/" target="_blank" title="Google"><i className="fa fa-google"></i></a></li>
                     <li className="social-icons-youtube"><a data-toggle="tooltip" href="http://www.youtube.com/" target="_blank" title="Youtube"><i className="fa fa-youtube"></i></a></li>

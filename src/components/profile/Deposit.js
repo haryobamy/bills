@@ -9,14 +9,14 @@ import swal from 'sweetalert';
 
 
 const Deposit = () => {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('userInfo'))
   const [ formData, setFormData] = useState({
     amount:'', 
      
 
   })
 
-  console.log(user.uid)
+  console.log(user.id)
 
   // const handleSubmit = (e) => {
    
@@ -45,7 +45,7 @@ const Deposit = () => {
    try {
     const params = {
       email:user.email,
-      user_id:user.uid,
+      user_id:user.id,
       amount:formData.amount,
       service_type:'wallet'
     }
