@@ -49,7 +49,7 @@ const Deposit = () => {
       amount:formData.amount,
       service_type:'wallet'
     }
-    axios.post(`http://desolate-shore-36733.herokuapp.com/api/pay`, params)
+    axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
 
 
     .then((response) => {
