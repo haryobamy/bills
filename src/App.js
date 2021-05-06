@@ -60,10 +60,11 @@ const  handleImageChange = (event) =>{
 
   const token= localStorage.getItem('jwtToken');
 
-  axios.post( "https://desolate-shore-36733.herokuapp.com/api/pic", formData,   {
+  axios.post( "https://desolate-shore-36733.herokuapp.com/api/image", formData,   {
     headers: {
-      'Authorization': `Bearer ${token}`
-    },
+      'Authorization': `Bearer ${token}`,
+      'e':    ''
+     },
   })
   .then((res) => {
     const {user} = res.data;

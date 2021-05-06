@@ -118,6 +118,7 @@ export const signupUser = (newUserData, history) => dispatch => {
 // Login - get user token 
 
 export const loginUser = (userData, history) => dispatch => {
+  dispatch({ type: USER_LOADING });
   dispatch({ type: LOADING_UI });
 
   axios
