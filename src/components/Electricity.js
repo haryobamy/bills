@@ -7,6 +7,7 @@ import swal from 'sweetalert';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import light from '../assests/images/bg/light.jpg';
+import ToggleButton from './ToggleButton';
 
 
 
@@ -15,6 +16,8 @@ import light from '../assests/images/bg/light.jpg';
 const Electricity = (props) => {
   const history = useHistory()
   const [meterError, setMeterError] = useState('')
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  const [selected, setSelected] = useState(false)
   const [meterName, setMeterName] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -26,7 +29,7 @@ const Electricity = (props) => {
 
   })
 
-  const { user: {isAuthenticated}, user } = props;
+  const { user: {isAuthenticated} } = props;
 
   
  
@@ -88,54 +91,100 @@ const Electricity = (props) => {
   }
 
 
-  const handleSubmit = (e) => {
-    if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){
-    if(!isAuthenticated){
-      history.push('/login')
-      return
-    }
-
-    const username = "plus27solutions@gmail.com";
-    const password =  "blessing1";
-    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-    
-    const url = 'https://sandbox.vtpass.com/api/pay'
-
-    
-    const params = {
-      request_id:'',
-      email:user.email,
-      billersCode:formData.meterNumber,
-      serviceID:formData.network,
-      phone:formData.phoneNumber,
-      service_type:'electricity',
-      variation_code:formData.meterType,
-      amount:formData.amount
-    }
-    axios.post(url, params,  {
-      headers: {
-        'Authorization': `Basic ${token}`
-      },})
-    .then((response) => {
-      //handle success
-      console.log(response)
-      const data = response.data
-      swal("Success!", "Your Payment was Successful", "success");
-      console.log(data)
-    
-  })
-  .catch((error) => {
-    //handle error
-    swal("Error!", "Your Payment wasn't Successful", "warning");
-    console.log(error)
-  })
+  const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
+  }
   
-  console.log(formData);
+
+ 
+    const handleDirectPay = (e) => {
+       if(!isAuthenticated){
+    history.push('/login')
+    return
+  }
+
+      try {
+       const params = {
+        
+        email:user.email,
+              billersCode:formData.meterNumber,
+              serviceID:formData.network,
+              phone:formData.phoneNumber,
+              service_type:'electricity',
+              variation_code:formData.meterType,
+              amount:formData.amount
+       
+      }
+      window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+     return;
+   } catch (error) {
+     //handle error
+    console.log(error)
+   }
+ }
+
+ const handleSubmit = (e) => {
+  if(selected){
+   handleDirectPay();
+    console.log("direct payment")
   }else{
-    swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+    console.log("wallet payment")
   }
 
 }
+
+
+//   const handleSubmit = (e) => {
+//     if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){
+//     if(!isAuthenticated){
+//       history.push('/login')
+//       return
+//     }
+
+//     const username = "plus27solutions@gmail.com";
+//     const password =  "blessing1";
+//     const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    
+//     const url = 'https://sandbox.vtpass.com/api/pay'
+
+    
+//     const params = {
+//       request_id:'',
+//       email:user.email,
+//       billersCode:formData.meterNumber,
+//       serviceID:formData.network,
+//       phone:formData.phoneNumber,
+//       service_type:'electricity',
+//       variation_code:formData.meterType,
+//       amount:formData.amount
+//     }
+//     axios.post(url, params,  {
+//       headers: {
+//         'Authorization': `Basic ${token}`
+//       },})
+//     .then((response) => {
+//       //handle success
+//       console.log(response)
+//       const data = response.data
+//       swal("Success!", "Your Payment was Successful", "success");
+//       console.log(data)
+    
+//   })
+//   .catch((error) => {
+//     //handle error
+//     swal("Error!", "Your Payment wasn't Successful", "warning");
+//     console.log(error)
+//   })
+  
+//   console.log(formData);
+//   }else{
+//     swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+//   }
+
+// }
         return ( 
           <>
           
@@ -191,6 +240,19 @@ const Electricity = (props) => {
                 <div className="custom-control custom-radio custom-control-inline">
                   <input id="abuja-electric" name="network" value='abuja-electric' className="custom-control-input" required type="radio" onChange={handleChange}   />
                   <label className="custom-control-label" for='abuja-electric' >AEDC</label>
+                   
+                <div className="custom-control custom-radio custom-control-inline"  >
+                  <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                <ToggleButton 
+                selected={selected}
+                toggleSelected={() => {
+                  setSelected(!selected);}}
+                
+                  
+                />
+                
+                
+                </div>
                 </div>
               </div>
               <div class="form-row">

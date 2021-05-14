@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import tv from '../assests/images/bg/tv.jpg';
+import ToggleButton from './ToggleButton';
 
 
 
@@ -17,6 +18,8 @@ const Cable = (props) => {
   const [meterName, setMeterName] = useState('')
   const [planAmount, setPlanAmount] = useState('')
   const [cables, setCables] = useState([]);
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  const [selected, setSelected] = useState(false)
   const [smartError, setSmartError] = useState('')
   const [ formData, setFormData] = useState({
     amount:'', 
@@ -29,31 +32,44 @@ const Cable = (props) => {
 
   })
 
-  const { user: {isAuthenticated}, user } = props;
+  const { user: {isAuthenticated} } = props;
 
 
-  useEffect(() => {
-
+  
+    
+  const handleInputChange = (e) => {
+    const {name,value} = e.target
     setFormData({
       ...formData, 
-      amount:planAmount
+      [name]:value
     })
-  
-     
-   }, [planAmount])
-    
 
+ 
+    // console.log(e.target.value);
+    // setPlanAmount(cables.find(v => v.variation_code === value)?.variation_amount )
+  }
   const handleChange = (e) => {
     const {name,value} = e.target
     setFormData({
       ...formData, 
       [name]:value
     })
-    // console.log(name, value);
-    
-    console.log(e.target.value);
-    setPlanAmount(cables.find(v => v.variation_code === value)?.variation_amount )
 
+  console.log(e.target.value);
+    setPlanAmount(cables.find(v => v.variation_code === value)?.variation_amount )
+  }
+
+  const handleNetworkSelect = (e) => {
+    
+    const {name,value} = e.target
+    setFormData({
+      ...formData, 
+      [name]:value
+    })
+    console.log(name, value);
+    
+    // console.log(e.target.value);
+    // setPlanAmount(cables.find(value => value.variation_code === value)?.variation_amount )
   }
 
   const dstv = async () => {
@@ -102,14 +118,23 @@ const Cable = (props) => {
 
   useEffect(() => {
     dstv();
-  }, [])
-  useEffect(() => {
-    gotv();
-  }, [])
-  useEffect(() => {
     startimes();
+      gotv();
   }, [])
 
+  useEffect(() => {
+
+    setFormData({
+      ...formData, 
+      amount:planAmount
+    })
+     
+   }, [planAmount])
+ 
+
+
+  console.log(formData.amount)
+ console.log(planAmount)
 
      // VERIFY SMART CARD NUMBER
   const handleVerify = (e) => {
@@ -145,52 +170,111 @@ const Cable = (props) => {
   }
 
 
-   const handleSubmit = (e) => {
-    if(formData.phoneNumber && formData.network && formData.smartCardNumber && formData.variation_code){
-      if(!user){
-        history.push('/login')
-        return
-      }
+  const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
+  }
+  
 
-      const username = "plus27solutions@gmail.com";
-      const password =  "blessing1";
-      const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-      
-      const params = {
-        request_id:uuidv4(),
+ 
+    const handleDirectPay = (e) => {
+       if(!isAuthenticated){
+    history.push('/login')
+    return
+  }
+
+      try {
+       const params = {
+
         email:user.email,
-        billersCode:formData.smartCardNumber,
         serviceID:formData.network,
-        phone:formData.phoneNumber,
+        billersCode:formData.smartCardNumber,
         variation_code:formData.variation_code,
         amount:formData.amount,
-        service_type:'tv'
+       phone:formData.phoneNumber,
+       service_type:"tv"
+        
+        // email:user.email,
+        //       billersCode:formData.smartCardNumber,
+        //       serviceID:formData.network,
+        //       phone:formData.phoneNumber,
+        //       variation_code:formData.variation_code,
+        //       amount:formData.amount,
+        //       service_type:'tv'
       }
-      axios.post(`https://sandbox.vtpass.com/api/pay`, params,   {
-        headers: {
-          'Authorization': `Basic ${token}`
-        },
-      })
-      .then((response) => {
-        //handle success
-        const data = response.data
-        swal("Success!", "Your Payment was Successful", "success");
-        setFormData({...formData, amount:"", phoneNumber:"", network:null, smartCardNumber:''})
-        setPlanAmount('')
-        setCables([])
-        console.log(response)
-      
-    })
-    .catch((error) => {
-      //handle error
-      swal("Error!", "Your Payment wasn't Successful", "warning");
-      console.log(error)
-    })
-    }else{
-      swal("Error!", "Ensure All details are Filled Correctly ", "error");
-    }
-    
+      window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+     return;
+   } catch (error) {
+     //handle error
+    console.log(error)
+   }
+ }
+
+ const handleSubmit = (e) => {
+  if(selected){
+   handleDirectPay();
+    console.log("direct payment")
+  }else{
+    console.log("wallet payment")
   }
+
+}
+
+
+
+
+
+
+
+
+  //  const handleSubmit = (e) => {
+  //   if(formData.phoneNumber && formData.network && formData.smartCardNumber && formData.variation_code){
+  //     if(!user){
+  //       history.push('/login')
+  //       return
+  //     }
+
+  //     const username = "plus27solutions@gmail.com";
+  //     const password =  "blessing1";
+  //     const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+      
+  //     const params = {
+  //       request_id:uuidv4(),
+  //       email:user.email,
+  //       billersCode:formData.smartCardNumber,
+  //       serviceID:formData.network,
+  //       phone:formData.phoneNumber,
+  //       variation_code:formData.variation_code,
+  //       amount:formData.amount,
+  //       service_type:'tv'
+  //     }
+  //     axios.post(`https://sandbox.vtpass.com/api/pay`, params,   {
+  //       headers: {
+  //         'Authorization': `Basic ${token}`
+  //       },
+  //     })
+  //     .then((response) => {
+  //       //handle success
+  //       const data = response.data
+  //       swal("Success!", "Your Payment was Successful", "success");
+  //       setFormData({...formData, amount:"", phoneNumber:"", network:null, smartCardNumber:''})
+  //       setPlanAmount('')
+  //       setCables([])
+  //       console.log(response)
+      
+  //   })
+  //   .catch((error) => {
+  //     //handle error
+  //     swal("Error!", "Your Payment wasn't Successful", "warning");
+  //     console.log(error)
+  //   })
+  //   }else{
+  //     swal("Error!", "Ensure All details are Filled Correctly ", "error");
+  //   }
+    
+  // }
 
   
   const handleReset = () => {
@@ -237,16 +321,29 @@ const Cable = (props) => {
                 <form id="cableTvRecharge" method="post">
                 <div className="mb-3">
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="dstv" name="network" value='dstv' className="custom-control-input" required type="radio"  checked={formData.network === "dstv"} onClick={() => dstv()} onChange={handleChange} />
+                <input id="dstv" name="network" value='dstv' className="custom-control-input" required type="radio"  checked={formData.network === "dstv"} onClick={() => dstv()} onChange={handleNetworkSelect}  />
                   <label className="custom-control-label" for='dstv' >DSTV</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                <input id="gotv" name="network" value='gotv' className="custom-control-input" required type="radio"  checked={formData.network === "gotv"} onClick={() => gotv()} onChange={handleChange} />
+                <input id="gotv" name="network" value='gotv' className="custom-control-input" required type="radio"  checked={formData.network === "gotv"} onClick={() => gotv()} onChange={handleNetworkSelect}  />
                   <label className="custom-control-label" for="gotv" >GOTV</label>
                 </div>
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input id="startimes" name="network" className="custom-control-input" value='startimes' required type="radio"  checked={formData.network === "startimes"} onClick={() => startimes()}  onChange={handleChange} />
+                  <input id="startimes" name="network" className="custom-control-input" value='startimes' required type="radio"  checked={formData.network === "startimes"} onClick={() => startimes()}  onChange={handleNetworkSelect}  />
                   <label className="custom-control-label" for='startimes' >STARTIMES</label>
+                </div>
+                 
+                <div className="custom-control custom-radio custom-control-inline"  >
+                  <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                <ToggleButton 
+                selected={selected}
+                toggleSelected={() => {
+                  setSelected(!selected);}}
+                
+                  
+                />
+                
+                
                 </div>
               </div>
                 <div className="form-row">
@@ -268,14 +365,15 @@ const Cable = (props) => {
                   </div>
                   <div className="col-md-6 col-lg-3 form-group">
                   
-                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text"  value={planAmount} />
+                    <input className="form-control" id="amount" placeholder="Enter Amount" required type="text" onChange={handleInputChange}  value={planAmount} />
                   </div>
 
                   <div className="col-md-6 col-lg-2 form-group">
+
                   { formData.smartCardNumber  && formData.phoneNumber && formData.network && formData.variation_code ?(
               <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
               (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
-              }
+              } 
                   </div>
                   <div className="col-md-6 col-lg-2 form-group">
                   <button className="btn btn-danger btn-lg btn-block" type="button" onClick={handleReset}>Cancel</button>

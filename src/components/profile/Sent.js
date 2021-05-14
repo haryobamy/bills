@@ -3,11 +3,32 @@ import { Navbar, Nav } from "react-bootstrap";
 import Profileheader from './Pofileheader';
 import Profilefooter from './Profilefooter';
 
+import ReactNotification from 'react-notifications-component';
+import {store} from 'react-notifications-component';
+import 'animate.css';
+import 'react-notifications-component/dist/theme.css'
+// import { NotifyHandler, NotifyComponent } from 'react-notification-component';
 
 
-class Sent extends Component {
-    state = {  }
-    render() { 
+
+const Sent =()=> {
+
+      const notification = () => {
+        store.addNotification({
+          title: "Wonderful!",
+          message: "teodosii@react-notifications-component",
+          type: "success",
+          insert: "top",
+          container: "top-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true
+          }
+        })
+      }
+    
         return ( 
           <>
 
@@ -35,7 +56,7 @@ class Sent extends Component {
                   <p className="text-center text-4">Transactions Complete</p>
                   </div>
                   <p className="text-center text-3 mb-4">You've Succesfully sent <span className="text-4 font-weight-500">$1000</span> to <span className="font-weight-500">demo@gmail.com</span>, See transaction details under <a href="#">Activity</a>.</p>
-                    <button className="btn btn-primary btn-block">Send Money Again</button>
+                    <button className="btn btn-primary btn-block" onClick={notification}>Send Money Again</button>
                     <button className="btn btn-link btn-block"><i className="fas fa-print"></i> Print</button> 
                   </div>
                 </div>
@@ -47,6 +68,6 @@ class Sent extends Component {
           </>
          );
     }
-}
+
  
 export default Sent;

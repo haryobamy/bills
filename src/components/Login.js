@@ -10,22 +10,7 @@ import { loginUser, signupUser} from '../redux/actions/userAction';
 import PropTypes from 'prop-types';
 
 import {useDispatch, useSelector} from "react-redux";
-
-
-
-
-
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
-
+// import { validateLoginData } from '../util/Validators';
 
 
 
@@ -33,17 +18,22 @@ const required = value => {
 
 class Login extends Component {
  
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       usermame : "",
       email: "",
       password: "",
       confirm_password: "",
-      errors: {}
+      errors: {},
+      messages:{}
+      
     };
+    
   }
  
+
+  
  
   handleSignup = (e) => {
     e.preventDefault();
@@ -61,17 +51,39 @@ class Login extends Component {
 
   handleLogin = (e) => {
     e.preventDefault();
-  
+
     const userData = {
       email: this.state.email,
       password: this.state.password
     }
+    // const {valid, messages} = validateLoginData(userData);
+    // if(!valid) return (
+    //   <div className="alert alert-danger" role="alert">
+    //    {messages}
+    //   </div>
+    // );
+
+
+
       this.props.loginUser(userData, this.props.history)
+      // window.location.reload(); // check functionaliy
+
   
  }
 
+
+
   handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    const name = e.target.name;
+    const value = e.target.value;
+
+  
+    
+    this.setState({[name] : value })
+       
+    // this.setState({[name] : value },
+    //    () => { this.validateField([name], value) });
+    
 }
 
 
@@ -85,6 +97,8 @@ if (nextProps.errors) {
     });
   }
 }
+
+
 
 
 
@@ -217,19 +231,22 @@ if (nextProps.errors) {
                 <li className="nav-item"> <a id="signup-page-tab" className="nav-link text-4" data-toggle="tab" href="#signupPage" role="tab" aria-controls="signup" aria-selected="false">Sign Up</a> </li>
               </ul>
               <div className="tab-content pt-4">
-                {/* {hasAccount ? (
-                  <> */}
-               
+              
                 <div className="tab-pane fade show active" id="loginPage" role="tabpanel" aria-labelledby="login-page-tab">
-                  <form id="loginForm"  >
-                    <div className="form-group">
-                      <input type="email" className="form-control" error={errors.email}  required id="email"  name='email'  placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
+                  <form id="loginForm" >
+                  <div className="panel panel-default">
+                        
+                      </div>
+                    <div className='form-group'>
+                    <label htmlFor="email">Email address</label>
+                      <input type="email" className="form-control"  required id="email"  name='email'  placeholder="Mobile or Email ID" value={this.state.email} onChange={this.handleChange}/>
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.email}</p>
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.error}</p>
                     </div>
-                    <div className="form-group">
+                    <div className='form-group'>
+                        <label htmlFor="password">Password</label>
                       <input type="password" className="form-control" id="Password"  name='password' placeholder="Password" value={this.state.password} onChange={this.handleChange}/>
-                      <p className='errorMsg' style={{color:'red',textTransform:'capitalize'}}>{errors.password}</p>
+                      <p className='errorMsg' style={{color:'red',textTransform:'capitalize'}}>{errors.message}</p>
                     </div>
                     <div className="row mb-4">
                       <div className="col-sm">
@@ -241,7 +258,7 @@ if (nextProps.errors) {
                       <div className="col-sm text-right"> <a className="justify-content-end" href="#">Forgot Password ?</a> </div>
 
                     </div>
-                    {errors.general && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.general}</p>)}
+                    {errors.message && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.message}</p>)}
                     <button className={`btn btn-${loading? "success":"primary" } btn-block` } type="button" onClick={this.handleLogin} >  {loading? (
                 <CircularProgress size={20} />):"Login"}</button>
                     
@@ -270,7 +287,7 @@ if (nextProps.errors) {
                       <input type="password" className="form-control" id="signuploginconfirm_password" required placeholder="Confirm Password" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange}  />
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.confirm_password}</p>
                     </div>
-                    <button className="btn btn-primary btn-block" type="button" onClick={this.handleSignup}  > {loading? (
+                    <button className="btn btn-primary btn-block" disabled={loading} type="button" onClick={this.handleSignup}  > {loading? (
                 <CircularProgress size={20} />):"Signup"}</button>
                   </form>
                 </div>

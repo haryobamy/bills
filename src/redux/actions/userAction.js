@@ -75,6 +75,11 @@ import axios from "axios";
 import setAuthToken from "../../util/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING,SET_UNAUTHENTICATED, CLEAR_ERRORS, GET_USERDATA, STOP_LOADING_UI, LOADING_UI} from "../types";
+// import {store} from 'react-notifications-component';
+// import 'animate.css';
+// import 'react-notifications-component/dist/theme.css'
+import {goodbyeAlert, loginAlert, profileAlert, profileError} from '../../util/AlertMessage'
+
 
 
 // const url = 'http://localhost:5000/bills-com-ng/europe-west2/api'
@@ -106,6 +111,7 @@ export const signupUser = (newUserData, history) => dispatch => {
        // clearing errors
           dispatch({ type: CLEAR_ERRORS});
       history.push("/dashboard")
+      loginAlert(user);
     }) 
 
     .catch(err =>
@@ -118,8 +124,8 @@ export const signupUser = (newUserData, history) => dispatch => {
 // Login - get user token 
 
 export const loginUser = (userData, history) => dispatch => {
-  dispatch({ type: USER_LOADING });
-  dispatch({ type: LOADING_UI });
+  // dispatch({ type: USER_LOADING });
+  // dispatch({ type: LOADING_UI });
 
   axios
     .post(url+'/login', userData)
@@ -145,18 +151,18 @@ export const loginUser = (userData, history) => dispatch => {
       dispatch({ type: CLEAR_ERRORS });
      
       // re-direct to dashboard on successful register
-      history.push("/dashboard")
+      history.push("/dashboard");
+      loginAlert(user);
     }) 
 
-    .catch(err =>
-      
+    .catch(err => 
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-       
-      
-    );
+        
+      }) 
+     );
+    
 };
 
 export const setCurrentUser = (decoded) => {
@@ -189,13 +195,14 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
   localStorage.clear();
-  
+
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch({ type: SET_UNAUTHENTICATED});
         // Redirect to login
     window.location.href = "/";
+  
   
 };
 
@@ -210,8 +217,10 @@ export const editUserDetails = (userDetails) => (dispatch) => {
       localStorage.setItem('userInfo', JSON.stringify(user));
       
       dispatch(getUserData(user));
+      
     })
     .catch((err) => console.log(err));
+    
 };
 
 export const uploadImage = (formData) => (dispatch) => {
@@ -225,5 +234,6 @@ export const uploadImage = (formData) => (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 

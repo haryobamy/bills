@@ -17,7 +17,6 @@ const Deposit = () => {
 
   })
 
-  console.log(user.id)
 
   // const handleSubmit = (e) => {
    
@@ -43,7 +42,7 @@ const Deposit = () => {
   // console.log(formData);
   // }
 
-  const blessing_hash =(params)=>
+  const deposit_hash =(params)=>
   {
       var serialize = JSON.stringify(params);
       var hash = btoa(serialize);
@@ -51,21 +50,17 @@ const Deposit = () => {
   }
   
   
-  
-  
-  
   const handleSubmit = (e) => {
      try {
       const params = {
-        email:'dopetest@gmail.com',
-        user_id:4,
-        amount:200,
+        email:user.email,
+        user_id:user.id,
+        amount:formData.amount,
         service_type:'wallet'
-       
-      
+
+        
      }
-     window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+blessing_hash(params)
-     history.push('/dashboard')
+     window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
     return;
   } catch (error) {
     //handle error
@@ -74,53 +69,6 @@ const Deposit = () => {
 }
       
      
- 
-      
-    
-    
-
-  // const handleSubmit = (e) => {
-  //  try {
-  //   const params = {
-  //     email:user.email,
-  //     user_id:user.id,
-  //     amount:formData.amount,
-  //     service_type:'wallet'
-  //   }
-  //   axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params, {
-  //     headers: {
-  //       'Access-Control-Allow-Headers': 'Accept',
-        
-  //       'Content-Type': 'application/json'
-  //     },
-  //   })
-
-  //   .then((res) => {
-  //     if (res.status === 204) {
-  //       console.log("REDIRECTION avec status => ", res.status);
-  //       // how to redirect here
-  //       // <Redirect to = {{ pathname: "/home" }} />
-  //     }
-      
-
-  //     //handle success
-  //     // const data = response.data
-  //     // swal("Success!", "Your Payment was Successful", "success");
-  //     // console.log(data)
-    
-  // })
-  // .catch((error) => {
-  //   //handle error
-  //   swal("Error!", "Your Payment wasn't Successful", "warning");
-  //   console.log(error)
-  // })
-  // console.log(formData);
-  
-  //  } catch (err) {
-  //    console.error(err)
-  //  }
-  // }
-
   const handleChange = (e) => {
     const {name,value} = e.target
     setFormData({

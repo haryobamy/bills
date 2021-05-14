@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import internet from '../assests/images/bg/home.jpg';
+import ToggleButton from './ToggleButton';
 
 
 
@@ -15,9 +16,9 @@ const Data = (props) => {
   const history = useHistory()
   const [planAmount, setPlanAmount] = useState('')
   const user = JSON.parse(localStorage.getItem('userInfo'));
+  const [selected, setSelected] = useState(false)
   const [service, setService] = useState([])
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
+ 
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
@@ -130,6 +131,7 @@ const Data = (props) => {
       [name]:value
     })
   }
+   
   
 
   const handleNetworkSelect = (e) => {
@@ -145,61 +147,53 @@ const Data = (props) => {
     setPlanAmount(service.find(v => v.variation_code === value)?.variation_amount )
 
   }
+
+  const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
+  }
   
 
+ 
+    const handleDirectPay = (e) => {
+       if(!isAuthenticated){
+    history.push('/login')
+    return
+  }
 
-  const handleSubmit = (e) => {
-    if(formData.variation_code && formData.phoneNumber && formData.network){
-      if(!isAuthenticated){
-        history.push('/login')
-        return
+      try {
+       const params = {
+         email:user.email,
+         billersCode:formData.phoneNumber,
+         serviceID:formData.network,
+         phone:formData.phoneNumber,
+         variation_code:formData.variation_code,
+         amount:formData.amount,
+         service_type:'data'
+       
       }
+      window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+     return;
+   } catch (error) {
+     //handle error
+    console.log(error)
+   }
+ }
 
-      // {
-      //   headers: {
-      //     'Authorization': `Basic ${token}`
-      //   },
-  
-      // const username = "plus27solutions@gmail.com";
-      
-      // const password =  "blessing1";
-      // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
-      
-      const url = 'https://desolate-shore-36733.herokuapp.com/api/pay'
-        const params = {
-  
-          request_id:uuidv4(),
-          email:user.email,
-          billersCode:formData.phoneNumber,
-          serviceID:formData.network,
-          phone:formData.phoneNumber,
-          variation_code:formData.variation_code,
-          amount:formData.variation_amount,
-          service_type:'data'
-        }
-        axios.post( url, params)
-        .then((response) => {
-          //handle success
-          const data = response.data
-          swal("Success!", "Your Payment was Successful", "success");
-          setFormData({...formData,  phoneNumber:"", network:null,variation_code:''})
-          console.log(response)
-        
-      })
-      .catch((error) => {
-        //handle error
-        swal("Error!", "Your Payment wasn't Successful", "warning");
-        console.log(error)
-      })
-    }else{
-      swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
-    }
-    
-    }
 
+ const handleSubmit = (e) => {
+   if(selected){
+    handleDirectPay();
+     console.log("direct payment")
+   }else{
+     console.log("wallet payment")
+   }
+
+ }
     
 const handleValidation =(e)=>{
-  e.persist();
   if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated){
     if(!user){
       history.push('/login')
@@ -251,8 +245,12 @@ const handleValidation =(e)=>{
 
       <div className="bg-secondary shadow-md rounded px-4 pt-4 pb-3"   >
           <h2 className="text-4 mb-3"  >Pay your Broadbanad Bill</h2>
+          
             <form id="form-data" method="post">
+             
             <div className="mb-3">
+              <div className='row'>
+                <div className='col-md-6'>
                 <div className="custom-control custom-radio custom-control-inline">
                 <input id="mtn-data" name="network" value='mtn-data' className="custom-control-input" required type="radio" checked={formData.network === "mtn-data"}  onClick={ () => mtnData()}  onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='mtn-data' >MTN</label>
@@ -272,6 +270,19 @@ const handleValidation =(e)=>{
                 <div className="custom-control custom-radio custom-control-inline">
                   <input id="smile-direct" name="network" value='smile-direct' className="custom-control-input" required type="radio" onClick={() =>  smileData()}  onChange={handleNetworkSelect} checked={formData.network === "smile-direct"}  />
                   <label className="custom-control-label" for='smile-direct' >SMILE</label>
+                </div>
+                </div>
+                <div className='offset-md-3 col-md-3'>
+                
+                <div className="custom-control custom-radio custom-control-inline"  >
+                  <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                <ToggleButton 
+                selected={selected}
+                toggleSelected={() => {
+                  setSelected(!selected);}}
+                />
+                </div>
+                </div>
                 </div>
               </div>
 
@@ -293,6 +304,7 @@ const handleValidation =(e)=>{
                 <input className="form-control" id="amount" placeholder="Enter Amount"  required type="text" onChange={handleChange} value={planAmount} />
               </div>
               <div className="col-md-6 col-lg-3 form-group">
+              {/* <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Payment Now</button> */}
               {  formData.amount && formData.phoneNumber && formData.network ?(
               <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
               (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
@@ -435,13 +447,7 @@ const handleValidation =(e)=>{
 
     const mapStateToProps = (state) => ({
       user: state.user
-     });
-
-
-
-
-    
-
+     })
 
 
 export default  connect(mapStateToProps)(Data);

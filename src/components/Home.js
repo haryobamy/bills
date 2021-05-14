@@ -17,19 +17,22 @@ import Login from './Login';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ToggleButton from './ToggleButton';
 
 
 
 const Home = (props) => {
   const history = useHistory()
-  const [email, setEmail] = useState('')
+  // const [email, setEmail] = useState('')
+  const [selected, setSelected] = useState(false)
+  const user = JSON.parse(localStorage.getItem('userInfo'));
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
   })
  
-  const { user: {isAuthenticated}, user } = props
+  const { user: {isAuthenticated} } = props
 
 
 const handleValidation =(e)=>{
@@ -47,56 +50,97 @@ const handleValidation =(e)=>{
   
  
 
-  const handleSubmit = (e) => {
-    e.persist();
-    if(formData.amount && formData.phoneNumber && formData.network){
-      if(!isAuthenticated){
-        history.push('/login')
-        return
-      }
+  // const handleSubmit = (e) => {
+  //   e.persist();
+  //   if(formData.amount && formData.phoneNumber && formData.network){
+  //     if(!isAuthenticated){
+  //       history.push('/login')
+  //       return
+  //     }
   
-      const username = "plus27solutions@gmail.com";
-      const password =  "blessing1";
-      const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+  //     // const username = "plus27solutions@gmail.com";
+  //     // const password =  "blessing1";
+  //     // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
       
-      const url = 'https://sandbox.vtpass.com/api/pay'
-      const params = {
-        request_id:uuidv4(),
-        email:user.email,
-        serviceID:formData.network,
-        phone:formData.phoneNumber,
-        amount:formData.amount,
-        service_type:'airtime'
-      }
-      axios.post( url, params,   {
-        headers: {
-          'Authorization': `Basic ${token}`
-        },
-      })
-      .then((response) => {
-        //handle success
-        const data = response.data
-        // if(response.data.content.errors && response.data.content.errors.length){
-        //   swal("Error!", response.data.content.errors[0], "error");
-        //   return 
-        // }
-        swal("Success!", "Your Payment was Successful", "success");
-        setFormData({...formData, amount:"", phoneNumber:"", network:null})
-        console.log(response)
+  //     const url = 'https://sandbox.vtpass.com/api/pay'
+  //     const params = {
+  //       // request_id:uuidv4(),
+  //       email:user.email,
+  //       serviceID:formData.network,
+  //       phone:formData.phoneNumber,
+  //       amount:formData.amount,
+  //       service_type:'airtime'
+  //     }
+  //     axios.post( url, params,   {
+  //       headers: {
+  //         'Authorization': `Basic ${token}`
+  //       },
+  //     })
+  //     .then((response) => {
+  //       //handle success
+  //       const data = response.data
+  //       // if(response.data.content.errors && response.data.content.errors.length){
+  //       //   swal("Error!", response.data.content.errors[0], "error");
+  //       //   return 
+  //       // }
+  //       swal("Success!", "Your Payment was Successful", "success");
+  //       setFormData({...formData, amount:"", phoneNumber:"", network:null})
+  //       console.log(response)
       
-    })
-    .catch((error) => {
-      //handle error
-      swal("Error!", "Your Payment wasn't Successful", "warning");
+  //   })
+  //   .catch((error) => {
+  //     //handle error
+  //     swal("Error!", "Your Payment wasn't Successful", "warning");
       
-      console.log(error)
-    })
-    }else{
-      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
-    }
+  //     console.log(error)
+  //   })
+  //   }else{
+  //     swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+  //   }
     
-  console.log(formData);
+  // console.log(formData);
+  // }
+
+  
+  const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
   }
+
+  const handleDirectPay = (e) => {
+    if(!isAuthenticated){
+            history.push('/login')
+            return
+          }
+    try {
+     const params = {
+      email:user.email,
+            serviceID:formData.network,
+            phone:formData.phoneNumber,
+            amount:formData.amount,
+            service_type:'airtime'
+    }
+    window.location.href = 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+   return;
+ } catch (error) {
+   //handle error
+  console.log(error)
+ }
+}
+
+const handleSubmit = (e) => {
+  if(selected){
+   handleDirectPay();
+    console.log("direct payment")
+  }else{
+    console.log("wallet payment")
+  }
+
+}
+
+  
 
 
   const handleReset = () => {
@@ -172,6 +216,8 @@ const handleValidation =(e)=>{
             <form id="recharge-bill" method="post">
            
               <div className="mb-3">
+              <div className='row'>
+                <div className='col-md-6'>
               <div className="custom-control custom-radio custom-control-inline">
                 <input id="mtn" name="network" value='mtn' className="custom-control-input" required type="radio"  checked={formData.network === "mtn"}  onClick={handleNetworkSelect} />
                   <label className="custom-control-label" for='mtn' >MTN</label>
@@ -188,6 +234,24 @@ const handleValidation =(e)=>{
                   <input id="glo" name="network" value='glo' className="custom-control-input" required type="radio" checked={formData.network === "glo"}   onChange={handleNetworkSelect} />
                   <label className="custom-control-label" for='glo' >GLO</label>
                 </div>
+                </div>
+               
+
+                 
+                <div className='offset-md-3 col-md-3'>
+                
+                <div className="custom-control custom-radio custom-control-inline"  >
+                  <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                <ToggleButton 
+                selected={selected}
+                toggleSelected={() => {
+                  setSelected(!selected);}}
+                />
+                </div>
+                </div>
+                
+                
+                </div>
               </div>
               <div className="form-row">
               <div className="col-md-6 col-lg-4 form-group">
@@ -201,10 +265,12 @@ const handleValidation =(e)=>{
               </div>)} */}
               <div className="col-md-6 col-lg-2 form-group">
               {/* <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Continue</button> */}
+
+                            
              {  formData.amount && formData.phoneNumber && formData.network ?(
               <button className="btn btn-success btn-lg btn-block" type="button"  onClick={handleSubmit}>Pay Now</button>):
               (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={handleValidation} >Pay Now</button>)
-              }
+              } 
             
               
             

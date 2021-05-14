@@ -8,6 +8,7 @@ import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import educ from '../assests/images/bg/edu.jpg';
 import home from '../assests/images/bg/home.jpg';
+import ToggleButton from './ToggleButton';
 
 
 
@@ -20,18 +21,20 @@ const Education = (props) => {
   const [planAmount, setPlanAmount] = useState('')
   const [totalAmount, setTotalAmount] = useState('')
   const [waec, setWaec] = useState([]);
+  const [selected, setSelected] = useState(false)
+  const user = JSON.parse(localStorage.getItem('userInfo'));
   const [ formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
      quantity:'1',
-     variation_code:''
-     
+     variation_code:'',
+     email:''     
 
   })
 
   
-  const { user: {isAuthenticated}, user } = props;
+  const { user: {isAuthenticated} } = props;
 
   
 
@@ -72,20 +75,8 @@ useEffect(() => {
  
 }, [])
 
-console.log(totalAmount)
-
-const myamount = () => {
-  let quantity = formData.quantity
-  let price = planAmount
-  const data = quantity * price
-  console.log(data)
-  setTotalAmount(data)
-}
 
 
-useEffect(() => {
-  myamount();
-}, [myamount])
   
 
  
@@ -128,51 +119,107 @@ useEffect(() => {
       
       }
 
+
+
       const handleSubmit = (e) => {
-
-        if(formData.variation_code && formData.phoneNumber && formData.network){
-        if(!isAuthenticated){
-          history.push('/login')
-          return
+        if(selected){
+         handleDirectPay();
+          console.log("direct payment")
+        }else{
+          console.log("wallet payment")
         }
+     
+      }
 
-        const username = "plus27solutions@gmail.com";
-        const password =  "blessing1";
-        const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+
+      const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
+  }
+  
+
+ 
+    const handleDirectPay = (e) => {
+       if(!isAuthenticated){
+    history.push('/login')
+    return
+  }
+
+      try {
+       const params = {
         
-        const url = 'https://sandbox.vtpass.com/api/pay'
+        email:formData.email,
+            // serviceID:formData.network,
+            // phone:formData.phoneNumber,
+            // variation_code:formData.variation_code,
+            // amount:300,
+            // service_type:'education'
+
+
+            serviceID:'waec-registration',
+                phone:'08011111111',
+                variation_code:'waec-registration',
+                
+                amount:'1000',
+                service_type:'education'
+       
+      }
+      window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+     return;
+   } catch (error) {
+     //handle error
+    console.log(error)
+   }
+ }
+
+
+      // const handleSubmit = (e) => {
+
+      //   if(formData.variation_code && formData.phoneNumber && formData.network){
+      //   if(!isAuthenticated){
+      //     history.push('/login')
+      //     return
+      //   }
+
+      //   const username = "plus27solutions@gmail.com";
+      //   const password =  "blessing1";
+      //   const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+        
+      //   const url = 'https://sandbox.vtpass.com/api/pay'
     
-        const params = {
-          request_id:'',
-          email:user.email,
-          serviceID:formData.network,
-          phone:formData.phoneNumber,
-          variation_code:formData.variation_code,
-          amount:planAmount,
-          service_type:'education'
-        }
-        axios.post(url, params,  {
-          headers: {
-            'Authorization': `Basic ${token}`
-          },})
-        .then((response) => {
-          //handle success
-          const data = response.data
-          swal("Success!", "Your Payment was Successful", "success");
-          console.log(data)
+      //   const params = {
+      //     request_id:'',
+      //     email:user.email,
+      //     serviceID:formData.network,
+      //     phone:formData.phoneNumber,
+      //     variation_code:formData.variation_code,
+      //     amount:planAmount,
+      //     service_type:'education'
+      //   }
+      //   axios.post(url, params,  {
+      //     headers: {
+      //       'Authorization': `Basic ${token}`
+      //     },})
+      //   .then((response) => {
+      //     //handle success
+      //     const data = response.data
+      //     swal("Success!", "Your Payment was Successful", "success");
+      //     console.log(data)
         
-      })
-      .catch((error) => {
-        //handle error
-        swal("Error!", "Your Payment wasn't Successful", "warning");
-        console.log(error)
-      })
-      console.log(formData);
-      }else{
-        swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
-      }
+      // })
+      // .catch((error) => {
+      //   //handle error
+      //   swal("Error!", "Your Payment wasn't Successful", "warning");
+      //   console.log(error)
+      // })
+      // console.log(formData);
+      // }else{
+      //   swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
+      // }
       
-      }
+      // }
 
 
 
@@ -253,18 +300,29 @@ useEffect(() => {
               </div>
               <div className="form-group col-md-6 col-lg-12">
               <label className="input-item-label">Email</label>
-                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email" value={user.email}/>
+                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email" value={formData.email}/>
               </div>
               <label className="input-item-label" >Quantity</label>
               <div className="form-group input-group col-md-6 col-lg-12">
                 <div className="input-group-prepend">  </div>
                 <input className="form-control" id="quantity" placeholder="Enter Quantity" name='quantity' value={formData.quantity} onChange={handleChange} required type="text"/>
               </div>
-              <label className="input-item-label" >Total Amount</label>
+              {/* <label className="input-item-label" >Total Amount</label>
               <div className="form-group input-group col-md-6 col-lg-12">
                 <div className="input-group-prepend">  </div>
                 <input className="form-control" id="quantity" placeholder="Enter Quantity" name='quantity' value={totalAmount}  required type="text"/>
-              </div>
+              </div> */}
+              <div className='row' >
+                
+            <div className="custom-control custom-radio custom-control-inline offset-3 col-md-6 col-lg-12 offset-3 " style={{}}  >
+                  <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                    <ToggleButton 
+                    selected={selected}
+                      toggleSelected={() => {
+                        setSelected(!selected);}}
+                        />
+                       </div>
+                       </div>
 
               <div className='row ' style={{justifyContent:'center'}}>
               {/* <button className="btn btn-success  btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button> */}

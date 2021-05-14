@@ -29,6 +29,10 @@ import Deposit from './components/profile/Deposit';
 import AllNav from './components/AllNav';
 import Profileheader from './components/profile/Pofileheader';
 import Header from './components/Header';
+import ReactNotification from 'react-notifications-component'
+import {store} from 'react-notifications-component';
+import 'animate.css';
+
 
 
 
@@ -84,6 +88,7 @@ const  handleImageChange = (event) =>{
    
     return ( 
        <>
+       <ReactNotification/>
        
        {
          isAuthenticated?(< Profileheader />):(<Header />)

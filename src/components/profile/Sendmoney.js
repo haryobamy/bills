@@ -6,13 +6,15 @@ import { useHistory } from 'react-router-dom';
 
 import { AuthContext } from "../../context";
 import internet from '../../assests/images/bg/home.jpg';
+import { connect, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
 
 
-  const Sendmoney = () => {
+  const Sendmoney = (props) => {
     const history = useHistory()
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('userInfo'))
     const [banks, setBanks] =  useState([])
     const [serviceID, setServiceID] = useState('');
     const [beneficiaryName, setBeneficiaryName] = useState('')
@@ -26,6 +28,7 @@ import internet from '../../assests/images/bg/home.jpg';
        amount:''
     })
 
+    const { user: {isAuthenticated} } = props;
    
 
     useEffect(() => {
@@ -103,35 +106,79 @@ import internet from '../../assests/images/bg/home.jpg';
     })
     }
 
+    const deposit_hash =(params)=>
+  {
+      var serialize = JSON.stringify(params);
+      var hash = btoa(serialize);
+      return hash;
+  }
+  
+
+ 
     const handleSubmit = (e) => {
-      if(!user){
-        history.push('/login')
-        return
-      }
-      
-        const params = {
-          request_id:'',
-          email:user.email,
-          billersCode:formData.accountNumber,
-          serviceID:serviceID,
-          phone:formData.beneficiaryMobile,
-          variation_code:formData.bank,
-          amount:formData.amount,
-          service_type:'bank'
-        }
-        axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
-        .then((response) => {
-          //handle success
-          const data = response.data
-          console.log(data)
+       if(!isAuthenticated){
+    history.push('/login')
+    return
+  }
+
+      try {
+       const params = {
         
-      })
-      .catch((error) => {
-        //handle error
-        console.log(error)
-      })
-      console.log(formData);
+        email:'test@gmail.com',
+        
+        billersCode:'1234567890',
+        serviceID: 'bank-deposit',
+        phone:'08175875590',
+        variation_code:'gtb',
+        amount:1000,
+        service_type:'bank'
+        // email:user.email,
+        // billersCode:formData.accountNumber,
+        // serviceID: 'bank-deposit',
+        // phone:formData.beneficiaryMobile,
+        // variation_code:formData.bank,
+        // amount:1000,
+        // service_type:'bank'
+       
       }
+      window.location.href= 'https://desolate-shore-36733.herokuapp.com/api/pay?h='+deposit_hash(params)
+     return;
+   } catch (error) {
+     //handle error
+    console.log(error)
+   }
+ }
+
+
+    // const handleSubmit = (e) => {
+    //   if(!user){
+    //     history.push('/login')
+    //     return
+    //   }
+      
+    //     const params = {
+    //       request_id:'',
+    //       email:user.email,
+    //       billersCode:formData.accountNumber,
+    //       serviceID:serviceID,
+    //       phone:formData.beneficiaryMobile,
+    //       variation_code:formData.bank,
+    //       amount:formData.amount,
+    //       service_type:'bank'
+    //     }
+    //     axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
+    //     .then((response) => {
+    //       //handle success
+    //       const data = response.data
+    //       console.log(data)
+        
+    //   })
+    //   .catch((error) => {
+    //     //handle error
+    //     console.log(error)
+    //   })
+    //   console.log(formData);
+    //   }
 
     
      
@@ -243,5 +290,22 @@ import internet from '../../assests/images/bg/home.jpg';
          );
     }
 
+
+      
+    Sendmoney.propTypes = {
+      user: PropTypes.object.isRequired,
+    };
+
+    const mapStateToProps = (state) => ({
+      user: state.user
+     });
+
+
+
+
+    
+
+
+
+export default  connect(mapStateToProps)(Sendmoney);
  
-export default Sendmoney;

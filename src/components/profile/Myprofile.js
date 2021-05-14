@@ -7,12 +7,17 @@ import db from "../../fire";
 import PropTypes from 'prop-types';
 import { connect, useSelector,useDispatch } from 'react-redux';
 import {uploadImage, editUserDetails} from '../../redux/actions/userAction';
+import {store} from 'react-notifications-component';
+import 'animate.css';
+import 'react-notifications-component/dist/theme.css'
+
 
 
 
 
 import './Myprofile.css';
 import Profilefooter from './Profilefooter';
+import { phoneAlert, profileAlert } from '../../util/AlertMessage';
 
 
 const Myprofile = (props) =>{
@@ -42,13 +47,17 @@ const Myprofile = (props) =>{
       address:formData.address,
       city:formData.city,
       zip_code:formData.zipCode,
+      state:formData.state,
       phone:user.phone,
       account_status:user.account_status
 
     }
     props.editUserDetails(userDetails)
+    profileAlert();
+    
     
  }
+ 
   const handlePhoneUpdate = (e) => {
     e.preventDefault();
     
@@ -63,6 +72,7 @@ const Myprofile = (props) =>{
 
     }
     props.editUserDetails(userDetails)
+    phoneAlert()
     
  }
   const handleStatusUpdate = (e) => {
@@ -106,7 +116,6 @@ const { handleImageChange, user: { userData: { first_name, last_name, address, c
 
   
 
- 
   
   const handleEditPicture = () => {
     const fileInput = document.getElementById('imageInput');

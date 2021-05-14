@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { logoutUser} from '../../redux/actions/userAction';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { goodbyeAlert } from '../../util/AlertMessage';
 
 
 class Profileheader extends Component {
@@ -19,7 +20,8 @@ class Profileheader extends Component {
    handleLogout = (e) => {
     e.preventDefault();
    
-    this.props.logoutUser();
+    this.props.logoutUser( this.props.history);
+    goodbyeAlert();
     
  }
 
