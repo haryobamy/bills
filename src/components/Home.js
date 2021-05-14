@@ -50,56 +50,51 @@ const handleValidation =(e)=>{
   
  
 
-  // const handleSubmit = (e) => {
-  //   e.persist();
-  //   if(formData.amount && formData.phoneNumber && formData.network){
-  //     if(!isAuthenticated){
-  //       history.push('/login')
-  //       return
-  //     }
+  const handleWalletPay = (e) => {
   
-  //     // const username = "plus27solutions@gmail.com";
-  //     // const password =  "blessing1";
-  //     // const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    if(formData.amount && formData.phoneNumber && formData.network){
+      if(!isAuthenticated){
+        history.push('/login')
+        return
+      }
+  
       
-  //     const url = 'https://sandbox.vtpass.com/api/pay'
-  //     const params = {
-  //       // request_id:uuidv4(),
-  //       email:user.email,
-  //       serviceID:formData.network,
-  //       phone:formData.phoneNumber,
-  //       amount:formData.amount,
-  //       service_type:'airtime'
-  //     }
-  //     axios.post( url, params,   {
-  //       headers: {
-  //         'Authorization': `Basic ${token}`
-  //       },
-  //     })
-  //     .then((response) => {
-  //       //handle success
-  //       const data = response.data
-  //       // if(response.data.content.errors && response.data.content.errors.length){
-  //       //   swal("Error!", response.data.content.errors[0], "error");
-  //       //   return 
-  //       // }
-  //       swal("Success!", "Your Payment was Successful", "success");
-  //       setFormData({...formData, amount:"", phoneNumber:"", network:null})
-  //       console.log(response)
       
-  //   })
-  //   .catch((error) => {
-  //     //handle error
-  //     swal("Error!", "Your Payment wasn't Successful", "warning");
+      const url = 'https://desolate-shore-36733.herokuapp.com/api/airtime'
+      const params = {
+        // request_id:uuidv4(),
+        // email:user.email,
+        service_id:formData.network,
+        phone:formData.phoneNumber,
+        amount:formData.amount,
+        id: user.id
+        // service_type:'airtime'
+      }
+      axios.post( url, params)
+      .then((response) => {
+        //handle success
+        const data = response.data
+        // if(response.data.content.errors && response.data.content.errors.length){
+        //   swal("Error!", response.data.content.errors[0], "error");
+        //   return 
+        // }
+        swal("Success!", "Your Payment was Successful", "success");
+        setFormData({...formData, amount:"", phoneNumber:"", network:null})
+        console.log(response)
       
-  //     console.log(error)
-  //   })
-  //   }else{
-  //     swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
-  //   }
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      
+      console.log(error)
+    })
+    }else{
+      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+    }
     
-  // console.log(formData);
-  // }
+  console.log(formData);
+  }
 
   
   const deposit_hash =(params)=>
@@ -135,6 +130,7 @@ const handleSubmit = (e) => {
    handleDirectPay();
     console.log("direct payment")
   }else{
+   handleWalletPay();
     console.log("wallet payment")
   }
 

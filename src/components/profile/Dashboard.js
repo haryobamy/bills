@@ -18,12 +18,41 @@ const Dashboard = (props) => {
 
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
+  const [walletBalance, setWalletBalance] = useState('')
+
 
   const handleEditPicture = () => {
     const fileInput = document.getElementById('imageInput');
     fileInput.click();
   };
   const { handleImageChange  } = props;
+
+
+
+  const getWalletBalance = () => {
+    const params = {
+      id : user.id
+    }
+    axios.get('https://desolate-shore-36733.herokuapp.com/api/get-wallet', params)
+    .then(res => {
+      const data = res.data.amount
+      console.log(data)
+      setWalletBalance(data)
+      
+    })
+    .catch((err) => {
+      // const data = err.response.data
+      console.log(err)
+    })
+  }
+
+console.log(walletBalance)
+
+
+
+  useEffect(() => {
+    getWalletBalance();
+  }, [])
 
   
 
@@ -86,7 +115,7 @@ const Dashboard = (props) => {
           
           <div className="bg-secondary shadow-sm rounded text-center p-3 mb-4">
             <div className="text-17 text-light my-3"><i className=" fa fa-wallet"></i></div>
-            <h3 className="text-9 font-weight-400">$2956.00</h3>
+           { walletBalance != '' ?( <h3 className="text-9 font-weight-400">₦ {walletBalance}</h3>):( <h3 className="text-9 font-weight-400">₦ 13.00</h3>) }
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3"/>
             <div className="d-flex"><a href="#" className="btn-link mr-auto">Withdraw</a> <a href="/deposit" className="btn-link ml-auto">Deposit</a></div>

@@ -104,6 +104,8 @@ if (nextProps.errors) {
 
 
 
+
+
 // componentDidMount() {
 //   // If logged in and user navigates to Login page, should redirect them to dashboard
 //   if (this.props.auth.isAuthenticated) {
@@ -197,6 +199,18 @@ if (nextProps.errors) {
     //     //handle error
     //     console.log(error)
     //   })
+    // }
+
+
+    // handleValidation =(e)=>{
+    //   if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated){
+    //     if(!user){
+    //       history.push('/login')
+    //       return 
+    //     }}else{
+    //       validationError();
+    //     }
+    
     // }
 
     render() { 
