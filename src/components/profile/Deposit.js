@@ -52,11 +52,27 @@ const Deposit = () => {
   
   const handleSubmit = (e) => {
      try {
-      const params = {
+     const params = {
         email:user.email,
         user_id:user.id,
         amount:formData.amount,
         service_type:'wallet'
+
+      //email:"test@gmail.com",
+      //    serviceID:"dstv",
+      //   billersCode:"1212121212",
+      //   variation_code:"dstv1",
+      //   amount:"1000.00",
+      //  phone:"08011111111",
+      //   service_type:"tv",
+
+
+        // serviceID :'waec-registration',
+        //     phone :'08011111111',
+        //     variation_code :'waec-registration',
+            
+        //     amount :'1000',
+        //     service_type :'education'
 
         
      }
