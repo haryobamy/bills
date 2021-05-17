@@ -62,23 +62,26 @@ const handleValidation =(e)=>{
       
       const url = 'https://desolate-shore-36733.herokuapp.com/api/airtime'
       const params = {
-        // request_id:uuidv4(),
-        // email:user.email,
+        
         service_id:formData.network,
         phone:formData.phoneNumber,
         amount:formData.amount,
-        id: user.id
-        // service_type:'airtime'
+        
+        
       }
       axios.post( url, params)
       .then((response) => {
         //handle success
         const data = response.data
-        // if(response.data.content.errors && response.data.content.errors.length){
-        //   swal("Error!", response.data.content.errors[0], "error");
-        //   return 
+        if(response.data.status == '200'){
+           swal("Success!", `${response.data.message}`, "success");
+        }
+        else{
+            swal("Error!", 'Insufficient Fund', "warning")
+        }
+        // if(response.data.status === '201'){
         // }
-        swal("Success!", "Your Payment was Successful", "success");
+       
         setFormData({...formData, amount:"", phoneNumber:"", network:null})
         console.log(response)
       

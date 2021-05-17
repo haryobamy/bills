@@ -78,7 +78,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING,SET_UNAUTHENTICATED, CLEAR_E
 // import {store} from 'react-notifications-component';
 // import 'animate.css';
 // import 'react-notifications-component/dist/theme.css'
-import {goodbyeAlert, loginAlert, profileAlert, profileError} from '../../util/AlertMessage'
+import {goodbyeAlert, loginAlert, LoginError, profileAlert, profileError} from '../../util/AlertMessage'
 
 
 
@@ -147,8 +147,9 @@ export const loginUser = (userData, history) => dispatch => {
      
        // Set current user
       dispatch(setCurrentUser(decoded));
+     
 
-      dispatch({ type: CLEAR_ERRORS });
+      // dispatch({ type: CLEAR_ERRORS });
      
       // re-direct to dashboard on successful register
       history.push("/dashboard");
@@ -161,7 +162,9 @@ export const loginUser = (userData, history) => dispatch => {
         payload: err.response.data
         
       }) 
+      
      );
+       LoginError()
     
 };
 
@@ -234,6 +237,7 @@ export const uploadImage = (formData) => (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 
 

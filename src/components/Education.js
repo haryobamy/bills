@@ -300,7 +300,7 @@ useEffect(() => {
               </div>
               <div className="form-group col-md-6 col-lg-12">
               <label className="input-item-label">Email</label>
-                <input type="text" className="form-control" data-bv-field="number" id="email" onChange={handleChange} required placeholder="Enter  Your Email" value={formData.email}/>
+                <input type="text" className="form-control"  data-bv-field="number" name='email' id="email" onChange={handleChange} required placeholder="Enter  Your Email" value={formData.email}/>
               </div>
               <label className="input-item-label" >Quantity</label>
               <div className="form-group input-group col-md-6 col-lg-12">

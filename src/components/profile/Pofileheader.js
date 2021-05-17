@@ -36,9 +36,10 @@ class Profileheader extends Component {
           <div className="header-row">
             <div className="header-column justify-content-start"> 
               
-              <div className="logo"> <a className="d-flex" href="/" title=""><img src="images/logo.png" alt="Payyed" /></a> </div>
+              <div className="logo"> <a className="d-flex" href="/" title=""><img src="images/logo.png" alt="billsng" /></a> </div>
              
               <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-nav"> <span></span><span></span><span></span></button>
+              <button className="navbar-toggler" type="button" data-toggle="collapse"  data-toggle="tooltip" title="Sign Out" onClick={this.handleLogout} > <i className='fa fa-sign-out-alt'></i></button>
               {/* <!-- Collapse Button end -->  */}
               
               
@@ -54,18 +55,18 @@ class Profileheader extends Component {
               </nav>
              
             </div>
-            <div className="header-column justify-content-end"> 
-             
-              <nav className="login-signup navbar navbar-expand">
-                <ul className="navbar-nav">
-                <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-success shadow-none d-none d-sm-block" href="/profile">Settings</a></li>
-                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" href="/" onClick={this.handleLogout}  >Sign out</a></li>
-                </ul>
-              </nav>
+            <div  className="header-column justify-content-end"> 
+              <nav id='head-nav' className="login-signup navbar navbar-expand-lg">
               
+                <ul className="navbar-nav">
+                <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-primary shadow-none d-none d-sm-block" href="/profile">Settings</a></li>
+                  <li className="align-items-center h-auto ml-sm-3"><a className="btn btn-outline-primary shadow-none d-none d-sm-block" onClick={this.handleLogout}  >Sign Out</a></li>
+                </ul>
+                
+              </nav>
+              </div>
             </div>
           </div>
-        </div>
       </header>
      
       

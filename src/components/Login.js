@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 
 import {useDispatch, useSelector} from "react-redux";
 // import { validateLoginData } from '../util/Validators';
+import { validationError, SignupValidation, confirmPassword } from '../util/AlertMessage';
 
 
 
@@ -26,7 +27,7 @@ class Login extends Component {
       password: "",
       confirm_password: "",
       errors: {},
-      messages:{}
+      message:{}
       
     };
     
@@ -56,17 +57,9 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     }
-    // const {valid, messages} = validateLoginData(userData);
-    // if(!valid) return (
-    //   <div className="alert alert-danger" role="alert">
-    //    {messages}
-    //   </div>
-    // );
-
-
-
+    
       this.props.loginUser(userData, this.props.history)
-      // window.location.reload(); // check functionaliy
+      
 
   
  }
@@ -77,13 +70,8 @@ class Login extends Component {
     const name = e.target.name;
     const value = e.target.value;
 
-  
-    
     this.setState({[name] : value })
-       
-    // this.setState({[name] : value },
-    //    () => { this.validateField([name], value) });
-    
+  
 }
 
 
@@ -119,42 +107,6 @@ if (nextProps.errors) {
 
 
 
-
-// class Login extends Component {
-//     constructor(props){
-//       super(props)
-//       this.state = {
-
-//         email:'',
-//         phonenumber:'',
-//         password:'',
-//         checked: false
-//       }
-//       this.handleChange = this.handleChange.bind(this)
-//       // this.changePhonenumber = this.changePhonenumber.bind(this)
-//       // this.changePassword = this.changePassword.bind(this)
-//       this.handleCheck = this.handleCheck.bind(this)
-//       this.signup = this.signup.bind(this)
-//       this.signin = this.signin.bind(this)
-//       console.log(props);
-//       console.log(this.state);
-//     }
-
-   
-
-    // handleChange = e => {
-    //   this.setState ({ [e.target.name]: e.target.value});
-    //   console.log({ [e.target.name]: e.target.value})
-    
-    // }
-
-    // handleCheck = e  => {
-
-    //   this.setState(() => ({
-    //     checked: !this.state.checked
-    //   }));
-    //  console.log(this.state.checked,'checked');
-    // }
 
 
 
@@ -200,18 +152,36 @@ if (nextProps.errors) {
     //     console.log(error)
     //   })
     // }
-
-
-    // handleValidation =(e)=>{
-    //   if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated){
-    //     if(!user){
-    //       history.push('/login')
-    //       return 
-    //     }}else{
-    //       validationError();
-    //     }
     
-    // }
+
+
+    handleValidLogin =(e)=>{
+      if(this.state.email && this.state.password ){
+
+       return
+      
+        }else{
+          validationError();
+        }
+    
+    }
+
+
+    handleValidSignup =(e)=>{
+      if(this.state.email && this.state.password && this.state.username && this.state.confirm_password){
+      
+       return
+
+
+        }else
+        if(this.state.password != this.state.confirm_password){
+          confirmPassword();
+          return
+        }else{
+          SignupValidation();
+        }
+    
+    }
 
     render() { 
 
@@ -272,9 +242,13 @@ if (nextProps.errors) {
                       <div className="col-sm text-right"> <a className="justify-content-end" href="#">Forgot Password ?</a> </div>
 
                     </div>
-                    {errors.message && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.message}</p>)}
-                    <button className={`btn btn-${loading? "success":"primary" } btn-block` } type="button" onClick={this.handleLogin} >  {loading? (
-                <CircularProgress size={20} />):"Login"}</button>
+                    {  this.state.email && this.state.password ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={this.handleLogin}>Login</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={this.handleValidLogin} >Login</button>)
+              }
+                    {/* {errors.message && errors (<p style={{color:'red', fontWeight:'bold',fontSize:'20px', textAlign:'center',textTransform:'capitalize'}} >{errors.message}</p>)}
+                    <button className={`btn btn-${loading? "success":"primary" } btn-block` } type="button" onClick={this.handleValidLogin} >  {loading? (
+                <CircularProgress size={20} />):"Login"}</button> */}
                     
                   </form>
                 </div>
@@ -301,8 +275,13 @@ if (nextProps.errors) {
                       <input type="password" className="form-control" id="signuploginconfirm_password" required placeholder="Confirm Password" name='confirm_password' value={this.state.confirm_password} onChange={this.handleChange}  />
                       <p className='errorMsg ' style={{color:'red', textTransform:'capitalize'}}>{errors.confirm_password}</p>
                     </div>
-                    <button className="btn btn-primary btn-block" disabled={loading} type="button" onClick={this.handleSignup}  > {loading? (
-                <CircularProgress size={20} />):"Signup"}</button>
+
+                    {  this.state.email && this.state.password && this.state.username && this.state.confirm_password ?(
+              <button className="btn btn-success btn-lg btn-block" type="button"  onClick={this.handleLogin}>Signup</button>):
+              (<button className="btn btn-secondary btn-lg btn-block" type="button" onClick={this.handleValidSignup} >Signup</button>)
+              }
+                    {/* <button className="btn btn-primary btn-block" disabled={loading} type="button" onClick={this.handleSignup}  > {loading? (
+                <CircularProgress size={20} />):"Signup"}</button> */}
                   </form>
                 </div>
                 {/* </>

@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Profileheader from './Pofileheader';
+import axios from 'axios'
+import Wallet from './Wallet';
 
 
 
-class Notification extends Component {
-    state = {  }
-    render() { 
+const Notification = () =>  {
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  
+
+
+
+
+ 
+     
         return (  
             <>
             
@@ -37,40 +45,7 @@ class Notification extends Component {
         ============================================= --> */}
         <aside className="col-lg-3"> 
           
-          {/* <!-- Profile Details
-          =============================== --> */}
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
-            <div className="profile-thumb mt-3 mb-4"> <img className="rounded-circle" src="images/profile-thumb.jpg" alt=""/>
-              <div className="profile-thumb-edit custom-file bg-secondary text-white" data-toggle="tooltip" title="edit Profile Picture"> <i className="fas fa-camera position-absolute"></i>
-                {/* <input type="file" className="custom-file-input" id="customFile"/> */}
-              </div>
-            </div>
-            <p className="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
-            <p className="mb-2"><a href="profile.html" className="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i className="fas fa-edit"></i></a></p>
-          </div>
-          {/* <!-- Profile Details End --> 
-          
-          <!-- Available Balance
-          =============================== --> */}
-          <div className="bg-secondary shadow-sm rounded text-center p-3 mb-4">
-            <div className="text-17 text-light my-3"><i className="fas fa-wallet"></i></div>
-            <h3 className="text-9 font-weight-400">$2956.00</h3>
-            <p className="mb-2 text-muted opacity-8">Available Balance</p>
-            <hr className="mx-n3"/>
-            <div className="d-flex"><a href="withdraw-money.html" className="btn-link mr-auto">Withdraw</a> <a href="deposit-money.html" className="btn-link ml-auto">Deposit</a></div>
-          </div>
-          {/* <!-- Available Balance End --> 
-          
-          <!-- Need Help?
-          =============================== --> */}
-          <div className="bg-light shadow-sm rounded text-center p-3 mb-4">
-            <div className="text-17 text-light my-3"><i className="fas fa-comments"></i></div>
-            <h3 className="text-3 font-weight-400 my-4">Need Help?</h3>
-            <p className="text-muted opacity-8 mb-4">Have questions or concerns regrading your account?<br/>
-              Our experts are here to help!.</p>
-            <a href="#" className="btn btn-primary btn-block">Chate with Us</a> </div>
-          {/* <!-- Need Help? End -->  */}
-          
+         <Wallet />
         </aside>
         {/* <!-- Left Panel End --> 
         
@@ -141,6 +116,6 @@ class Notification extends Component {
   </>
         );
     }
-}
+
  
 export default Notification;

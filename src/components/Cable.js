@@ -192,7 +192,7 @@ const Cable = (props) => {
         serviceID:formData.network,
         billersCode:formData.smartCardNumber,
         variation_code:formData.variation_code,
-        amount:formData.amount,
+        amount:planAmount,
        phone:formData.phoneNumber,
        service_type:"tv"
         
@@ -347,14 +347,7 @@ const Cable = (props) => {
                 </div>
               </div>
                 <div className="form-row">
-                  <div className="col-md-6 col-lg-3 form-group">
-                      <select className="custom-select" id="variation_code" name='variation_code' required onChange={handleChange}  value={formData.variation_code} >
-                        <option value="">Select Your Plan</option>
-                        {
-                               cables.map(cable =>  <option key={cable.variation_code} value={cable.variation_code} >{cable.name} </option>)
-                             }
-                      </select>
-                    </div>
+                  
                   <div className="col-md-6 col-lg-3 form-group">
                     <input type="text" className="form-control" data-bv-field="number" id="smartCardNumber" name='smartCardNumber' value={formData.smartCardNumber} required placeholder="Enter Smart card Number" onChange={handleChange} onInput={handleVerify}/>
                     <p style={{color:'red'}}>{smartError}</p>
@@ -363,6 +356,14 @@ const Cable = (props) => {
                   <div className="col-md-6 col-lg-3 form-group">
                     <input type="text" className="form-control" data-bv-field="number" id="phoneNumber" name='phoneNumber' value={formData.phoneNumber} required placeholder="Enter Phone Number" onChange={handleChange}/>
                   </div>
+                  <div className="col-md-6 col-lg-3 form-group">
+                      <select className="custom-select" id="variation_code" name='variation_code' required onChange={handleChange}  value={formData.variation_code} >
+                        <option value="">Select Your Plan</option>
+                        {
+                               cables.map(cable =>  <option key={cable.variation_code} value={cable.variation_code} >{cable.name} </option>)
+                             }
+                      </select>
+                    </div>
                   <div className="col-md-6 col-lg-3 form-group">
                   
                     <input className="form-control" id="amount" placeholder="Enter Amount" required type="text" onChange={handleInputChange}  value={planAmount} />

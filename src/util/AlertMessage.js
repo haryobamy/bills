@@ -96,8 +96,60 @@ export const profileAlert = () => {
   export const validationError = () => {
     store.addNotification({
       title: "error!",
-      message: "Profile update Unsuccessfuly",
+      message: "Email and Password Must Not Be Empty",
       type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 10000,
+        onScreen:false,
+        showIcon: true
+      },
+      width:600
+    })
+  }
+  export const SignupValidation = () => {
+    store.addNotification({
+      title: "error!",
+      message: "Username, Email and Password Must Not Be Empty",
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 10000,
+        onScreen:false,
+        showIcon: true
+      },
+      width:600
+    })
+  }
+  export const LoginError = () => {
+    store.addNotification({
+      title: "error!",
+      message:'"Incorrect Email/Password. Try again!"',
+      type: "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 2000,
+        onScreen:true,
+        showIcon: true
+      },
+      width:600
+    })
+  }
+
+  export const confirmPassword = () => {
+    store.addNotification({
+      title: "error!",
+      message: " Password Must Match",
+      type: "info",
       insert: "top",
       container: "top-right",
       animationIn: ["animate__animated", "animate__fadeIn"],

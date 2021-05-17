@@ -21,3 +21,5 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const GET_USERDATA ="GET_USERDATA";
 export const LOADING_UI  = "LOADING_UI";
 export const STOP_LOADING_UI = "STOP_LOADING_UI"
+
+export const GET_WALLET_BALANCE ="GET_WALLET_BALANCE"
