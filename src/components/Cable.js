@@ -212,15 +212,67 @@ const Cable = (props) => {
    }
  }
 
- const handleSubmit = (e) => {
-  if(selected){
-   handleDirectPay();
-    console.log("direct payment")
-  }else{
-    console.log("wallet payment")
+
+
+
+ const handleWalletPay = (e) => {
+        const params = {
+        
+        billersCode:formData.smartCardNumber,
+        service_id:formData.network,
+        phone:formData.phoneNumber,
+        variation_code:formData.variation_code,
+        amount:formData.amount
+      }
+      axios.post(`https://desolate-shore-36733.herokuapp.com/api/tv`, params)
+      .then((response) => {
+        //handle success
+        const data = response.data
+        if(response.data.status == '200'){
+          swal("Success!", `${response.data.message}`, "success");
+       }
+       else{
+           swal("Error!", 'Insufficient Fund', "warning")
+       }
+       
+       setFormData({...formData, amount:"", phoneNumber:"", network:null})
+       console.log(response)
+        setFormData({...formData, amount:"", phoneNumber:"", network:null, smartCardNumber:''})
+        setPlanAmount('')
+        setCables([])
+        console.log(response)
+      
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      console.log(error)
+    })
+    
+    
   }
 
-}
+  const handleSubmit = (e) => {
+    if(formData.amount && formData.phoneNumber && formData.network){
+      if(!isAuthenticated){
+        history.push('/login')
+        return
+      }
+  
+    if(selected){
+     handleDirectPay();
+      
+    }else{
+     handleWalletPay();
+     
+    }
+  }else{
+    swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+  }
+  
+  }
+
+
 
 
 

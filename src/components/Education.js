@@ -23,7 +23,7 @@ const Education = (props) => {
   const [waec, setWaec] = useState([]);
   const [selected, setSelected] = useState(false)
   const user = JSON.parse(localStorage.getItem('userInfo'));
-  const [ formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     amount:'', 
     phoneNumber:"", 
      network:'',
@@ -77,10 +77,6 @@ useEffect(() => {
 
 
 
-  
-
- 
-
 
 
       const handleChange = (e) => {
@@ -109,7 +105,7 @@ useEffect(() => {
 
        const handleValidation =(e)=>{
        
-        if(formData.amount && formData.phoneNumber && formData.network && !isAuthenticated && formData.quantity){
+        if(formData.phoneNumber && formData.network  && formData.quantity && formData.email){
           if(!isAuthenticated){
             history.push('/login')
             return 
@@ -122,13 +118,23 @@ useEffect(() => {
 
 
       const handleSubmit = (e) => {
+        if( formData.phoneNumber && formData.network  && formData.quantity && formData.email){
+          if(!isAuthenticated){
+            history.push('/login')
+            return
+          }
+      
         if(selected){
          handleDirectPay();
-          console.log("direct payment")
+          
         }else{
-          console.log("wallet payment")
+         handleWalletPay();
+         
         }
-     
+      }else{
+        swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+      }
+      
       }
 
 
@@ -173,6 +179,42 @@ useEffect(() => {
     console.log(error)
    }
  }
+
+
+ const handleWalletPay = (e) => {
+     
+  const url = 'https://desolate-shore-36733.herokuapp.com/api/education'
+  
+      
+      const params = {
+       
+        billersCode:formData.meterNumber,
+        service_id:formData.network,
+        phone:formData.phoneNumber,
+        variation_code:formData.meterType,
+        amount:formData.amount
+      }
+      axios.post(url, params)
+      .then((response) => {
+        //handle success
+        const data = response.data
+        if(response.data.status == '200'){
+          swal("Success!", `${response.data.message}`, "success");
+       }
+       else{
+           swal("Error!", 'Insufficient Fund', "warning")
+       }
+        console.log(data)
+      
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      console.log(error)
+    })
+    
+    console.log(formData);
+  }
 
 
       // const handleSubmit = (e) => {
@@ -326,7 +368,7 @@ useEffect(() => {
 
               <div className='row ' style={{justifyContent:'center'}}>
               {/* <button className="btn btn-success  btn-lg" type="button" onClick={handleSubmit}>Continue to Pay Bill</button> */}
-              { formData.variation_code  && formData.phoneNumber && formData.network && formData.quantity ?(
+              {  formData.phoneNumber && formData.network && formData.email ?(
               <button className="btn btn-success btn-lg   col-md-6 col-lg-3" type="button"  onClick={handleSubmit}>Pay Now</button>):
               (<button className="btn btn-secondary btn-lg col-md-6 col-lg-3" type="button" onClick={handleValidation} >Pay Now</button>)
               }

@@ -133,7 +133,7 @@ export const profileAlert = () => {
       message:'"Incorrect Email/Password. Try again!"',
       type: "warning",
       insert: "top",
-      container: "top-right",
+      container: "top-center",
       animationIn: ["animate__animated", "animate__fadeIn"],
       animationOut: ["animate__animated", "animate__fadeOut"],
       dismiss: {

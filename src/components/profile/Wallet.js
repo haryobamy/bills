@@ -47,7 +47,7 @@ const Wallet = (props) => {
            { walletBalance != null ?( <h3 className="text-9 font-weight-400">₦ {walletBalance}</h3>):( <h3 className="text-9 font-weight-400">₦ 0.00</h3>) }
             <p className="mb-2 text-muted opacity-8">Available Balance</p>
             <hr className="mx-n3"/>
-            <div className="d-flex"><a href="#" className="btn-link mr-auto">Withdraw</a> <a href="/deposit" className="btn-link ml-auto">Deposit</a></div>
+            <div className="d-flex"><a href="/sendmoney" className="btn-link mr-auto">Withdraw</a> <a href="/deposit" className="btn-link ml-auto">Deposit</a></div>
           </div>
           {/* Available Balance End */}
           

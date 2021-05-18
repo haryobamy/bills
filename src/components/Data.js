@@ -183,13 +183,63 @@ const Data = (props) => {
  }
 
 
+  const handleWalletPay = (e) => {
+
+        const url = 'https://desolate-shore-36733.herokuapp.com/api/data'
+    
+        const params = {
+       
+         billersCode:formData.phoneNumber,
+         service_id:formData.network,
+         phone:formData.phoneNumber,
+         variation_code:formData.variation_code,
+         amount:formData.amount
+    
+        }
+        axios.post(url, params)
+        .then((response) => {
+          //handle success
+          if(response.data.status == '200'){
+            swal("Success!", `${response.data.message}`, "success");
+         }
+         else{
+             swal("Error!", 'Insufficient Fund', "warning")
+         }
+         // if(response.data.status === '201'){
+         // }
+        
+         setFormData({...formData, amount:"", phoneNumber:"", network:null})
+         console.log(response)
+        
+      })
+      .catch((error) => {
+        //handle error
+        swal("Error!", "Your Payment wasn't Successful", "warning");
+        console.log(error)
+      })
+      console.log(formData);
+     
+      
+      }
+
+
  const handleSubmit = (e) => {
+  if(formData.variation_code && formData.phoneNumber && formData.network){
+    if(!isAuthenticated){
+      history.push('/login')
+      return
+    }
+
    if(selected){
     handleDirectPay();
      console.log("direct payment")
    }else{
+     handleWalletPay();
      console.log("wallet payment")
    }
+  }else{
+    swal("Error!", "Ensure network plan  is selected, phone number and amount are valid", "error");
+  }
 
  }
     

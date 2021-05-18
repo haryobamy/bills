@@ -52,14 +52,6 @@ const handleValidation =(e)=>{
 
   const handleWalletPay = (e) => {
   
-    if(formData.amount && formData.phoneNumber && formData.network){
-      if(!isAuthenticated){
-        history.push('/login')
-        return
-      }
-  
-      
-      
       const url = 'https://desolate-shore-36733.herokuapp.com/api/airtime'
       const params = {
         
@@ -92,9 +84,7 @@ const handleValidation =(e)=>{
       
       console.log(error)
     })
-    }else{
-      swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
-    }
+   
     
   console.log(formData);
   }
@@ -129,6 +119,12 @@ const handleValidation =(e)=>{
 }
 
 const handleSubmit = (e) => {
+  if(formData.amount && formData.phoneNumber && formData.network){
+    if(!isAuthenticated){
+      history.push('/login')
+      return
+    }
+
   if(selected){
    handleDirectPay();
     console.log("direct payment")
@@ -136,6 +132,9 @@ const handleSubmit = (e) => {
    handleWalletPay();
     console.log("wallet payment")
   }
+}else{
+  swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+}
 
 }
 

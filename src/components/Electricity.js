@@ -126,16 +126,61 @@ const Electricity = (props) => {
    }
  }
 
- const handleSubmit = (e) => {
-  if(selected){
-   handleDirectPay();
-    console.log("direct payment")
-  }else{
-    console.log("wallet payment")
+
+ const handleWalletPay = (e) => {
+     
+  const url = 'https://desolate-shore-36733.herokuapp.com/api/electricity'
+  
+      
+      const params = {
+       
+        billersCode:formData.meterNumber,
+        service_id:formData.network,
+        phone:formData.phoneNumber,
+        variation_code:formData.meterType,
+        amount:formData.amount
+      }
+      axios.post(url, params)
+      .then((response) => {
+        //handle success
+        const data = response.data
+        if(response.data.status == '200'){
+          swal("Success!", `${response.data.message}`, "success");
+       }
+       else{
+           swal("Error!", 'Insufficient Fund', "warning")
+       }
+        console.log(data)
+      
+    })
+    .catch((error) => {
+      //handle error
+      swal("Error!", "Your Payment wasn't Successful", "warning");
+      console.log(error)
+    })
+    
+    console.log(formData);
   }
 
-}
-
+  const handleSubmit = (e) => {
+    if(formData.amount && formData.phoneNumber && formData.network){
+      if(!isAuthenticated){
+        history.push('/login')
+        return
+      }
+  
+    if(selected){
+     handleDirectPay();
+      console.log("direct payment")
+    }else{
+     handleWalletPay();
+      console.log("wallet payment")
+    }
+  }else{
+    swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+  }
+  
+  }
 
 //   const handleSubmit = (e) => {
 //     if(formData.meterNumber  && formData.phoneNumber && formData.network && formData.meterType && !isAuthenticated ){

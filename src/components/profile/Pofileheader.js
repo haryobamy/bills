@@ -39,7 +39,7 @@ class Profileheader extends Component {
               <div className="logo"> <a className="d-flex" href="/" title=""><img src="images/logo.png" alt="billsng" /></a> </div>
              
               <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-nav"> <span></span><span></span><span></span></button>
-              <button className="navbar-toggler" type="button" data-toggle="collapse"  data-toggle="tooltip" title="Sign Out" onClick={this.handleLogout} > <i className='fa fa-sign-out-alt'></i></button>
+              <button className="navbar-toggler m" type="button" data-toggle="collapse"  data-toggle="tooltip" title="Sign Out" onClick={this.handleLogout} > <i className='fa fa-sign-out-alt'></i></button>
               {/* <!-- Collapse Button end -->  */}
               
               

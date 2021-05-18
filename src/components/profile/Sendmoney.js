@@ -8,6 +8,8 @@ import { AuthContext } from "../../context";
 import internet from '../../assests/images/bg/home.jpg';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import swal from 'sweetalert';
+import ToggleButton from '../ToggleButton';
 
 
 
@@ -18,7 +20,8 @@ import PropTypes from 'prop-types';
     const [banks, setBanks] =  useState([])
     const [serviceID, setServiceID] = useState('');
     const [beneficiaryName, setBeneficiaryName] = useState('')
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
+    const [selected, setSelected] = useState(false)
     const [ formData, setFormData] = useState({
       amount:'',
       bank:'', 
@@ -115,7 +118,7 @@ import PropTypes from 'prop-types';
   
 
  
-    const handleSubmit = (e) => {
+    const handleDirectPay = (e) => {
        if(!isAuthenticated){
     history.push('/login')
     return
@@ -150,41 +153,61 @@ import PropTypes from 'prop-types';
  }
 
 
-    // const handleSubmit = (e) => {
-    //   if(!user){
-    //     history.push('/login')
-    //     return
-    //   }
+    const handleWalletPay = (e) => {
+      if(!user){
+        history.push('/login')
+        return
+      }
       
-    //     const params = {
-    //       request_id:'',
-    //       email:user.email,
-    //       billersCode:formData.accountNumber,
-    //       serviceID:serviceID,
-    //       phone:formData.beneficiaryMobile,
-    //       variation_code:formData.bank,
-    //       amount:formData.amount,
-    //       service_type:'bank'
-    //     }
-    //     axios.post(`https://desolate-shore-36733.herokuapp.com/api/pay`, params)
-    //     .then((response) => {
-    //       //handle success
-    //       const data = response.data
-    //       console.log(data)
+        const params = {
+          
+          billersCode:formData.accountNumber,
+          service_id:'bank-deposit',
+          phone:formData.beneficiaryMobile,
+          variation_code:formData.bank,
+          amount:formData.amount,
+        }
+        axios.post(`https://desolate-shore-36733.herokuapp.com/api/bank`, params)
+        .then((response) => {
+          //handle success
+          const data = response.data
+        if(response.data.status == '200'){
+          swal("Success!", `${response.data.message}`, "success");
+       }
+       else{
+           swal("Error!", 'Insufficient Fund', "warning")
+       }
+        console.log(data)
         
-    //   })
-    //   .catch((error) => {
-    //     //handle error
-    //     console.log(error)
-    //   })
-    //   console.log(formData);
-    //   }
-
-    
-     
+      })
+      .catch((error) => {
+        //handle error
+        console.log(error)
+      })
+      console.log(formData);
+      }
 
 
-
+      const handleSubmit = (e) => {
+        if(formData.amount && formData.beneficiaryMobile && formData.bank && formData.accountNumber){
+          if(!isAuthenticated){
+            history.push('/login')
+            return
+          }
+      
+        if(selected){
+         handleDirectPay();
+          console.log("direct payment")
+        }else{
+         handleWalletPay();
+          console.log("wallet payment")
+        }
+      }else{
+        swal("Error!", "Ensure network is selected, phone number and amount are valid", "error");
+      }
+      
+      }
+   
 
 
 
@@ -241,11 +264,10 @@ import PropTypes from 'prop-types';
                             </select>
                             </div>
                         </div>
-
                       <div className="form-group">
                         <label for="accountNumber">Account Number</label>
                         <div className="input-group">
-                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number"    onChange={handleChange} value={formData.accountNumber} onInput={handleVerify}  />
+                        <input type="text" name="accountNumber" id="accountNumber" class="form-control float__input" required  placeholder="Account Number"    onChange={handleChange} value={formData.accountNumber} onInput={handleVerify}   />
                         <p>{error}</p>
                         {/* <button className="btn btn-warning" type="button"  onClick={handleVerify} >Verify</button> */}
                         </div>
@@ -271,8 +293,20 @@ import PropTypes from 'prop-types';
                             <div className="form-group">
                         <label for="beneficiaryMobile">Beneficiary's Mobile Number</label>
                         <div className="input-group"></div>
-                      <input type="text" className="form-control" id="beneficiaryMobile" name='beneficiaryMobile' value={formData.beneficiaryMobile} maxlength="10" required placeholder="Mobile Number" onChange={handleChange} />
+                      <input type="text" className="form-control" id="beneficiaryMobile" name='beneficiaryMobile' value={formData.beneficiaryMobile} required placeholder="Mobile Number" onChange={handleChange} />
                     </div>
+
+                   
+                
+                <div className="custom-control custom-radio custom-control-inline "  >
+                      <label htmlFor="payment" className='mr-3' style={{ color:'#fff'}}>Payment Mode</label>
+                        <ToggleButton 
+                        selected={selected}
+                          toggleSelected={() => {
+                            setSelected(!selected);}}
+                            />
+                           </div>
+                         
                         
                       <button className="btn btn-success btn-block" type="button" value='submit' onClick={handleSubmit} >Continue</button>
                     </form>
