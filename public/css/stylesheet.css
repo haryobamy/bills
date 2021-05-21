@@ -2386,38 +2386,8 @@ h2.resp-accordion:first-child {
 }
 
 /* Social Icons */
-.social-icons {
-  margin: 0;
-  padding: 0;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  list-style: none;
-}
-.social-icons li {
-  margin: 0px 2px 4px;
-  padding: 0;
-  border-radius: 100%;
-  overflow: visible;
-}
-.social-icons li:last-child {
-  margin-right: 0px;
-}
-.social-icons li a {
-  background: #d4d4d4;
-  border-radius: 100%;
-  display: block;
-  height: 34px;
-  line-height: 34px;
-  width: 34px;
-  font-size: 16px;
-  text-align: center;
-  color: #fff;
-  text-decoration: none;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
+
+
 .social-icons li i {
   line-height: inherit;
 }
@@ -2436,11 +2406,12 @@ h2.resp-accordion:first-child {
 .social-icons.social-icons-dark li a {
   background: #555;
 }
-.social-icons li:hover a {
+/* .social-icons li:hover a {
   background: #171717;
   color: #FFF;
-}
-.social-icons li:hover.social-icons-twitter a, .social-icons.social-icons-colored li.social-icons-twitter a {
+} */
+
+/* .social-icons li:hover.social-icons-twitter a, .social-icons.social-icons-colored li.social-icons-twitter a {
   background: #00ACEE;
 }
 .social-icons li:hover.social-icons-facebook a, .social-icons.social-icons-colored li.social-icons-facebook a {
@@ -2511,7 +2482,7 @@ h2.resp-accordion:first-child {
 }
 .social-icons.social-icons-colored li:hover a {
   background: #d4d4d4;
-}
+} */
 
 /* Login/Signup Modal Dialog */
 #login-signup .modal-dialog,

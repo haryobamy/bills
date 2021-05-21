@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import Wallet from './Wallet';
 import Profilefooter from './Profilefooter';
+import moment from 'moment'
+import ReactPaginate from 'react-paginate';
 // import { addDays } from 'date-fns';
 // import 'react-date-range/dist/styles.css'; // main style file
 // import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -12,6 +14,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import { Switch } from 'react-router';
+import TransactionMin from './TransactionMin';
+
 
 
 const Transaction = () => {
@@ -19,6 +23,9 @@ const Transaction = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
   const [historys, setHistorys] = useState('')
+  const [amount, setAmount] = useState('')
+
+ 
  
 
 
@@ -29,34 +36,29 @@ const Transaction = () => {
   };
 
 
-  const handleTranscation = (e) => {
-  
-    const url = 'https://desolate-shore-36733.herokuapp.com/api/get-history'
-   
-    axios.get( url)
-    .then((response) => {
-      //handle success
-      const data = response.data.transaction
-      setHistorys(data)
-      
+  // const handlefilterSelect = (e) => {
     
-      console.table(data)
+  //   const {name,value} = e.target
+  //   setFormData({
+  //     ...formData, 
+  //     [name]:value
+  //   })
+  //   console.log(name, value);
     
-  })
-  .catch((error) => {
-    //handle error
-    
-    console.log(error)
-  })
+  //   console.log(e.target.value);
+  //   setAmount(historys.filter(v => v.variation_code === value)?.variation_amount )
 
-}
+  // }
 
-useEffect(() => {
-  handleTranscation();  
-}, [])
+
+ 
+
+
     
         return ( 
+
             <>
+            
             
 
             <div id="content" className="py-4">
@@ -166,195 +168,15 @@ useEffect(() => {
             
             <!-- Transaction List
             =============================== -->  */}
-            {
-               historys && historys.map(history =>  <div className="transaction-list" key={history.id} value={history.id} >
-            
-            <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-            <div className="row align-items-center flex-row">
-            <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300"></span> {new Intl.DateTimeFormat("en-GB", {
-               year: "numeric", month: "long",  day: "2-digit" }).format()}
-        {/* <span className="d-block text-1 font-weight-300 text-uppercase">APR</span>  */}
-        </div>
-            <div className="col col-sm-7"> <span className="d-block text-4">HDFC Bank</span> <span className="text-muted">{history.product_name}</span> </div>
-           <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-warning" data-toggle="tooltip" data-original-title="In Progress"><i className="fa fa-ellipsis-h"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">-  {new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "NGN"
-  }).format(history.amount)}</span>  </div>
-            </div>
-             </div>
-            </div>)
-            }
-            
-            {/* <div className="transaction-list">
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">16</span> <span className="d-block text-1 font-weight-300 text-uppercase">APR</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">HDFC Bank</span> <span className="text-muted">Withdraw to Bank account</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-warning" data-toggle="tooltip" data-original-title="In Progress"><i className="fa fa-ellipsis-h"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">- $562</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">15</span> <span className="d-block text-1 font-weight-300 text-uppercase">APR</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">Envato Pty Ltd</span> <span className="text-muted">Payment Received</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-success" data-toggle="tooltip" data-original-title="Completed"><i className="fa fa-check-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">+ $562</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">04</span> <span className="d-block text-1 font-weight-300 text-uppercase">APR</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">HDFC Bank</span> <span className="text-muted">Withdraw to Bank account</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-success" data-toggle="tooltip" data-original-title="Completed"><i className="fa fa-check-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">- $106</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">28</span> <span className="d-block text-1 font-weight-300 text-uppercase">MAR</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">Patrick Cary</span> <span className="text-muted">Refund</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-success" data-toggle="tooltip" data-original-title="Completed"><i className="fa fa-check-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">+ $60</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">28</span> <span className="d-block text-1 font-weight-300 text-uppercase">MAR</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">Patrick Cary</span> <span className="text-muted">Payment Sent</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-danger" data-toggle="tooltip" data-original-title="Cancelled"><i className="fa fa-times-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">- $60</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">16</span> <span className="d-block text-1 font-weight-300 text-uppercase">FEB</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">HDFC Bank</span> <span className="text-muted">Withdraw to Bank account</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-success" data-toggle="tooltip" data-original-title="Completed"><i className="fa fa-check-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">- $1498</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-              <div className="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail">
-                <div className="row align-items-center flex-row">
-                  <div className="col-2 col-sm-1 text-center"> <span className="d-block text-4 font-weight-300">15</span> <span className="d-block text-1 font-weight-300 text-uppercase">FEB</span> </div>
-                  <div className="col col-sm-7"> <span className="d-block text-4">Envato Pty Ltd</span> <span className="text-muted">Payment Received</span> </div>
-                  <div className="col-auto col-sm-2 d-none d-sm-block text-center text-3"> <span className="text-success" data-toggle="tooltip" data-original-title="Completed"><i className="fa fa-check-circle"></i></span> </div>
-                  <div className="col-3 col-sm-2 text-right text-4"> <span className="text-nowrap">+ $1498</span> <span className="text-2 text-uppercase">(USD)</span> </div>
-                </div>
-              </div>
-            </div> */}
-            {/* <!-- Transaction List End -->
-            
-            <!-- Transaction Item Details Modal
-            =========================================== --> */}
-                {historys && historys.map(history => <div id="transaction-detail" key={history.id} value={history.product_name} className="modal fade" role="dialog" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered transaction-details" role="document">
-                <div className="modal-content">
-                  <div className="modal-body">
-                    <div className="row no-gutters">
-                    <div className="col-sm-5 d-flex justify-content-center bg-primary rounded-left py-4">
-                        <div className="my-auto text-center">
-                        <div className="text-17 text-white my-3"><i className="fa fa-building"></i></div>
-                        <h3 className="text-4 text-white font-weight-400 my-3" key={history.id}>{history.product_name}</h3>
-                        <div className="text-8 font-weight-500 text-white my-4">{history.amount}</div>
-                        <p className="text-white"> {new Intl.DateTimeFormat("en-GB", {
-               year: "numeric", month: "long",  day: "2-digit" }).format()}</p>
-                          </div>
-                          </div>
-                          <div className="col-sm-7">
-                        <h5 className="text-5 font-weight-400 m-3">Transaction Details
-                          <button type="button" className="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                        </h5>
-                        <hr/>
-                        <div className="px-3">
-                          <ul className="list-unstyled">
-                            <li className="mb-2">Payment Amount <span className="float-right text-3">₦ {history.amount}</span></li>
-                            <li className="mb-2">Fee <span className="float-right text-3">₦ 0.00</span></li>
-                          </ul>
-                          <hr className="mb-2"/>
-                          <p className="d-flex align-items-center font-weight-500 mb-4">Total Amount <span className="text-3 ml-auto">₦ {history.amount}</span></p>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Paid By:</li>
-                            <li className="text-muted">Envato Pty Ltd</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Transaction ID:</li>
-                            <li className="text-muted">{history.transactionId}</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Description:</li>
-                            <li className="text-muted">{history.product_name} Purchased On The {new Intl.DateTimeFormat("en-GB", {
-               year: "numeric", month: "long",  day: "2-digit" }).format()}</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Status:</li>
-                          {history.status = 'delivered' ? (<li className="text-muted">Completed</li>) : (<li className="text-muted">Uncompleted</li>)}
-                            
-                          </ul>
-                        </div>
-                      </div>
-                          
-                      </div>
-                      </div>
-                      </div>
-                  </div>
-                </div>
-                )}
-
-            {/* <div id="transaction-detail" className="modal fade" role="dialog" aria-hidden="true">
-              <div className="modal-dialog modal-dialog-centered transaction-details" role="document">
-                <div className="modal-content">
-                  <div className="modal-body">
-                    <div className="row no-gutters">
-                      <div className="col-sm-5 d-flex justify-content-center bg-primary rounded-left py-4">
-                        <div className="my-auto text-center">
-                          <div className="text-17 text-white my-3"><i className="fa fa-building"></i></div>
-                          <h3 className="text-4 text-white font-weight-400 my-3">Envato Pty Ltd</h3>
-                          <div className="text-8 font-weight-500 text-white my-4">$557.20</div>
-                          <p className="text-white">15 March 2019</p>
-                        </div>
-                      </div>
-                      <div className="col-sm-7">
-                        <h5 className="text-5 font-weight-400 m-3">Transaction Details
-                          <button type="button" className="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                        </h5>
-                        <hr/>
-                        <div className="px-3">
-                          <ul className="list-unstyled">
-                            <li className="mb-2">Payment Amount <span className="float-right text-3">$562.00</span></li>
-                            <li className="mb-2">Fee <span className="float-right text-3">-$4.80</span></li>
-                          </ul>
-                          <hr className="mb-2"/>
-                          <p className="d-flex align-items-center font-weight-500 mb-4">Total Amount <span className="text-3 ml-auto">$557.20</span></p>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Paid By:</li>
-                            <li className="text-muted">Envato Pty Ltd</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Transaction ID:</li>
-                            <li className="text-muted">26566689645685976589</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Description:</li>
-                            <li className="text-muted">Envato March 2019 Member Payment</li>
-                          </ul>
-                          <ul className="list-unstyled">
-                            <li className="font-weight-500">Status:</li>
-                            <li className="text-muted">Completed</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+            <TransactionMin  />
+           
+          
+              
             {/* <!-- Transaction Item Details Modal End -->
             
             <!-- Pagination
             ============================================= --> */}
-            <ul className="pagination justify-content-center mt-4 mb-0">
+            {/* <ul className="pagination justify-content-center mt-4 mb-0">
               <li className="page-item disabled"> <a className="page-link" href="#" tabindex="-1"><i className="fa fa-angle-left"></i></a> </li>
               <li className="page-item"><a className="page-link" href="#">1</a></li>
               <li className="page-item active"> <a className="page-link" href="#">2 <span className="sr-only">(current)</span></a> </li>
@@ -362,7 +184,9 @@ useEffect(() => {
               <li className="page-item d-flex align-content-center flex-wrap text-muted text-5 mx-1">......</li>
               <li className="page-item"><a className="page-link" href="#">15</a></li>
               <li className="page-item"> <a className="page-link" href="#"><i className="fa fa-angle-right"></i></a> </li>
-            </ul>
+            </ul> */}
+
+               
             {/* <!-- Paginations end -->  */}
             
           </div>
@@ -372,10 +196,11 @@ useEffect(() => {
       </div>
     </div>
   </div>
+  
   <Profilefooter />
   </>
          );
     }
-
+   
  
 export default Transaction;

@@ -2343,8 +2343,9 @@ h2.resp-accordion:first-child {
   list-style: none;
 }
 .social-icons li {
-  margin: 0px 6px 4px;
+  margin: 0px 2px 4px;
   padding: 0;
+  border-radius: 100%;
   overflow: visible;
 }
 .social-icons li:last-child {
@@ -2633,11 +2634,11 @@ select.form-control:not([size]):not([multiple]):not(.form-control-sm) {
 }
 
 .text-primary, .btn-light, .btn-outline-light:hover, .btn-link {
-  color: #fff !important;
+  color: #6c757d  !important;
 }
 
 .btn-link:hover {
-  color: #6c757d !important;
+  color: #007bff !important;
 }
 
 .text-secondary {

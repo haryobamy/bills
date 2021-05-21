@@ -53,32 +53,7 @@ const App = (props) => {
 const history = useHistory()
 
 
-const  handleImageChange = (event) =>{
-  const image = event.target.files[0];
-  const formData = new FormData();
-  formData.append('image', image, image.name);
 
-  console.log(formData)
-
-  console.log(image)
-
-  const token= localStorage.getItem('jwtToken');
-
-  axios.post( "https://desolate-shore-36733.herokuapp.com/api/image", formData,   {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'e':    ''
-     },
-  })
-  .then((res) => {
-    const {user} = res.data;
-    localStorage.setItem('userInfo', JSON.stringify(user));
-
-    console.log(user)
-    
-  })
-  .catch((err) => console.log(err));
-}
   
  
 
